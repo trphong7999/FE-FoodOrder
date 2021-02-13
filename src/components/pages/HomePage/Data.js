@@ -7,6 +7,6 @@ export const homeObjOne = {
     description: 'Hello everyone',
     buttonLabel: 'Get started',
     imgStart: '',
-    img: '#',
+    img: 'images/svg-1.svg',
     alt: 'Recipe'
 }

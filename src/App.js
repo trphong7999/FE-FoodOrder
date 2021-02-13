@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
+import Footer from './components/pages/Footer/Footer';
+import Home from './components/pages/HomePage/Home';
 import Navbar from './components/pages/Navbar';
 
 function App() {
@@ -7,8 +9,9 @@ function App() {
     <Router>
       <Navbar/>
       <Switch>
-        <Route path='/'/>
+        <Route path='/' exact component={Home}/>
       </Switch>
+      <Footer/>
     </Router>
   );
 }
