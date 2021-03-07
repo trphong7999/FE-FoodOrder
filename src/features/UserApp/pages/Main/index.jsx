@@ -1,10 +1,14 @@
 import Navbar from "components/Navbar";
 import React from "react";
+import "assets/css/grid.css";
 
 function MainPage(props) {
   return (
     <div>
-      <Navbar />
+      <div className="grid wide">
+        <Navbar />
+      </div>
+      
     </div>
   );
 }
