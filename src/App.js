@@ -1,17 +1,17 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import './App.css';
-import Footer from './components/pages/Footer/Footer';
-import Home from './components/pages/HomePage/Home';
-import Navbar from './components/pages/Navbar';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import "./App.css";
+import UserApp from "./features/UserApp";
+import MerchantApp from "./features/MerchantApp";
+import PartnerApp from "./features/PartnerApp";
 
 function App() {
   return (
     <Router>
-      <Navbar/>
       <Switch>
-        <Route path='/' exact component={Home}/>
+        <Route path="/" exact component={UserApp} />
+        <Route path="/merchant" exact component={MerchantApp} />
+        <Route path="/partner" exact component={PartnerApp} />
       </Switch>
-      <Footer/>
     </Router>
   );
 }
