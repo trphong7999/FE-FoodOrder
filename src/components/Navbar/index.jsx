@@ -7,7 +7,9 @@ function Navbar(props) {
   return (
     <nav className="navbar">
       <div className="nav__logo">
-        <img src={logo} alt="logo" className="nav-logo__img" />
+        <Link to="#">
+          <img src={logo}  alt="logo" className="nav-logo__img" />
+        </Link>
       </div>
 
       <ul className="nav__list">

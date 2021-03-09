@@ -1,6 +1,6 @@
 import React from 'react'
 import './Banner.scss'
-import banner from 'assets/image/banner.png'
+import banner from 'assets/image/banner.jpg'
 import { BsSearch } from "react-icons/bs";
 
 function Banner(props) {

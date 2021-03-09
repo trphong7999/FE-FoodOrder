@@ -1,0 +1,29 @@
+.slick-wrapper{
+    margin-top: 26px;
+    height: 222px;
+    // overflow: hidden;
+
+    .slick-item{
+        
+    }
+
+    .slick-img {
+        width: 380px;
+        height: 222px;
+        background-size: cover;
+        border-radius: 8px;
+    }
+}
+
+.slick-arrow {
+    width: 60px;
+    height: 100%;
+    z-index: 1;
+    color: #646464;
+    border-radius: 100px;
+  }
+  .slick-arrow:hover,
+  .slick-arrow:active,
+  .slick-arrow:focus {
+    background-color: red !important;
+  }

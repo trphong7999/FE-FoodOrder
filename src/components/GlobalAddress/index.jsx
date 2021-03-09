@@ -3,7 +3,7 @@ import { HiLocationMarker } from 'react-icons/hi'
 import { FaAngleRight } from 'react-icons/fa'
 import './style.scss'
 
-function GlobalAddress() {
+function GlobalAddress(props) {
     return (
         <div className="global-address-search">
             <span className="global-address__title">Giao tới địa chỉ</span>
