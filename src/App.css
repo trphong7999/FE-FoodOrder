@@ -1,23 +1,26 @@
 :root {
-    --white-color: #fff;
-    --black-color: #000;
-    --text-color: #333;
-    --primary-color: #f7001e;
-    --border-color: #dbdbdb;
+  --white-color: #fff;
+  --black-color: #000;
+  --text-color: #333;
+  --primary-color: #f7001e;
+  --border-color: #dbdbdb;
 
-
-    --navhar-height: 50px;
+  --navhar-height: 50px;
 }
 
 * {
-    box-sizing: inherit;
+  box-sizing: inherit;
 }
 
 html {
-    /* 10px */
-    font-size: 62.5%;
-    line-height: 1.6rem;
-    font-family: 'Roboto', sans-serif;
-    box-sizing: border-box;
+  /* 10px */
+  font-size: 62.5%;
+  line-height: 1.6rem;
+  font-family: "Roboto", sans-serif;
+  box-sizing: border-box;
 }
 
+body {
+  padding: 0;
+  margin: 0;
+}
