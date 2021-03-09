@@ -4,6 +4,7 @@ import "assets/css/grid.css";
 import Banner from "components/Banner";
 import GlobalAddress from "components/GlobalAddress"
 import SlickList from "features/UserApp/components/Slide";
+import Newfeed from "features/UserApp/components/Newfeed";
 
 export default function MainPage() {
   const [SlideImage, setSlideImage] = useState([])
@@ -21,6 +22,9 @@ export default function MainPage() {
       </div>
       <div className="grid wide">
         <SlickList />
+      </div>
+      <div className="grid wide">
+        <Newfeed />
       </div>
     </div>
   );
