@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
-import Login from "./components/Login";
-import Manage from "./components/Manage";
+import Login from "./pages/Login";
+import Manager from "./pages/Manager";
 function UserApp(props) {
   const match = useRouteMatch();
-  let user = false;
+  const [isLogin, setIsLogin] = useState(true);
+  const user = {
+    name: "admin",
+    pass: "admin",
+  };
+  console.log(isLogin);
   return (
     <Switch>
       <Route
         exact
         path={match.url}
-        component={() => (user ? <Manage /> : <Login />)}
+        component={() =>
+          isLogin ? <Manager /> : <Login user={user} setIsLogin={setIsLogin} />
+        }
       />
 
       {/* <Route path={`${match.url}/add`} component={AddEditPage} />

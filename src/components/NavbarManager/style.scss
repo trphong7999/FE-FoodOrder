@@ -1,0 +1,22 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 5px 5px -5px #999;
+  padding: 1.5em 5em;
+  height: 9em;
+  box-sizing: border-box;
+  p {
+    font-size: 2em;
+  }
+}
+.main {
+  height: calc(100vh-9em);
+  display: flex;
+  .side-bar {
+    flex-grow: 1;
+    background: #f7f8fa;
+  }
+  .content {
+    flex-grow: 9;
+  }
+}

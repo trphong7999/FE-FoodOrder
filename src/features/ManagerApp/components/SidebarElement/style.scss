@@ -1,0 +1,32 @@
+.sidebarEl {
+  display: flex;
+  padding: 1em 4em;
+  color: #aaa;
+  font-size: 2em;
+  height: 10rem;
+  position: relative;
+  z-index: 999;
+  .icon {
+    position: relative;
+    top: 0.8em;
+    left: -0.3em;
+  }
+}
+.active {
+  background: white;
+  box-shadow: 0px 0.5px 0px #eee, 0px 1px 0px #eee;
+
+  color: #000;
+  .icon {
+    color: #781de1;
+  }
+}
+.active:before {
+  content: "";
+  width: 7px;
+  height: 10rem;
+  background: #781de1;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
