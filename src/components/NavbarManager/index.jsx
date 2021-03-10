@@ -4,7 +4,7 @@ import "./style.scss";
 
 function NavbarManager(props) {
   return (
-    <div className="navbar">
+    <div className="navbar-manager">
       <div className="logo">
         <img src={logo} alt="logo" width="100" />
       </div>
