@@ -1,6 +1,6 @@
 import React from 'react'
 import ImageDish from 'assets/image/dishes/dish1.jpg'
-import { HiLocationMarker } from 'react-icons/hi'
+import { IoLocationOutline } from 'react-icons/io5'
 import './style.scss'
 
 export default function Card() {
@@ -12,7 +12,7 @@ export default function Card() {
                     <div className="dish-name">Nem Nướng Nha Trang </div>
                     <div className="dish-price">20.000 đ</div>
                     <div className="dish-location">
-                        <HiLocationMarker className="location-icon" />
+                        <IoLocationOutline className="location-icon" />
                         <div className="location-km">8.6 km</div>
                     </div>
                 </div>

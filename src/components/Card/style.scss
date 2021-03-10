@@ -1,4 +1,5 @@
 .dish-item {
+    background-color: #fff;
     margin-bottom: 18px;
     border: 1px solid #ebebeb;
     border-radius: 10px;
@@ -9,7 +10,11 @@
     }
 
     .dish-info {
-        padding: 0 5px;
+        padding: 0 10px;
+        height: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
         .dish-name {
             --line-height: 2rem;
@@ -30,12 +35,12 @@
     
             .location-icon {
                 margin-left: -5px;
-                color: var(--primary-color);
                 margin-right: 8px;
                 font-size: 2rem;
             }
             .location-km {
                 font-size: 1.6rem;
+                font-weight: 200;
             }
         }
     }
