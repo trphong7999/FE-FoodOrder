@@ -1,0 +1,47 @@
+.footer-wrap {
+    padding: 30px 0;
+    border-top: 1px solid #ccc;
+    .footer-item {
+        font-size: 1.4rem;
+        display: flex;
+        flex-direction: column;
+
+        p {
+            
+        }
+
+        .footer-logo {
+            width: 100px;
+        }
+
+        .location-company {
+            font-weight: bold;
+        }
+
+        .footer-link {
+            padding-bottom: 15px;
+            text-decoration: none;
+            color: #9c9c9c;
+
+            &:hover {
+                color: var(--primary-color);
+            }
+
+            .footer-icon {
+                font-size: 2rem;
+                margin-right: 10px;
+            }
+        }
+
+        .footer-link.icon {
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+
+.footer-copyright {
+    text-align: center;
+    font-size: 1.5rem;
+    padding: 15px;
+}
