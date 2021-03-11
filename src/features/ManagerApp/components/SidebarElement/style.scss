@@ -5,14 +5,13 @@
   font-size: 2em;
   height: 10rem;
   position: relative;
-  z-index: 999;
   .icon {
     position: relative;
     top: 0.8em;
     left: -0.3em;
   }
 }
-.active {
+.actived {
   background: white;
   box-shadow: 0px 0.5px 0px #eee, 0px 1px 0px #eee;
 
@@ -21,7 +20,7 @@
     color: #781de1;
   }
 }
-.active:before {
+.actived:before {
   content: "";
   width: 7px;
   height: 10rem;

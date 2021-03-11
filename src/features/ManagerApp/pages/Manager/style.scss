@@ -3,4 +3,11 @@
   .create {
     height: 200px;
   }
+  .main {
+    height: calc(100vh - 9em);
+    display: flex;
+    .content {
+      flex-grow: 9;
+    }
+  }
 }
