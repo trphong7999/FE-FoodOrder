@@ -1,13 +1,8 @@
-.slick-wrapper{
+.slide-wrapper{
     margin: 32px 0 50px;
     height: 222px;
-    // overflow: hidden;
 
-    .slick-item{
-        
-    }
-
-    .slick-img {
+    .slide-img {
         width: 380px;
         height: 222px;
         background-size: cover;
@@ -15,6 +10,9 @@
     }
 }
 
+.slick-item {
+  outline: none;
+}
 .slick-arrow {
     width: 60px;
     height: 100%;

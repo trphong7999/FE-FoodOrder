@@ -6,12 +6,14 @@ import './style.scss'
 function GlobalAddress(props) {
     return (
         <div className="global-address-search">
-            <span className="global-address__title">Giao tới địa chỉ</span>
-            <div className="global-address__content">
-                <HiLocationMarker className="icon-location"/>
-                <div className="content">Số 8 ngõ 33 Kiều Sơn, Đằng Lâm, Hải An, Hải Phòng, Việt Nam</div>
-                <FaAngleRight className="icon-right"/>
-            </div>
+            <section className="grid wide">
+                <span className="global-address__title">Giao tới địa chỉ</span>
+                <div className="global-address__content">
+                    <HiLocationMarker className="icon-location"/>
+                    <div className="content">Số 8 ngõ 33 Kiều Sơn, Đằng Lâm, Hải An, Hải Phòng, Việt Nam</div>
+                    <FaAngleRight className="icon-right"/>
+                </div>
+            </section>
         </div>
     )
 }

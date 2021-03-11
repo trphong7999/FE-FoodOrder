@@ -13,26 +13,13 @@ export default function MainPage() {
   
   return (
     <div className="main-page">
-      <div className="grid wide">
-        <Navbar />
-      </div>
-      <div className="bg-w">
-      <div className="grid__full-width">
-        <Banner/>
-      </div>
-      <div className="grid wide">
-        <GlobalAddress />
-      </div>
-      <div className="grid wide">
-        <SlickList />
-      </div>
-      <div className="grid wide">
-        <Newfeed />
-      </div>
-      </div>
-      <div className="grid wide">
-        <Footer/>
-      </div>
+      <Navbar />
+      <Banner/>
+      <GlobalAddress />
+      <SlickList />
+      <Newfeed />
+      <Newfeed />
+      <Footer/>
     </div>
   );
 }

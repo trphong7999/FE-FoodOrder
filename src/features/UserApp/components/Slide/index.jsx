@@ -26,27 +26,29 @@ export default function SlickList() {
     };
 
     return (
-        <div className="slick-wrapper">   
-            <Slider {...settings}>
-            <div className="slick-item ">
-                <div className="slick-img" style={{backgroundImage: `url(${img1})`}}></div>
-            </div>
-            <div className="slick-item ">
-                <div className="slick-img" style={{backgroundImage: `url(${img2})`}}></div>
-            </div>
-            <div className="slick-item ">
-                <div className="slick-img" style={{backgroundImage: `url(${img3})`}}></div>
-            </div>
-            <div className="slick-item ">
-                <div className="slick-img" style={{backgroundImage: `url(${img4})`}}></div>
-            </div>
-            <div className="slick-item ">
-                <div className="slick-img" style={{backgroundImage: `url(${img5})`}}></div>
-            </div>
-            <div className="slick-item ">
-                <div className="slick-img" style={{backgroundImage: `url(${img6})`}}></div>
-            </div>
-            </Slider>
+        <div className="slide-wrapper"> 
+            <section className="grid wide">        
+                <Slider {...settings}>
+                    <div className="slide-item ">
+                        <div className="slide-img" style={{backgroundImage: `url(${img1})`}}></div>
+                    </div>
+                    <div className="slide-item ">
+                        <div className="slide-img" style={{backgroundImage: `url(${img2})`}}></div>
+                    </div>
+                    <div className="slide-item ">
+                        <div className="slide-img" style={{backgroundImage: `url(${img3})`}}></div>
+                    </div>
+                    <div className="slide-item ">
+                        <div className="slide-img" style={{backgroundImage: `url(${img4})`}}></div>
+                    </div>
+                    <div className="slide-item ">
+                        <div className="slide-img" style={{backgroundImage: `url(${img5})`}}></div>
+                    </div>
+                    <div className="slide-item ">
+                        <div className="slide-img" style={{backgroundImage: `url(${img6})`}}></div>
+                    </div>
+                </Slider>
+            </section>  
         </div>
     )
 }
