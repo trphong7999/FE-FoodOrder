@@ -2,6 +2,8 @@ import React from "react";
 import logo from "assets/image/logo.png";
 import "./style.scss";
 import { Link } from "react-router-dom";
+import Modal from 'components/Modal';
+import TransitionsModal from "components/Modal";
 
 function Navbar(props) {
   return (
@@ -45,10 +47,8 @@ function Navbar(props) {
             </Link>
           </li>
         </ul>
-      
-        <div className="nav__login">
-          <span className="btn nav-login__btn">Đăng nhập</span>
-        </div>
+
+        <TransitionsModal/>
       </nav>
     </section>
   );
