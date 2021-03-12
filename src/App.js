@@ -5,7 +5,6 @@ import MerchantApp from "./features/MerchantApp";
 import PartnerApp from "./features/PartnerApp";
 import ManagerApp from "features/ManagerApp";
 
-
 function App() {
   return (
     <Router>
