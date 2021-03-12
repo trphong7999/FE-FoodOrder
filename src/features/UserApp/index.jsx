@@ -8,6 +8,7 @@ function UserApp(props) {
   return (
     <Switch>
       <Route exact path={match.url} component={MainPage} />
+      <Route exact path={`${match.url}/nemnuongnhatrang`} component={MainPage} />
 
       {/* <Route path={`${match.url}/add`} component={AddEditPage} />
       <Route path={`${match.url}/:photoId`} component={AddEditPage} /> */}

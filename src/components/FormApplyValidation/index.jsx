@@ -23,6 +23,7 @@ export default function FormApplyValidation() {
       <input
         type="text"
         name="userName"
+        placeholder="Nhập tài khoản"
         ref={register({
             required: "This input is required.",
             minLength: {
@@ -49,6 +50,7 @@ export default function FormApplyValidation() {
       <input 
         type="password" 
         name="password" 
+        placeholder="Nhập mật khẩu"
         ref={register({ required: "This input is required." })} 
       />
       <ErrorMessage
@@ -63,8 +65,7 @@ export default function FormApplyValidation() {
             : null;
         }}
       />
-   
-      
+    
       <Link to="/" className="link-register">Đăng ký</Link>
       <input type="submit" value="Đăng nhập"/>
     </form>
