@@ -2,10 +2,10 @@ import React from "react";
 import "./style.scss";
 
 function SidebarElement({ item, index, changeActive }) {
-  const { Icon, content, actived } = item;
+  const { Icon, content, active } = item;
   return (
     <div
-      className={actived ? "sidebarEl actived" : "sidebarEl"}
+      className={active ? "sidebarEl actived" : "sidebarEl"}
       onClick={() => changeActive(index)}
     >
       <div>

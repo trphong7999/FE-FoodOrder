@@ -8,21 +8,22 @@ import {
 } from "react-icons/fa";
 import "./style.scss";
 
-function Sidebar(props) {
+function Sidebar({ setSidebar }) {
   const [menubar, setMenubar] = useState([
-    { Icon: FaClipboardList, content: "Dashboard", actived: true },
-    { Icon: FaStore, content: "Merchant", actived: false },
-    { Icon: FaMotorcycle, content: "Partner", actived: false },
-    { Icon: FaUserAlt, content: "Customer", actived: false },
+    { Icon: FaClipboardList, content: "Dashboard", active: true },
+    { Icon: FaStore, content: "Merchant", active: false },
+    { Icon: FaMotorcycle, content: "Partner", active: false },
+    { Icon: FaUserAlt, content: "Customer", active: false },
   ]);
 
   const changeActive = (index) => {
     const bar = menubar.map((item, i) => {
-      if (i === index) item.actived = true;
-      else item.actived = false;
+      if (i === index) item.active = true;
+      else item.active = false;
       return item;
     });
     setMenubar(bar);
+    setSidebar(index + 1);
   };
   return (
     <div className="side-bar">
@@ -33,6 +34,7 @@ function Sidebar(props) {
           key={index}
           index={index}
           changeActive={changeActive}
+          setSidebar={setSidebar}
         />
       ))}
     </div>
