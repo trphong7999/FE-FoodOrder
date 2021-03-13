@@ -9,10 +9,10 @@ const { makeStyles } = require("@material-ui/core");
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: "absolute",
-    width: "100rem",
+    width: "70rem",
     height: "50rem",
-    top: "10rem",
-    left: "50rem",
+    top: "calc((100vh - 50rem)/2)",
+    left: "calc((100vw - 70rem)/2)",
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
@@ -30,15 +30,15 @@ function ModalForm({ handleClose }) {
 
   const steps = [
     {
-      name: "Buoc1",
+      name: "Bước 1",
       component: <Form1 />,
     },
     {
-      name: "b2",
+      name: "Bước 2",
       component: <Form1 />,
     },
     {
-      name: "b3",
+      name: "Bước 3",
       component: <Form1 />,
     },
   ];

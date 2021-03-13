@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import MainPage from "./pages/Main";
+import MerchantPage from "./pages/MerchantPage";
 
 function UserApp(props) {
   const match = useRouteMatch();
@@ -8,12 +9,7 @@ function UserApp(props) {
   return (
     <Switch>
       <Route exact path={match.url} component={MainPage} />
-      <Route exact path={`${match.url}/nemnuongnhatrang`} component={MainPage} />
-
-      {/* <Route path={`${match.url}/add`} component={AddEditPage} />
-      <Route path={`${match.url}/:photoId`} component={AddEditPage} /> */}
-
-      {/* <Route component={NotFound} /> */}
+      <Route path={`${match.url}/quanan`} component={MerchantPage} />
     </Switch>
   );
 }

@@ -16,11 +16,11 @@ const LiClass = (props) => css`
   cursor: pointer;
 
   color: ${props.state === "todo" ? "silver" : "black"};
-  border-bottom: 4px solid ${props.state === "todo" ? "silver" : "#33C3F0"};
+  border-bottom: 4px solid ${props.state === "todo" ? "silver" : "#781de1"};
 
   &:before {
     position: relative;
-    bottom: -3.99rem;
+    bottom: -3.8rem;
     float: left;
     left: 50%;
 
@@ -30,14 +30,14 @@ const LiClass = (props) => css`
       ? 'content: "\u2022";'
       : 'content: "\u2713";'}
     color: ${props.state === "todo" ? "silver" : "white"}!important;
-    background-color: ${props.state === "todo" ? "white" : "#33C3F0"};
+    background-color: ${props.state === "todo" ? "white" : "#781de1"};
     width: 1.2em;
     line-height: ${props.state === "todo" ? "1.2em" : "1.2em"};
     border-radius: ${props.state === "todo" ? "0" : "1.2em"};
   }
   &:hover,
   &::before {
-    color: #0fa0ce;
+    color: #781de1;
   }
   &:after {
     content: "\\00a0\\00a0";

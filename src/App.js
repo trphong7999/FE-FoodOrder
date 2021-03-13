@@ -9,10 +9,10 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/" exact component={UserApp} />
-        <Route path="/merchant" exact component={MerchantApp} />
-        <Route path="/partner" exact component={PartnerApp} />
-        <Route path="/manager" exact component={ManagerApp} />
+        <Route path="/user" eact component={UserApp} />
+        <Route path="/merchant" component={MerchantApp} />
+        <Route path="/partner" component={PartnerApp} />
+        <Route path="/manager" component={ManagerApp} />
       </Switch>
     </Router>
   );
