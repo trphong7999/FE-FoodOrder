@@ -50,43 +50,56 @@
   }
 
   .brand-content {
-    width: 100%;
-    display: flex;
-    background-color: #fff;
+    background-color: #f6f6f6;
     color: var(--text-color);
-    border-radius: 8px;
-    box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 15%);
 
     .brand__category {
-      padding: 0 15px;
-      flex-basis: 20%;
+      background-color: #fff;
+
+      // =========== STICK CATEGORY LIST ==================
+      .stick-category-list {
+        position: sticky;
+        top: 0;
+        width: 100%;
+      }
+      // ==================================================
 
       .category__list {
         list-style: none;
-        padding-left: 0;
-        margin-top: 0;
+        padding: 0 0 3rem;
+        margin: 0 0;
+        border-radius: 8px;
+        box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 15%);
 
-        .category__item {
-          font-size: 1.4rem;
-          color: var(--text-color);
-          text-transform: uppercase;
-          padding: 10px 0;
-          border-bottom: 1px solid #3333333b;
+        li {
+          margin: 0 1.5rem;
 
-          &:hover {
-            color: var(--primary-color);
-            cursor: pointer;
+          .category__item {
+            text-decoration: none;
+            display: block;
+            font-size: 1.4rem;
+            color: var(--text-color);
+            text-transform: uppercase;
+            padding: 10px 0;
+            border-bottom: 1px solid #3333333b;
+
+            &:hover {
+              color: var(--primary-color);
+              cursor: pointer;
+            }
           }
         }
       }
     }
 
     .brand__products {
-      padding: 0 15px;
-      flex-basis: 80%;
+      background-color: #fff;
 
       .product__category {
+        padding: 0 1rem;
         margin-bottom: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 15%);
 
         .product__category-name {
           font-size: 1.8rem;
@@ -107,6 +120,43 @@
               background-size: cover;
               border-radius: 8px;
               margin-right: 20px;
+            }
+            .hover-mode {
+              position: relative;
+
+              &:hover {
+                .hidden {
+                  visibility: visible;
+                }
+
+                .img-big {
+                  top: -200px;
+                  left: 72px;
+                  transform: translateY(0);
+                }
+              }
+
+              .img-big__wrapper {
+                z-index: 200;
+                position: absolute;
+                width: 0;
+                bottom: -100%;
+                right: -10%;
+              }
+
+              .img-big {
+                border-radius: 12px;
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+                border: 3px solid #f6f6f6;
+                transition: width 0.25s, height 0.25s, blur 0.25s;
+                width: 600px;
+                height: 400px;
+              }
+              .hidden {
+                visibility: hidden;
+              }
             }
 
             .product__item-content {
@@ -135,6 +185,10 @@
 
                 &:focus {
                   outline: none;
+                }
+                &:hover {
+                  opacity: 0.8;
+                  cursor: pointer;
                 }
               }
             }
