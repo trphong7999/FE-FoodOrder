@@ -7,9 +7,21 @@ import ManageMerchant from "features/ManagerApp/components/ManageMerchant";
 import DashBoard from "features/ManagerApp/components/DashBoard";
 import ManagePartner from "features/ManagerApp/components/ManagePartner";
 import ManageCustomer from "features/ManagerApp/components/ManageCustomer";
+import managerApi from "api/managerApi";
+import { logout } from "redux/userSlice";
+import { useDispatch } from "react-redux";
 
 function Manager(props) {
   const [sidebar, setSidebar] = useState(1);
+  const dispatch = useDispatch();
+
+  //Check login is manager
+  managerApi.checkAuth().then((res) => {
+    if (res.status === 400) {
+      dispatch(logout());
+    }
+  });
+
   return (
     <div className="ManagerApp">
       <NavbarManage />

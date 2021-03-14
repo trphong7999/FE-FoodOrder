@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import "./App.css";
 import UserApp from "./features/UserApp";
 import MerchantApp from "./features/MerchantApp";
@@ -9,7 +14,8 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/user" eact component={UserApp} />
+        <Redirect exact from="/" to="/user" />
+        <Route path="/user" component={UserApp} />
         <Route path="/merchant" component={MerchantApp} />
         <Route path="/partner" component={PartnerApp} />
         <Route path="/manager" component={ManagerApp} />

@@ -4,57 +4,46 @@ import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import Modal from "@material-ui/core/Modal";
 import ModalForm from "../ModalForm";
+import { useEffect } from "react";
+import merchantApi from "api/merchantApi";
 
 const columns = [
-  { field: "id", headerName: "ID", width: 70 },
-  { field: "firstName", headerName: "First name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
+  { field: "id", headerName: "STT", width: 80 },
+  { field: "name", headerName: "Tên cơ sở", width: 250 },
+  { field: "representative", headerName: "Người đại diện", width: 250 },
   {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
+    field: "username",
+    headerName: "Tài khoản cấp",
+    width: 200,
   },
   {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    valueGetter: (params) =>
-      `${params.getValue("firstName") || ""} ${
-        params.getValue("lastName") || ""
-      }`,
+    field: "address",
+    headerName: "Địa chỉ",
+    width: 270,
   },
   {
-    field: "detail",
-    headerName: " ",
+    field: "deduct",
+    headerName: "Chiết khấu",
+    width: 130,
+  },
+  {
+    field: "action",
+    headerName: "Hành động",
     id: "links",
+    width: 130,
     renderCell: (params) => {
-      console.log(params);
       return (
         <Link to={{ pathname: `/manager/merchant/${params.getValue("id")}` }}>
-          {"Detail"}
+          {"Chi tiết"}
         </Link>
       );
     },
   },
 ];
 
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-];
-
 function ManageMerchant(props) {
   const [open, setOpen] = useState(false);
+  const [merchantList, setMerchantList] = useState([]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -63,6 +52,33 @@ function ManageMerchant(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    const fetchMerchantsList = async () => {
+      try {
+        // const params = {
+        //   _page: 1,
+        //   _limit: 10,
+
+        // };
+        const res = await merchantApi.getAll();
+        const data = res.map((merchant, index) => ({
+          id: index + 1,
+          name: merchant.name,
+          representative: merchant.representative,
+          username: merchant.username,
+          address: merchant.location.address,
+          deduct: merchant.deduct,
+        }));
+
+        setMerchantList(data);
+      } catch (error) {
+        console.log("Failed to fetch product list: ", error);
+      }
+    };
+
+    fetchMerchantsList();
+  }, []);
 
   return (
     <>
@@ -81,7 +97,7 @@ function ManageMerchant(props) {
         </Button>
       </div>
       <div className="table-content" style={{ height: 400 }}>
-        <DataTable rows={rows} columns={columns} />
+        <DataTable rows={merchantList} columns={columns} />
       </div>
       <Modal
         open={open}

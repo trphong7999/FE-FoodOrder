@@ -1,24 +1,19 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import Login from "./pages/Login";
 import Manager from "./pages/Manager";
 
-function UserApp(props) {
+function ManagerApp(props) {
   const match = useRouteMatch();
-  const [isLogin, setIsLogin] = useState(true);
-  const user = {
-    name: "admin",
-    pass: "admin",
-  };
-  console.log(isLogin);
+  const user = useSelector((state) => state.user);
+
   return (
     <Switch>
       <Route
         exact
         path={match.url}
-        component={() =>
-          isLogin ? <Manager /> : <Login user={user} setIsLogin={setIsLogin} />
-        }
+        component={() => (user.username ? <Manager /> : <Login />)}
       />
 
       {/* <Route path={`${match.url}/add`} component={AddEditPage} />
@@ -29,4 +24,4 @@ function UserApp(props) {
   );
 }
 
-export default UserApp;
+export default ManagerApp;
