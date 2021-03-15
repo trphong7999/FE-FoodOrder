@@ -9,9 +9,7 @@ import "./style.scss";
 export default function MerchantPage() {
   return (
     <div className="merchant__main">
-      <div id="navbar">
-        <Navbar />
-      </div>
+      <Navbar />
       <div className="merchant__content">
         <section className="grid wide">
           <div className="row">

@@ -10,8 +10,8 @@ function Navbar(props) {
       <section className="grid wide">
         <div className="nav__wrap">
           <div className="nav__logo">
-            <Link to="#">
-              <img src={logo}  alt="logo" className="nav-logo__img" />
+            <Link to="/user">
+              <img src={logo} alt="logo" className="nav-logo__img" />
             </Link>
           </div>
 
@@ -33,7 +33,7 @@ function Navbar(props) {
             </li>
             <li className="nav-list__item">
               <Link to="#" className="nav-list__link">
-              Ăn tối
+                Ăn tối
               </Link>
             </li>
             <li className="nav-list__item">
@@ -48,7 +48,7 @@ function Navbar(props) {
             </li>
           </ul>
 
-          <TransitionsModal/>
+          <TransitionsModal />
         </div>
       </section>
     </nav>

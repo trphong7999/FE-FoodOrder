@@ -9,7 +9,7 @@ function UserApp(props) {
   return (
     <Switch>
       <Route exact path={match.url} component={MainPage} />
-      <Route path={`${match.url}/quanan`} component={MerchantPage} />
+      <Route path={`${match.url}/:id`} component={MerchantPage} />
     </Switch>
   );
 }
