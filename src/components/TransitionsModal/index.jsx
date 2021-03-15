@@ -9,8 +9,6 @@ import "./style.scss"
 const useStyles = makeStyles((theme) => ({
   modalWrap: {
     lineHeight: 'var(--navbar-height)',
-    position: 'absolute',
-    right: '0',
   },  
   button: {
     fontSize: '1.6rem',

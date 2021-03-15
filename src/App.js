@@ -9,6 +9,7 @@ import UserApp from "./features/UserApp";
 import MerchantApp from "./features/MerchantApp";
 import PartnerApp from "./features/PartnerApp";
 import ManagerApp from "features/ManagerApp";
+import NotFound from "components/pages/NotFound";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/merchant" component={MerchantApp} />
         <Route path="/partner" component={PartnerApp} />
         <Route path="/manager" component={ManagerApp} />
+        <Route component={NotFound} />
       </Switch>
     </Router>
   );

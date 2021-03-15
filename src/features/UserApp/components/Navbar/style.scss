@@ -24,23 +24,41 @@
       display: flex;
       padding-left: 0;
       margin: 0;
-      line-height: var(--navbar-height);
-    }
 
-    .nav-list__link {
-      display: block;
-      text-decoration: none;
-      font-size: 1.6rem;
-      color: var(--text-color);
-      line-height: var(--navhar-height);
-      padding: 0 10px;
+      .nav-list__link {
+        display: block;
+        text-decoration: none;
+        font-size: 1.6rem;
+        color: var(--text-color);
+        padding: 3px 10px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+  
+        &:hover {
+          color: var(--primary-color);
+          opacity: 0.75;
+          background-color: #99999936;
+        }
+      }
 
-      &:hover {
+      .nav-list__link--active {
+        font-weight: bold;
         color: var(--primary-color);
-        opacity: 0.75;
-        background-color: #99999936;
-        border: 2px;
+        border-bottom: 3px solid var(--primary-color);
+
+        &:hover {
+          background-color: #fff;
+          opacity: 1;
+        }
       }
     }
+
+    .nav__account {
+      position: absolute;
+      right: 0;
+      max-width: 15rem;
+    }
+
   }
 }

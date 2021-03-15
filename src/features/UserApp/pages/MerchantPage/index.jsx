@@ -10,6 +10,7 @@ export default function MerchantPage() {
   return (
     <div className="merchant__main">
       <Navbar />
+      
       <div className="merchant__content">
         <section className="grid wide">
           <div className="row">
