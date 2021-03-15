@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
 
 function DataTable({ rows, columns, style = useStyles }) {
   const classes = style();
-  console.log(rows, columns);
   return (
     <div className="data-table">
       <DataGrid
