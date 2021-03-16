@@ -1,0 +1,60 @@
+// MODAL CHANGE INFORMATION FORM
+.change-info__form {
+  background-color: #fff;
+  padding: 1rem 2rem;
+  font-size: 1.4rem;
+  border-radius: 8px;
+  width: 400px;
+
+  .form-header {
+    display: flex;
+    padding: 1rem 0 1rem;
+
+    .form-header__title {
+      margin-top: 0;
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    .form-header__icon {
+      font-size: 2rem;
+      cursor: pointer;
+    }
+  }
+
+  .form-item {
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+    margin-bottom: 2.5rem;
+
+    input {
+      padding: 8px 0px 4px;
+      line-height: 2rem;
+      font-size: 1.4rem;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #ebebeb;
+      border-radius: 0;
+
+      &:hover {
+        border-color: #cbcbcb;
+      }
+
+      &:focus {
+        border-color: #0897ee;
+        outline: none;
+      }
+    }
+
+    .form-item__select {
+      border: none;
+      padding: 8px 0px 4px;
+      font-size: 1.4rem;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}

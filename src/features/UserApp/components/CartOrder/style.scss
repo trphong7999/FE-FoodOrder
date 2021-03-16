@@ -60,6 +60,7 @@
         font-size: 1.6rem;
         display: flex;
         justify-content: space-between;
+        align-items: center;
         line-height: 2rem;
 
         .item-name {
@@ -74,6 +75,22 @@
 
           .item-update__quantity {
             color: var(--text-color);
+          }
+
+          .item-update__down,
+          .item-update__up {
+            font-size: 1.6rem;
+            font-weight: bold;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+
+            &:focus {
+              outline: none;
+            }
+
+            &:hover {
+              cursor: pointer;
+            }
           }
         }
         .item-price {

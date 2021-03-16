@@ -32,20 +32,21 @@ export default function CartOrder() {
         <div className="list__title">Đơn hàng của bạn</div>
         <div className="list__item">
           <div className="item">
-            <div className="item-name">Trà Sữa Collagen</div>
+            <div className="item-name">Trà Sữa Collagen </div>
             <div className="item-update">
-              <div className="item-update__down">-</div>
+              <button className="item-update__down">-</button>
               <div className="item-update__quantity">1</div>
-              <div className="item-update__up">+</div>
+              <button className="item-update__up">+</button>
             </div>
             <div className="item-price">64.000 đ</div>
           </div>
+
           <div className="item">
             <div className="item-name">Hồng Trà</div>
             <div className="item-update">
-              <div className="item-update__down">-</div>
+              <button className="item-update__down">-</button>
               <div className="item-update__quantity">1</div>
-              <div className="item-update__up">+</div>
+              <button className="item-update__up">+</button>
             </div>
             <div className="item-price">64.000 đ</div>
           </div>

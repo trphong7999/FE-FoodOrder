@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import logo from "assets/image/logo.png";
 import "./style.scss";
 import { Link } from "react-router-dom";
@@ -12,8 +12,8 @@ function Navbar(props) {
       <section className="grid wide">
         <div className="nav__wrap">
           <div className="nav__logo">
-            <Link to="#">
-              <img src={logo}  alt="logo" className="nav-logo__img" />
+            <Link to="/user">
+              <img src={logo} alt="logo" className="nav-logo__img" />
             </Link>
           </div>
 
@@ -35,7 +35,7 @@ function Navbar(props) {
             </li>
             <li className="nav-list__item">
               <Link to="#" className="nav-list__link">
-              Ăn tối
+                Ăn tối
               </Link>
             </li>
             <li className="nav-list__item">
@@ -51,7 +51,7 @@ function Navbar(props) {
           </ul>
 
           <div className="nav__account">
-            {account === 1 ? (<TransitionsModal/>): (<NavAccount/>)}       
+            {account === 1 ? <TransitionsModal /> : <NavAccount />}
           </div>
         </div>
       </section>

@@ -1,79 +1,94 @@
 .account {
-    height: var(--navbar-height);
-    align-items: center;
-    display: flex;
-    position: relative;
+  height: var(--navbar-height);
+  align-items: center;
+  display: flex;
+  position: relative;
 
-    .account__icon {
-        margin-right: 1rem;
-        font-size: 2rem;
-        opacity: 0.4;
-    }
-    .account__img {
-        width: 5rem;
-        height: 5rem;
-        border-radius: 50%;
-    }
+  .account__icon {
+    margin-right: 1rem;
+    font-size: 2rem;
+    opacity: 0.4;
+  }
+  .account__img {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    padding: 1px;
+  }
 
-    &:hover {
-        cursor: pointer;
-
-        .action__list {
-            display: block;          
-        }
-    }
+  &:hover {
+    cursor: pointer;
 
     .action__list {
-        position: absolute;
-        padding-left: 0;
-        list-style: none;
-        top: 116%;
-        right: 0;
-        margin: 0;
-        padding: 1.5rem;
-        width: 20rem;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0px 2px 4px 0px rgb(0 0 0 / 15%);
-        display: none;
-        z-index: 99;
-
-        &::before {
-            content: "";
-            position: absolute;
-            border-style: solid;
-            border-width: 1.5rem 1.5rem;
-            border-color: transparent transparent white transparent;
-            right: 1rem;
-            top: -2.5rem;
-        }
-
-        &::after {
-            content: "";
-            position: absolute;
-            height: 2rem;
-            width: 100%;
-            top: -1.8rem;
-            background-color: transparent;
-        }
-
-        .action__list--item {
-            &:last-child {
-                border-bottom: none;
-            }
-        }
-
-        .action__list--link {
-            text-decoration: none;
-            color: var(--text-color);
-            font-size: 1.4rem;
-            display: block;
-            padding: 1rem 0;
-            border-bottom: 1px solid #ccc;
-
-            &:hover {
-                color: var(--primary-color);
-            }
-        }
+      display: block;
     }
+  }
+
+  .action__list {
+    position: absolute;
+    padding-left: 0;
+    list-style: none;
+    top: 116%;
+    right: 0;
+    margin: 0;
+    padding: 1.5rem;
+    width: 20rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px 0px rgb(0 0 0 / 15%);
+    display: none;
+    z-index: 99;
+    transform-origin: 100% top;
+    animation: accountHover ease-in 0.2s;
+
+    @keyframes accountHover {
+      from {
+        opacity: 0;
+        transform: scale(0);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      border-style: solid;
+      border-width: 1.5rem 1.5rem;
+      border-color: transparent transparent white transparent;
+      right: 1rem;
+      top: -2.5rem;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      height: 2rem;
+      width: 100%;
+      top: -1.8rem;
+      background-color: transparent;
+    }
+
+    .action__list--item {
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    .action__list--link {
+      text-decoration: none;
+      color: var(--text-color);
+      font-size: 1.4rem;
+      display: block;
+      padding: 1rem 0;
+      border-bottom: 1px solid #ccc;
+
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
 }

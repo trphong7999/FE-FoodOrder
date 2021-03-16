@@ -11,7 +11,7 @@ export default function Card({ merchant, index, key }) {
 
   return (
     <div className="col l-2">
-      <Link to={`${match.url}/${merchantId}`} className="dish-link">
+      <Link to={`${match.url}/quan-an/${merchantId}`} className="dish-link">
         <div className="dish-item">
           <img src={ImageDish} alt="ImageDish" className="dish-img" />
           <div className="dish-info">
