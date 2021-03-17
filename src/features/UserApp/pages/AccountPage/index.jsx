@@ -6,16 +6,20 @@ import {
   RiAccountCircleFill,
   RiCalendarTodoFill,
   RiLockPasswordLine,
+  RiMessage2Line,
+  RiPhoneLine,
 } from "react-icons/ri";
 import { MdEmail } from "react-icons/md";
-import { FiPhone } from "react-icons/fi";
-import { FaChevronRight } from "react-icons/fa";
+import { FaChevronRight, FaRegSmileBeam } from "react-icons/fa";
+import { SiFacebook } from "react-icons/si";
 
 import "./style.scss";
 import "assets/css/base.scss";
 import ModalFormChangePass from "features/UserApp/components/ModalFormChangePass";
 import ModalFormChangeInfo from "features/UserApp/components/ModalFormChangeInfo";
 import ModalFormChangePhone from "features/UserApp/components/ModalFormChangePhone";
+import { Link } from "react-router-dom";
+import RightColAccount from "features/UserApp/components/RightColAccount";
 
 export default function AccountPage() {
   const [account, setAccount] = useState({
@@ -59,11 +63,12 @@ export default function AccountPage() {
   return (
     <div className="account-page">
       <Navbar />
+
       <div className="account-page__container">
         <div className="grid wide">
           <div className="row">
             <div className="col l-3">
-              <div className="account-top">
+              <div className="account-left">
                 <div className="account-avatar">
                   <img
                     src={ava1}
@@ -115,8 +120,8 @@ export default function AccountPage() {
                     </span>
                   </div>
                   <div className="account-info__content">
-                    <div className="content__item">
-                      <FiPhone className="content-item__icon" />
+                    <div className="content__item ">
+                      <RiPhoneLine className="content-item__icon" />
                       <div className="content-item__text">{account.phone}</div>
                     </div>
                     <div
@@ -129,15 +134,69 @@ export default function AccountPage() {
                     </div>
                   </div>
                 </div>
+
+                <div className="account-info">
+                  <div className="account-info__head">
+                    <span className="head-span__left">Tài khoản FACEBOOK</span>
+                  </div>
+                  <div className="account-info__content account-info__content--facebook">
+                    <div className="content__item  content__item--hover content__item--facebook">
+                      <SiFacebook className="content-item__icon" />
+                      <div className="content-item__text">
+                        LIÊN KẾT TÀI KHOẢN FACEBOOK
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="account-bottom"></div>
+              <div className="account-left">
+                <div className="account-info">
+                  <div className="account-info__content">
+                    <Link
+                      to="#"
+                      className="content__item content__item--border content__item--link"
+                    >
+                      <FaRegSmileBeam className="content-item__icon" />
+                      <div className="content-item__text">
+                        Cộng đồng FoodLovers
+                      </div>
+                      <FaChevronRight />
+                    </Link>
+                    <Link
+                      to="#"
+                      className="content__item content__item--border content__item--link"
+                    >
+                      <RiMessage2Line className="content-item__icon" />
+                      <div className="content-item__text">
+                        Đề xuất cửa hàng mong muốn
+                      </div>
+                      <FaChevronRight />
+                    </Link>
+                    <Link
+                      to="#"
+                      className="content__item content__item--border content__item--link"
+                    >
+                      <RiMessage2Line className="content-item__icon" />
+                      <div className="content-item__text">
+                        Đóng góp tính năng FoodLovers
+                      </div>
+                      <FaChevronRight />
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="col l-9"></div>
+
+            <div className="col l-9">
+              <RightColAccount />
+            </div>
           </div>
         </div>
       </div>
+
       <Footer />
+
       {showModal.passForm ? (
         <ModalFormChangePass
           changeShowModalPass={callBackChangeShowModalPass}

@@ -1,5 +1,5 @@
 import React from "react";
-import "./style.scss";
+import "features/UserApp/css/styleModal.scss";
 import "assets/css/base.scss";
 import { MdClear } from "react-icons/md";
 
@@ -12,7 +12,7 @@ export default function ModalFormChangePhone({ changeShowModalPhone }) {
       <div className="modal__overlay"></div>
 
       <div className="modal__body">
-        <div className="change-phone__form">
+        <div className="modal__form">
           <div className="form-header">
             <h3 className="form-header__title">Thay đổi số điện thoại</h3>
             <MdClear className="form-header__icon" onClick={sendData} />

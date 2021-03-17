@@ -1,30 +1,31 @@
 .account-page {
-  background-color: #f6f6f6;
-  height: 10000px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 
   .account-page__container {
     margin-top: 3rem;
 
-    .account-top {
+    .account-left {
       padding: 1rem;
+      margin-bottom: 1rem;
       border-radius: 8px;
-      background-color: #fff;
+      background-color: var(--white-color);
+      box-shadow: var(--box-shadow);
 
       .account-avatar {
         text-align: center;
 
         .account-avatar__img {
-          margin: 0 auto;
           width: 8rem;
           border-radius: 50%;
         }
       }
 
       .account-info {
-        font-size: 1.5rem;
         margin-bottom: 2rem;
 
         .account-info__head {
+          font-size: 1.5rem;
           padding: 1rem 0;
           display: flex;
           justify-content: space-between;
@@ -44,12 +45,7 @@
 
         .account-info__content {
           padding: 0 1rem;
-
-          .content__item--hover {
-            &:hover {
-              cursor: pointer;
-            }
-          }
+          font-size: 1.4rem;
 
           .content__item {
             padding: 1rem 0;
@@ -69,11 +65,35 @@
               margin-right: 0.8rem;
             }
           }
+
+          .content__item--hover {
+            &:hover {
+              cursor: pointer;
+            }
+          }
+
+          .content__item--facebook {
+            font-weight: bold;
+            color: #3e6ec0;
+          }
+
+          .content__item--border {
+            border-bottom: 1px solid #ebebee;
+          }
+
+          .content__item--link {
+            text-decoration: none;
+            color: var(--text-color);
+          }
+        }
+
+        .account-info__content--facebook {
+          padding: 0 1rem;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          margin-top: 1rem;
         }
       }
-    }
-
-    .account-bottom {
     }
   }
 }

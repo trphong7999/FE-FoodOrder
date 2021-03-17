@@ -1,0 +1,27 @@
+.card-manage__head {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 1.5rem 1.5rem 0;
+}
+.card-manage__content {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.5rem;
+
+  .card-manage__link {
+    padding: 1.5rem;
+    display: flex;
+    position: relative;
+    right: 0;
+
+    .card-manage__icon {
+      margin-right: 1.5rem;
+    }
+
+    &:hover {
+      cursor: pointer;
+      transition: right linear 0.2s;
+      right: -6px;
+    }
+  }
+}

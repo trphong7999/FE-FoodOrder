@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import "./style.scss";
+import "features/UserApp/css/styleModal.scss";
 import "assets/css/base.scss";
 import { MdClear } from "react-icons/md";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import { makeStyles } from "@material-ui/core/styles";
 
 export default function ModalFormChangeInfo({ account, changeShowModalInfo }) {
   const { name, email, dateOfBirth, phone, sex } = account;
@@ -34,7 +31,7 @@ export default function ModalFormChangeInfo({ account, changeShowModalInfo }) {
       <div className="modal__overlay"></div>
 
       <div className="modal__body">
-        <div className="change-info__form">
+        <div className="modal__form">
           <div className="form-header">
             <h3 className="form-header__title">Thay đổi thông tin cá nhân</h3>
             <MdClear className="form-header__icon" onClick={sendData} />

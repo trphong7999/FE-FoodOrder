@@ -1,0 +1,32 @@
+.account-right {
+  .account-right__head {
+    .tab-navigation {
+      padding-left: 0;
+      margin: 0;
+      list-style: none;
+      display: flex;
+      margin-bottom: 2rem;
+
+      li {
+        padding: 1rem 1.5rem;
+        font-size: 1.6rem;
+        font-weight: bold;
+        border-radius: 8px;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .active {
+        background-color: #ebebeb;
+      }
+    }
+  }
+
+  .account-right__content {
+    min-height: 4rem;
+    background-color: var(--white-color);
+    padding: 1.5rem;
+  }
+}

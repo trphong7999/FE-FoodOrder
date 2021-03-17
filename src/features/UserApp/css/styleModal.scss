@@ -1,6 +1,5 @@
-// MODAL CHANGE INFORMATION FORM
-.change-info__form {
-  background-color: #fff;
+.modal__form {
+  background-color: var(--white-color);
   padding: 1rem 2rem;
   font-size: 1.4rem;
   border-radius: 8px;
@@ -54,6 +53,33 @@
 
       &:focus {
         outline: none;
+      }
+    }
+
+    .form-item__note {
+      font-weight: 400;
+      font-size: 1.3rem;
+    }
+
+    .form-item__span {
+      font-weight: 400;
+      p {
+        font-weight: bold;
+      }
+    }
+
+    .form-item__link {
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .form-item__btn--back {
+      margin-top: 1rem;
+      background-color: var(--white-color);
+      color: #9c9c9c !important;
+
+      &:hover {
+        background-color: #ebebeb;
       }
     }
   }

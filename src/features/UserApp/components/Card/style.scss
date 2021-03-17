@@ -1,85 +1,84 @@
 .dish-link {
-    text-decoration: none;
-    color: var(--text-color);
+  text-decoration: none;
+  color: var(--text-color);
 }
 .dish-item {
-    background-color: #fff;
-    margin-bottom: 18px;
-    border: 1px solid #ebebeb;
-    border-radius: 10px;
-    overflow: hidden;
+  background-color: var(--white-color);
+  margin-bottom: 18px;
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  overflow: hidden;
 
-    .dish-img {
-        width: 100%;
+  .dish-img {
+    width: 100%;
+  }
+
+  .dish-info {
+    padding: 0 10px;
+    margin: 10px 0;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .dish-name {
+      --line-height: 2rem;
+      font-size: 1.6rem;
+      font-weight: bold;
+      line-height: var(--line-height);
+      height: calc(var(--line-height) * 2);
     }
 
-    .dish-info {
-        padding: 0 10px;
-        margin: 10px 0;
-        height: 100px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        .dish-name {
-            --line-height: 2rem;
-            font-size: 1.6rem;
-            font-weight: bold;
-            line-height: var(--line-height);
-            height: calc(var(--line-height) *2);
-        }
-    
-        .dish-price {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-    
-        .dish-location {
-            display: flex;      
-            align-items: center;
-    
-            .location-icon {
-                margin-left: -5px;
-                margin-right: 8px;
-                font-size: 1.8rem;
-            }
-            .location-km {
-                font-size: 1.5rem;
-            }
-
-            .dish-img__discount {
-                width: 20px;
-                margin-right: 10px;
-            }
-        }
+    .dish-price {
+      font-size: 1.5rem;
+      font-weight: bold;
     }
 
-    // .dish-buy {
-    //     text-align: center;
-    //     margin: 10px 0;
+    .dish-location {
+      display: flex;
+      align-items: center;
 
-    //     .btn {
-    //         display: inline-block;
-    //         padding: 10px 20px;
-    //         line-height: 20px;
-    //         text-align: center;
-    //         border-radius: 10px;
-    //         font-weight: bold;
-    //         cursor: pointer;
-    //         -webkit-appearance: none;
-    //         -webkit-user-select: none;
-    //         -moz-user-select: none;
-    //         -ms-user-select: none;
-    //         user-select: none;
-    //     }
-    
-    //     .btn-buy {
-    //         background-color: var(--primary-color);
-    //         color: #fff;
-    //         font-size: 1.4rem;
-    //         padding: 8px 30px;
-    //         border-radius: 18px;
-    //     }
-    // }
+      .location-icon {
+        margin-left: -5px;
+        margin-right: 8px;
+        font-size: 1.8rem;
+      }
+      .location-km {
+        font-size: 1.5rem;
+      }
+
+      .dish-img__discount {
+        width: 20px;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  // .dish-buy {
+  //     text-align: center;
+  //     margin: 10px 0;
+
+  //     .btn {
+  //         display: inline-block;
+  //         padding: 10px 20px;
+  //         line-height: 20px;
+  //         text-align: center;
+  //         border-radius: 10px;
+  //         font-weight: bold;
+  //         cursor: pointer;
+  //         -webkit-appearance: none;
+  //         -webkit-user-select: none;
+  //         -moz-user-select: none;
+  //         -ms-user-select: none;
+  //         user-select: none;
+  //     }
+
+  //     .btn-buy {
+  //         background-color: var(--primary-color);
+  //         color: var(--white-color);
+  //         font-size: 1.4rem;
+  //         padding: 8px 30px;
+  //         border-radius: 18px;
+  //     }
+  // }
 }
-

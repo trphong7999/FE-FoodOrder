@@ -10,7 +10,7 @@
   background-color: #f6f6f6;
 
   .order__promotion {
-    background-color: white;
+    background-color: var(--white-color);
     border-radius: 8px;
     height: 110px;
     margin-bottom: 10px;
@@ -39,7 +39,7 @@
   }
 
   .order__cart-list {
-    background-color: #fff;
+    background-color: var(--white-color);
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 10px;
@@ -120,7 +120,7 @@
     text-align: center;
     font-size: 1.5rem;
     font-weight: bold;
-    color: #fff;
+    color: var(--white-color);
     padding: 12px 0;
     border-radius: 12px;
   }

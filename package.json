@@ -31,6 +31,7 @@
     "react-router-hash-link": "^2.4.0",
     "react-scripts": "4.0.2",
     "react-slick": "^0.28.1",
+    "react-swipeable-views": "^0.13.9",
     "sass": "^1.32.8",
     "scss": "^0.2.4",
     "slick-carousel": "^1.8.1",

@@ -5,7 +5,7 @@ import ImageDish from "assets/image/dishes/dish1.jpg";
 import iconDiscount from "assets/image/icons/discount.png";
 import "./style.scss";
 
-export default function Card({ merchant, index, key }) {
+export default function Card({ merchant, index }) {
   const { merchantId, merchantImg, merchantName, merchantLocation } = merchant;
   let match = useRouteMatch();
 
