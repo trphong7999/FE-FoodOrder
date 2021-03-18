@@ -2,4 +2,26 @@
   li {
     font-size: 1.5rem;
   }
+  .field-wrap {
+    display: flex;
+    justify-content: space-between;
+    label {
+      flex-basis: 20%;
+      margin-top: 5px;
+    }
+    input {
+      flex-basis: 70%;
+      border-color: gray;
+    }
+    select {
+      flex-basis: 70%;
+      border-radius: 0.7rem;
+      border-color: gray;
+      margin-bottom: 1rem;
+      height: 4rem;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
 }

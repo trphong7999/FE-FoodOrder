@@ -65,12 +65,12 @@ function ManageMerchant(props) {
         const data = res.map((merchant, index) => ({
           id: index + 1,
           name: merchant.name,
-          representative: merchant.representative,
+          representative: merchant.representative.name,
           username: merchant.username,
           address: merchant.location.address,
           deduct: merchant.deduct,
         }));
-
+        console.log(res.username);
         setMerchantList(data);
       } catch (error) {
         console.log("Failed to fetch product list: ", error);

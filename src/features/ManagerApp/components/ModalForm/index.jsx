@@ -35,11 +35,11 @@ function ModalForm({ handleClose }) {
     },
     {
       name: "Bước 2",
-      component: <Form1 />,
+      component: <Form2 />,
     },
     {
       name: "Bước 3",
-      component: <Form1 />,
+      component: <Form3 />,
     },
   ];
   return (

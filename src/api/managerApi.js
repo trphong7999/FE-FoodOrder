@@ -6,7 +6,7 @@ const managerApi = {
     return axiosClient.post(url, params);
   },
   checkAuth: () => {
-    const url = `/managers/isuser`;
+    const url = `/managers/auth`;
     return axiosClient.post(url);
   },
 };

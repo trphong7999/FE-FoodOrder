@@ -6,7 +6,7 @@ import TransitionsModal from "components/TransitionsModal";
 import NavAccount from "components/NavAccount";
 
 function Navbar(props) {
-  const [account, setAccount] = useState(0);
+  const [account, setAccount] = useState(1);
   return (
     <nav className="navbar">
       <section className="grid wide">

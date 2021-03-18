@@ -15,10 +15,14 @@ function Manager(props) {
   const [sidebar, setSidebar] = useState(1);
   const dispatch = useDispatch();
 
-  //Check login is manager
+  // Check login is the manager
   managerApi.checkAuth().then((res) => {
-    if (res.status === 400) {
-      dispatch(logout());
+    try {
+      if (res.status === 400) {
+        dispatch(logout());
+      }
+    } catch {
+      return;
     }
   });
 
