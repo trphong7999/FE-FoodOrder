@@ -4,7 +4,7 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import "./App.css";
+import "./App.scss";
 import UserApp from "./features/UserApp";
 import MerchantApp from "./features/MerchantApp";
 import PartnerApp from "./features/PartnerApp";

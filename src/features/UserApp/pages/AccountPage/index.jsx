@@ -15,9 +15,9 @@ import { SiFacebook } from "react-icons/si";
 
 import "./style.scss";
 import "assets/css/base.scss";
-import ModalFormChangePass from "features/UserApp/components/ModalFormChangePass";
-import ModalFormChangeInfo from "features/UserApp/components/ModalFormChangeInfo";
-import ModalFormChangePhone from "features/UserApp/components/ModalFormChangePhone";
+import ModalFormChangePass from "features/UserApp/components/ModalProfile/FormChangePass";
+import ModalFormChangeInfo from "features/UserApp/components/ModalProfile/FormChangeInfo";
+import ModalFormChangePhone from "features/UserApp/components/ModalProfile/FormChangePhone";
 import { Link } from "react-router-dom";
 import RightColAccount from "features/UserApp/components/RightColAccount";
 

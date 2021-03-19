@@ -25,3 +25,27 @@ body {
   padding: 0;
   margin: 0;
 }
+
+/* Mixin */
+/* Set các giá trị với màn hình tương ứng */
+$mobile-width: 415px;
+$tablet-width: 740px;
+$desktop-width: 1024px;
+
+@mixin mobile {
+  @media (max-width: #{$mobile-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}

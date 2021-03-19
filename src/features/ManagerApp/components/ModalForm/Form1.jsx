@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
-import { makeStyles } from "@material-ui/core";
 import GoogleMapReact from "google-map-react";
 import { HiLocationMarker } from "react-icons/hi";
 

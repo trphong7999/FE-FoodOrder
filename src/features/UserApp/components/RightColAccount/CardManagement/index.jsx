@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { GoPlus } from "react-icons/go";
-import ModalAddCard from "./ModalAddCard";
+import ModalAddCard from "../../ModalProfile/FormAddCard";
 import "./style.scss";
 
 export default function CardManagement() {

@@ -1,5 +1,5 @@
 import React from "react";
-import "features/UserApp/css/styleModal.scss";
+import "./styleModal.scss";
 import "assets/css/base.scss";
 import { MdClear } from "react-icons/md";
 
