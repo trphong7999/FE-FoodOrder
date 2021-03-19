@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "assets/css/grid.css";
 import "./index.scss";
-import Banner from "components/Banner";
+import Banner from "features/UserApp/components/Banner";
 import GlobalAddress from "features/UserApp/components/GlobalAddress";
 import SlickList from "features/UserApp/components/Slide";
 import Newfeed from "features/UserApp/components/Newfeed";

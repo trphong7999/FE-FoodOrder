@@ -12,7 +12,11 @@
     align-items: flex-end;
 
     @include tablet {
-      height: 20rem;
+      height: 200px;
+    }
+
+    @include mobile {
+      height: 136px;
     }
 
     .search-box {
@@ -26,6 +30,11 @@
       display: flex;
       align-items: center;
       box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.37);
+
+      @include mobile {
+        width: 99%;
+        border-radius: 4px;
+      }
 
       .btn-search {
         padding: 10px;

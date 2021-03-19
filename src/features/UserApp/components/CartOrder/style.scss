@@ -1,11 +1,3 @@
-// STICK ORDER CART LIST ================
-.sticky-order-cart {
-  position: sticky;
-  top: 0;
-  width: 100%;
-}
-// =======================================
-
 .order {
   background-color: #f6f6f6;
 
@@ -125,3 +117,11 @@
     border-radius: 12px;
   }
 }
+
+// STICK ORDER CART LIST ================
+.sticky-order-cart {
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+// =======================================

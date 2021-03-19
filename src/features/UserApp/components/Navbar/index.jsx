@@ -4,9 +4,13 @@ import "./style.scss";
 import { Link } from "react-router-dom";
 import TransitionsModal from "components/TransitionsModal";
 import NavAccount from "components/NavAccount";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { MdClear } from "react-icons/md";
+import { FaSignInAlt } from "react-icons/fa";
+import { RiUserAddFill } from "react-icons/ri";
 
 function Navbar(props) {
-  const [account, setAccount] = useState(0);
+  const [account, setAccount] = useState(1);
   return (
     <nav className="navbar">
       <section className="grid wide">
@@ -52,6 +56,29 @@ function Navbar(props) {
 
           <div className="nav__account">
             {account === 1 ? <TransitionsModal /> : <NavAccount />}
+          </div>
+
+          <div className="nav__menu-mobile">
+            <GiHamburgerMenu />
+
+            <div className="menu-mobile__wrap">
+              <div className="menu-mobile__content">
+                <div className="content__head">
+                  <img src={logo} alt="logo" className="content__head-logo" />
+                  <MdClear className="content__head-icon" />
+                </div>
+                <ul className="content__list">
+                  <li className="content__list-item">
+                    <FaSignInAlt className="content__list-icon" />
+                    <span className="content__list-span">Đăng nhập</span>
+                  </li>
+                  <li className="content__list-item">
+                    <RiUserAddFill className="content__list-icon" />
+                    <span className="content__list-span">Đăng ký</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>

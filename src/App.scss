@@ -31,15 +31,28 @@ body {
 $mobile-width: 415px;
 $tablet-width: 740px;
 $desktop-width: 1024px;
+$small-width: 376px;
+
+@mixin small {
+  @media (max-width: #{$small-width - 1px}) {
+    @content;
+  }
+}
 
 @mixin mobile {
-  @media (max-width: #{$mobile-width - 1px}) {
+  @media (max-width: #{$tablet-width - 1px}) {
     @content;
   }
 }
 
 @mixin tablet {
   @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin smallerPC {
+  @media (max-width: #{$desktop-width}) {
     @content;
   }
 }

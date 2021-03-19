@@ -1,6 +1,8 @@
+@import "app.scss";
+
 .global-address-search {
   background-color: var(--white-color);
-  margin-top: 2rem;
+  margin: 2.5rem 0;
 
   .global-address__wrap {
     max-width: 550px;
@@ -16,6 +18,16 @@
     flex-direction: column;
     justify-content: space-around;
 
+    @include mobile {
+      max-width: none;
+      width: 99%;
+    }
+
+    @include tablet {
+      max-width: none;
+      width: 100%;
+    }
+
     .global-address__title {
       color: #b3b3b3;
       margin: 0 8px;
@@ -25,6 +37,14 @@
       display: flex;
       margin: 0 8px;
       justify-content: space-between;
+
+      @include tablet {
+        font-size: 1.45rem;
+      }
+
+      @include mobile {
+        font-size: 1.45rem;
+      }
 
       .content {
         color: var(--text-color);

@@ -20,62 +20,60 @@ export default function SlickList() {
     slidesToShow: 3,
     slidesToScroll: 1,
     // autoplay: true,
-    // autoplaySpeed: 2000,
-    // pauseOnHover: true,
+    autoplaySpeed: 2000,
+    pauseOnHover: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+        },
+      },
+      {
+        breakpoint: 740,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   return (
-    <div className="slide-wrapper">
+    <div className="grid wide slide-wrapper">
       <Slider {...settings}>
-        <div
-          className="slide-item"
-          style={({ width: "100%" }, { display: "inline-block" })}
-        >
+        <div className="slide-item" style={{ display: "inline-block" }}>
           <div
             className="slide-img"
             style={{ backgroundImage: `url(${img1})` }}
           ></div>
         </div>
-        <div
-          className="slide-item "
-          style={({ width: "100%" }, { display: "inline-block" })}
-        >
+        <div className="slide-item" style={{ display: "inline-block" }}>
           <div
             className="slide-img"
             style={{ backgroundImage: `url(${img2})` }}
           ></div>
         </div>
-        <div
-          className="slide-item "
-          style={({ width: "100%" }, { display: "inline-block" })}
-        >
+        <div className="slide-item" style={{ display: "inline-block" }}>
           <div
             className="slide-img"
             style={{ backgroundImage: `url(${img3})` }}
           ></div>
         </div>
-        <div
-          className="slide-item "
-          style={({ width: "100%" }, { display: "inline-block" })}
-        >
+        <div className="slide-item" style={{ display: "inline-block" }}>
           <div
             className="slide-img"
             style={{ backgroundImage: `url(${img4})` }}
           ></div>
         </div>
-        <div
-          className="slide-item "
-          style={({ width: "100%" }, { display: "inline-block" })}
-        >
+        <div className="slide-item" style={{ display: "inline-block" }}>
           <div
             className="slide-img"
             style={{ backgroundImage: `url(${img5})` }}
           ></div>
         </div>
-        <div
-          className="slide-item "
-          style={({ width: "100%" }, { display: "inline-block" })}
-        >
+        <div className="slide-item" style={{ display: "inline-block" }}>
           <div
             className="slide-img"
             style={{ backgroundImage: `url(${img6})` }}
