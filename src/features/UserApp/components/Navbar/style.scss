@@ -19,6 +19,10 @@
     .nav__logo {
       max-width: 100px;
       margin-right: 20px;
+
+      @include mobile {
+        margin-left: 1rem;
+      }
     }
 
     .nav-logo__img {
@@ -74,10 +78,24 @@
     }
 
     .nav__menu-mobile {
-      display: flex;
       align-items: center;
       font-size: 3rem;
       z-index: 999;
+      display: none;
+
+      @include smallerPC {
+        display: flex;
+      }
+
+      .menu-mobile__icon {
+        @include mobile {
+          padding: 1rem;
+        }
+      }
+
+      .menu-mobile__wrap.menu-mobile__wrap--hidden {
+        display: none;
+      }
 
       .menu-mobile__wrap {
         position: fixed;
@@ -89,7 +107,32 @@
         display: flex;
         justify-content: flex-end;
 
+        animation: FadeInMobileMenu ease-out 0.3s;
+        -webkit-animation: FadeInMobileMenu ease-out 0.3s;
+
+        // transition: property duration timing-function delay|initial|inherit;
+        .menu-mobile__content.meunu-mobile__content--close {
+          transition: opacity 0.3s linear, background-color 0.3s linear,
+            right 0.3s ease-out;
+          animation: FadeInMobileMenuSideOut ease-out 0.3s;
+          -webkit-animation: FadeInMobileMenuSideOut ease-out 0.3s;
+          will-change: opacity, background-color, right;
+        }
+
+        .menu-mobile__content.menu-mobile__content--open {
+          transition: opacity 0.3s linear, background-color 0.3s linear,
+            right 0.3s ease-out;
+          animation: FadeInMobileMenuSideIn ease-out 0.3s;
+          -webkit-animation: FadeInMobileMenuSideIn ease-out 0.3s;
+          will-change: opacity, background-color, right;
+        }
+
         .menu-mobile__content {
+          position: absolute;
+          margin: 0;
+          right: 0;
+          top: 0;
+          bottom: 0;
           width: 320px;
           background-color: var(--white-color);
 
@@ -125,6 +168,37 @@
               .content__list-span {
               }
             }
+          }
+        }
+
+        @keyframes FadeInMobileMenu {
+          0% {
+            opacity: 0;
+          }
+          100% {
+            opacity: 1;
+          }
+        }
+
+        @keyframes FadeInMobileMenuSideIn {
+          from {
+            opacity: 0;
+            right: -320px;
+          }
+          to {
+            opacity: 1;
+            right: 0;
+          }
+        }
+
+        @keyframes FadeInMobileMenuSideOut {
+          from {
+            opacity: 1;
+            right: 0;
+          }
+          to {
+            opacity: 0;
+            right: -320px;
           }
         }
       }

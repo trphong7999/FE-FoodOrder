@@ -52,7 +52,7 @@ $small-width: 376px;
 }
 
 @mixin smallerPC {
-  @media (max-width: #{$desktop-width}) {
+  @media (max-width: #{$desktop-width - 1px}) {
     @content;
   }
 }

@@ -11,6 +11,12 @@ import { RiUserAddFill } from "react-icons/ri";
 
 function Navbar(props) {
   const [account, setAccount] = useState(1);
+
+  const [showMenu, setShowMenu] = useState(false);
+
+  const handleShowMenuMobile = () => {
+    setShowMenu(!showMenu);
+  };
   return (
     <nav className="navbar">
       <section className="grid wide">
@@ -59,13 +65,30 @@ function Navbar(props) {
           </div>
 
           <div className="nav__menu-mobile">
-            <GiHamburgerMenu />
+            <div className="menu-mobile__icon">
+              <GiHamburgerMenu onClick={handleShowMenuMobile} />
+            </div>
 
-            <div className="menu-mobile__wrap">
-              <div className="menu-mobile__content">
+            <div
+              className={
+                showMenu === true
+                  ? "menu-mobile__wrap"
+                  : "menu-mobile__wrap menu-mobile__wrap--hidden"
+              }
+            >
+              <div
+                className={
+                  showMenu === true
+                    ? "menu-mobile__content menu-mobile__content--open"
+                    : "menu-mobile__content menu-mobile__content--close"
+                }
+              >
                 <div className="content__head">
                   <img src={logo} alt="logo" className="content__head-logo" />
-                  <MdClear className="content__head-icon" />
+                  <MdClear
+                    className="content__head-icon"
+                    onClick={handleShowMenuMobile}
+                  />
                 </div>
                 <ul className="content__list">
                   <li className="content__list-item">
