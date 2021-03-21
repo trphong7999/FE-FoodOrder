@@ -19,9 +19,13 @@
       border-color: gray;
       margin-bottom: 1rem;
       height: 4rem;
+      padding: 0 1rem;
       &:focus {
         outline: none;
       }
+    }
+    .input_address {
+      flex-basis: 70%;
     }
   }
 }

@@ -1,28 +1,55 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
-import { makeStyles } from "@material-ui/core";
-import GoogleMapReact from "google-map-react";
+import React from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { HiLocationMarker } from "react-icons/hi";
-
+import Address2Geocode from "components/Address2Geocode";
 import area from "./data";
-const AnyReactComponent = () => (
-  <div>
-    <HiLocationMarker style={{ fontSize: "3rem" }} />
-  </div>
-);
-function Form1({ email, setEmail, emailConfirm, setEmailConfirm }) {
-  const [lat, setLat] = useState(20.828790101307185);
-  const [lng, setLng] = useState(106.71664668177716);
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+});
+L.Marker.prototype.options.icon = DefaultIcon;
+
+function Form1(props) {
+  const { name, setName, location, setLocation } = props;
+  const { address, district, lat, lng } = location;
+
+  function ChangeView({ center, zoom }) {
+    const map = useMap();
+    map.setView(center, zoom);
+    return null;
+  }
+
   return (
     <form className="form-apply-validation">
+      <h1 style={{ textAlign: "start", margin: "0 0 2rem 0" }}>
+        Thông tin quán - Cơ bản
+      </h1>
       <div className="field-wrap">
         <label>Tên cơ sở</label>
-        <input type="text" name="name" placeholder="Tên cơ sở" required />
+        <input
+          type="text"
+          name="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Tên cơ sở"
+          required
+        />
       </div>
       <div className="field-wrap">
         <label>Quận</label>
-        <select name="area">
+        <select
+          name="district"
+          value={district}
+          onChange={(e) =>
+            setLocation({ ...location, district: e.target.value })
+          }
+        >
           {area.map((item) => (
             <option key={item.key}>{item.value}</option>
           ))}
@@ -30,23 +57,39 @@ function Form1({ email, setEmail, emailConfirm, setEmailConfirm }) {
       </div>
       <div className="field-wrap">
         <label>Địa chỉ</label>
-        <input type="text" name="address" placeholder="Địa chỉ" required />
+        <Address2Geocode location={location} setLocation={setLocation} />
       </div>
-      <h1>Vị trí trên bản đồ</h1>
-      <div style={{ height: "300px", width: "100%" }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: "AIzaSyA66KwUrjxcFG5u0exynlJ45CrbrNe3hEc" }}
-          defaultCenter={{ lat, lng }}
-          defaultZoom={17}
-          yesIWantToUseGoogleMapApiInternals
-          onClick={(e) => {
-            console.log(e);
-            setLat(e.lat - 0.00000307185);
-            setLng(e.lng - 0.00000307185);
+      <br />
+      <div>
+        <MapContainer
+          center={[lat, lng]}
+          zoom={18}
+          scrollWheelZoom={false}
+          style={{ height: "300px", width: "100%" }}
+          whenReady={(map) => {
+            map.target.on("click", function (e) {
+              const { lat, lng } = e.latlng;
+              setLocation({ ...location, lat: lat, lng: lng });
+            });
           }}
         >
+          <ChangeView center={[lat, lng]} zoom={18} />
+          <TileLayer
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <Marker position={[lat, lng]}>
+            <Popup>Location</Popup>
+          </Marker>
+        </MapContainer>
+        {/* <GoogleMapReact
+          bootstrapURLKeys={{ key: "AIzaSyA66KwUrjxcFG5u0exynlJ45CrbrNe3hEc" }}
+          center={{ lat: parseInt(lat), lng: parseInt(lng) }}
+          defaultZoom={17}
+          yesIWantToUseGoogleMapApiInternals
+        >
           <AnyReactComponent lat={lat} lng={lng} />
-        </GoogleMapReact>
+        </GoogleMapReact> */}
       </div>
     </form>
   );

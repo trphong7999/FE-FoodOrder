@@ -10,35 +10,67 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     position: "absolute",
     width: "70rem",
-    height: "50rem",
-    top: "calc((100vh - 50rem)/2)",
+    height: "70rem",
+    top: "calc((100vh - 70rem)/2)",
     left: "calc((100vw - 70rem)/2)",
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(7, 7, 3),
+    padding: theme.spacing(3, 5, 3),
   },
 }));
 
-const prevStyle = { background: "#33c3f0", borderWidth: "2px" };
-const nextStyle = { background: "#33c3f0", borderWidth: "2px" };
+const nextStyle = {
+  background: "#781de1",
+  borderWidth: "2px",
+  padding: "1rem 2rem",
+  borderRadius: "8px",
+  color: "#f1f1f1",
+  position: "absolute",
+  bottom: "3rem",
+  right: "5.5rem",
+};
+
+const prevStyle = {
+  ...nextStyle,
+  left: "5.5rem",
+};
 
 function ModalForm({ handleClose }) {
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState({
+    address: "",
+    district: 1,
+    lat: "20.828790101307185",
+    lng: "106.71664668177716",
+  });
+  const [representative, setRepresentative] = useState("");
   const [emailConfirm, setEmailConfirm] = useState("");
   const classes = useStyles();
 
   const steps = [
     {
-      name: "Bước 1",
-      component: <Form1 />,
+      name: "Thông tin quán - Cơ bản",
+      component: (
+        <Form1
+          name={name}
+          setName={setName}
+          location={location}
+          setLocation={setLocation}
+        />
+      ),
     },
     {
-      name: "Bước 2",
-      component: <Form2 />,
+      name: "Thông tin người đại diện",
+      component: (
+        <Form2
+          representative={representative}
+          setRepresentative={setRepresentative}
+        />
+      ),
     },
     {
-      name: "Bước 3",
+      name: "Thông tin quán - Chi tiết",
       component: <Form3 />,
     },
   ];

@@ -96,7 +96,7 @@ function ManageMerchant(props) {
           Tạo mới
         </Button>
       </div>
-      <div className="table-content" style={{ height: 400 }}>
+      <div className="table-content" style={{ height: 800 }}>
         <DataTable rows={merchantList} columns={columns} />
       </div>
       <Modal

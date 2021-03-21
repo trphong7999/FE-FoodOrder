@@ -4,14 +4,16 @@ setup(React.createElement);
 
 const Ol = styled("ol")`
   margin: 0;
+  padding-left: 0;
   padding-bottom: 2.2rem;
   list-style-type: none;
 `;
 
 const LiClass = (props) => css`
+  width: 10rem;
   display: inline-block;
   text-align: center;
-  line-height: 4.5rem;
+  line-height: 1.5rem;
   padding: 0 0.7rem;
   cursor: pointer;
 
@@ -38,11 +40,15 @@ const LiClass = (props) => css`
   &:hover,
   &::before {
     color: #781de1;
+    bottom: -7rem;
   }
   &:after {
     content: "\\00a0\\00a0";
   }
   span {
+    display: inline-block;
+    width: 10rem;
+    line-height: 1.5rem;
     padding: 0 1.5rem;
   }
 `;
