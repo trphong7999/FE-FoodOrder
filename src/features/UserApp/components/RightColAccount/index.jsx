@@ -3,26 +3,18 @@ import "./style.scss";
 import YourOrder from "./YourOrder";
 import FavoriteStore from "./FavoriteStore";
 import CardManagement from "./CardManagement";
+import { useDispatch, useSelector } from "react-redux";
+import { changeActiveTab } from "redux/tabNavSlice";
 
 export default function RightColAccount() {
-  const [tab, setTab] = useState([
-    { id: 1, head: "Đơn hàng của bạn", active: true },
-    { id: 2, head: "Cửa hàng yêu thích", active: false },
-    { id: 3, head: "Quản lý thẻ", active: false },
-  ]);
+  const dispatch = useDispatch();
+  const listTabNav = useSelector((state) => state.tabNav);
 
   const [numericalOrder, setNumericalOrder] = useState(1);
 
-  const changeActiveTab = (index) => {
-    const listTab = tab.map((item, i) => {
-      if (i === index) {
-        item.active = true;
-      } else {
-        item.active = false;
-      }
-      return item;
-    });
-    setTab(listTab);
+  const handleActiveClick = (index) => {
+    const action = changeActiveTab(index);
+    dispatch(action);
     setNumericalOrder(index + 1);
   };
 
@@ -30,12 +22,12 @@ export default function RightColAccount() {
     <div className="account-right">
       <div className="account-right__head">
         <ul className="tab-navigation">
-          {tab.map((item, index) => (
+          {listTabNav.map((item, index) => (
             <li
               key={item.id}
               index={index}
               className={item.active ? "active" : null}
-              onClick={() => changeActiveTab(index)}
+              onClick={() => handleActiveClick(index)}
             >
               {item.head}
             </li>

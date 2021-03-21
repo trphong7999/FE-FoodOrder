@@ -1,27 +1,73 @@
-.slide-wrapper{
-    margin: 32px 0 50px;
-    height: 222px;
+@import "app.scss";
+
+.slide-wrapper {
+  position: relative;
+  margin: 2rem auto;
+  height: 220px;
+
+  @include tablet {
+    left: 6px;
+  }
+
+  @include mobile {
+    left: 13px;
+  }
+
+  @include small {
+    left: 16px;
+  }
+
+  .slide-item {
+    outline: none;
+    display: inline-block;
 
     .slide-img {
-        width: 380px;
-        height: 222px;
-        background-size: cover;
-        border-radius: 8px;
-    }
-}
+      width: 390px;
+      height: 220px;
+      border-radius: 8px;
+      background-size: cover;
+      margin: 0;
 
-.slick-item {
-  outline: none;
-}
-.slick-arrow {
+      @include tablet {
+        width: 314px;
+        height: 180px;
+      }
+
+      @include small {
+        width: 345px;
+        height: 200px;
+      }
+    }
+  }
+
+  //========================== SLICK LIST LIBARARY
+  .slick-item {
+    outline: none;
+  }
+
+  .slick-slider .slick-arrow {
     width: 60px;
     height: 100%;
     z-index: 1;
-    color: #646464;
-    border-radius: 100px;
+
+    @include mobile {
+      display: none !important;
+    }
   }
-  .slick-arrow:hover,
-  .slick-arrow:active,
-  .slick-arrow:focus {
-    background-color: red !important;
+
+  .slick-prev:before,
+  .slick-next:before {
+    color: var(--primary-color);
+    font-size: 4rem;
   }
+
+  .slick-prev {
+    position: absolute;
+    left: -60px;
+  }
+
+  .slick-next {
+    position: absolute;
+    right: -54px;
+  }
+}

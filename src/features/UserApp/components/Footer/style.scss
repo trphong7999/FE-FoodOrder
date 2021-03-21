@@ -1,3 +1,5 @@
+@import "app.scss";
+
 .footer-wrap {
   padding: 30px 0;
   border-top: 1px solid #ccc;
@@ -7,12 +9,20 @@
     font-size: 1.4rem;
     display: flex;
     flex-direction: column;
+    position: relative;
 
-    p {
+    @include mobile {
+      text-align: center;
+    }
+
+    @include tablet {
+      text-align: center;
     }
 
     .footer-logo {
-      width: 100px;
+      img {
+        width: 100px;
+      }
     }
 
     .location-company {
@@ -23,6 +33,14 @@
       padding-bottom: 15px;
       text-decoration: none;
       color: #9c9c9c;
+
+      @include mobile {
+        justify-content: center;
+      }
+
+      @include tablet {
+        justify-content: center;
+      }
 
       &:hover {
         color: var(--primary-color);
@@ -39,10 +57,10 @@
       align-items: center;
     }
   }
-}
 
-.footer-copyright {
-  text-align: center;
-  font-size: 1.5rem;
-  padding: 15px;
+  .footer-copyright {
+    text-align: center;
+    font-size: 1.5rem;
+    padding: 15px;
+  }
 }

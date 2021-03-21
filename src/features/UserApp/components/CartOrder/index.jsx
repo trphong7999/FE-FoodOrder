@@ -4,13 +4,13 @@ import "./style.scss";
 
 export default function CartOrder() {
   useEffect(() => {
-    const cart = document.getElementById("cart");
-    const sticky = cart.offsetTop;
+    const cartList = document.getElementById("cart");
+    const sticky = cartList.offsetTop;
     const scrollCallBack = window.addEventListener("scroll", () => {
       if (window.pageYOffset > sticky) {
-        cart.classList.add("sticky-order-cart");
+        cartList.classList.add("sticky-order-cart");
       } else {
-        cart.classList.remove("sticky-order-cart");
+        cartList.classList.remove("sticky-order-cart");
       }
     });
     return () => {
