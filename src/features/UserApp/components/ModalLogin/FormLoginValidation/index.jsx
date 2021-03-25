@@ -1,22 +1,38 @@
-import React from "react";
+import React, {useState} from "react";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import logo from 'assets/image/logo.png';
 import { Link } from 'react-router-dom';
+import {useDispatch} from "react-redux";
+import {login} from "redux/loginUserAppSlice"
 
 import "./style.scss";
 
-export default function FormApplyValidation() {
+export default function FormLoginValidation() {
     const { register, errors, handleSubmit, watch } = useForm({
         criteriaMode: "all"
     });
 
-    const onSubmit = data => console.log(data); // your form submit function which will invoke after successful validation
+    // ----------------- HANDLE LOGIN ------------
+    const {userName, setUserName} = useState("");
+    const {password, setPassword} = useState("");
 
-    console.log(watch("example")); // you can watch individual input by pass the name of the input
+    const dispatch = useDispatch();
+
+    const handleSubmitLogin = (e) => {
+      e.preventDefault();
+
+      dispatch(login({
+        userName: userName,
+        password: password,
+        loggedIn: true
+      }))
+    }
+    
+    // ---------------------------------------------
 
   return (
-    <form class="form-apply-validation" onSubmit={handleSubmit(onSubmit)}>
+    <form class="form-apply-validation" onSubmit={(e) => handleSubmitLogin(e)}>
       <img src={logo} alt="logo"/>
       <h1>Chào mừng đến với FoodLovers</h1>
       <label>Tên tài khoản</label>
@@ -31,6 +47,8 @@ export default function FormApplyValidation() {
               message: "This input must exceed 19 characters"
             }
         })}
+        value={userName}
+        onChange={e => setUserName(e.target.value)}
       />
       <ErrorMessage
         errors={errors}
@@ -52,6 +70,8 @@ export default function FormApplyValidation() {
         name="password" 
         placeholder="Nhập mật khẩu"
         ref={register({ required: "This input is required." })} 
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
       />
       <ErrorMessage
         errors={errors}
