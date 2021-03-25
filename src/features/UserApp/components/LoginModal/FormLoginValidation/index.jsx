@@ -1,23 +1,23 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import logo from 'assets/image/logo.png';
-import { Link } from 'react-router-dom';
+import logo from "assets/image/logo.png";
+import { Link } from "react-router-dom";
 
 import "./style.scss";
 
-export default function FormApplyValidation() {
-    const { register, errors, handleSubmit, watch } = useForm({
-        criteriaMode: "all"
-    });
+export default function FormLoginValidation() {
+  const { register, errors, handleSubmit, watch } = useForm({
+    criteriaMode: "all",
+  });
 
-    const onSubmit = data => console.log(data); // your form submit function which will invoke after successful validation
+  const onSubmit = (data) => console.log(data); // your form submit function which will invoke after successful validation
 
-    console.log(watch("example")); // you can watch individual input by pass the name of the input
+  console.log(watch("example")); // you can watch individual input by pass the name of the input
 
   return (
     <form class="form-apply-validation" onSubmit={handleSubmit(onSubmit)}>
-      <img src={logo} alt="logo"/>
+      <img src={logo} alt="logo" />
       <h1>Chào mừng đến với FoodLovers</h1>
       <label>Tên tài khoản</label>
       <input
@@ -25,11 +25,11 @@ export default function FormApplyValidation() {
         name="userName"
         placeholder="Nhập tài khoản"
         ref={register({
-            required: "This input is required.",
-            minLength: {
-              value: 20,
-              message: "This input must exceed 19 characters"
-            }
+          required: "This input is required.",
+          minLength: {
+            value: 5,
+            message: "This input must exceed 5 characters",
+          },
         })}
       />
       <ErrorMessage
@@ -44,14 +44,13 @@ export default function FormApplyValidation() {
             : null;
         }}
       />
-     
 
       <label>Mật khẩu</label>
-      <input 
-        type="password" 
-        name="password" 
+      <input
+        type="password"
+        name="password"
         placeholder="Nhập mật khẩu"
-        ref={register({ required: "This input is required." })} 
+        ref={register({ required: "This input is required." })}
       />
       <ErrorMessage
         errors={errors}
@@ -65,11 +64,11 @@ export default function FormApplyValidation() {
             : null;
         }}
       />
-    
-      <Link to="/" className="link-register">Đăng ký</Link>
-      <input type="submit" value="Đăng nhập"/>
-    </form>
 
-    
+      <Link to="/" className="link-register">
+        Đăng ký
+      </Link>
+      <input type="submit" value="Đăng nhập" />
+    </form>
   );
 }

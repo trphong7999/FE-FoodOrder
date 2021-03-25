@@ -1,42 +1,41 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import FormApplyValidation from 'components/FormApplyValidation';
-import "./style.scss"
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import FormApplyValidation from "features/UserApp/components/LoginModal/FormLoginValidation";
+import "./style.scss";
 
 const useStyles = makeStyles((theme) => ({
   modalWrap: {
-    lineHeight: 'var(--navbar-height)',
-  },  
+    lineHeight: "var(--navbar-height)",
+  },
   button: {
-    fontSize: '1.6rem',
-    color: 'var(--white-color)',
-    backgroundColor: 'var(--primary-color)',
-    "&:hover": { backgroundColor: '#f7001eab' },
-    "&:focus": { outline: 'none'},
-    padding: '10px 20px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    border: 'none',
-    borderRadius: '8px'
-    
+    fontSize: "1.6rem",
+    color: "var(--white-color)",
+    backgroundColor: "var(--primary-color)",
+    "&:hover": { backgroundColor: "#f7001eab" },
+    "&:focus": { outline: "none" },
+    padding: "10px 20px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    border: "none",
+    borderRadius: "8px",
   },
   modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
-    outline: 'none'
-  }
+    outline: "none",
+  },
 }));
 
-export default function TransitionsModal() {
+export default function LoginModal() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -67,13 +66,10 @@ export default function TransitionsModal() {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <FormApplyValidation/>
+            <FormApplyValidation />
           </div>
         </Fade>
       </Modal>
     </div>
   );
 }
-
-
-
