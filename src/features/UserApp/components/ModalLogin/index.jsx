@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import FormApplyValidation from "features/UserApp/components/LoginModal/FormLoginValidation";
+import FormLoginValidation from "features/UserApp/components/ModalLogin/FormLoginValidation";
 import "./style.scss";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LoginModal() {
+export default function ModalLogin() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -66,7 +66,7 @@ export default function LoginModal() {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <FormApplyValidation />
+            <FormLoginValidation />
           </div>
         </Fade>
       </Modal>

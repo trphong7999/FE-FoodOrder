@@ -2,21 +2,27 @@ import React, { useState } from "react";
 import logo from "assets/image/logo.png";
 import "./style.scss";
 import { Link } from "react-router-dom";
-import TransitionsModal from "features/UserApp/components/LoginModal";
-import NavAccount from "features/UserApp/components/NavAccount";
+
+import ModalLogin from "features/UserApp/components/ModalLogin";
+import NavAccount from "features/UserApp/components/Navbar/NavAccount";
+
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdClear } from "react-icons/md";
 import { FaSignInAlt } from "react-icons/fa";
 import { RiUserAddFill } from "react-icons/ri";
+import { useSelector } from "react-redux";
 
 function Navbar(props) {
-  const [account, setAccount] = useState(1);
+  const [loginUser, setLoginUser] = useState(false);
+  const user = useSelector((state) => state.loginUserApp);
+  console.log(user);
 
+  // -----------SHOW MOBILE MENU-----------------------
   const [showMenu, setShowMenu] = useState(false);
-
   const handleShowMenuMobile = () => {
     setShowMenu(!showMenu);
   };
+  // --------------------------------
   return (
     <nav className="navbar">
       <section className="grid wide">
@@ -61,9 +67,10 @@ function Navbar(props) {
           </ul>
 
           <div className="nav__account">
-            {account === 1 ? <TransitionsModal /> : <NavAccount />}
+            {user.user === null ? <ModalLogin /> : <NavAccount />}
           </div>
 
+          {/* --------------- HANDLE MOBILE MENU START --------------------------------------- */}
           <div className="nav__menu-mobile">
             <div className="menu-mobile__icon">
               <GiHamburgerMenu onClick={handleShowMenuMobile} />
@@ -103,6 +110,8 @@ function Navbar(props) {
               </div>
             </div>
           </div>
+
+          {/* ------------------------ HANDLE MOBILE MENU END --------------------- */}
         </div>
       </section>
     </nav>

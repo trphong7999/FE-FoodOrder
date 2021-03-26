@@ -3,7 +3,7 @@ import { AiFillCaretDown } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import ava from "assets/image/avartar/ava1.jpg";
 import "./style.scss";
-import { logout } from "redux/userSlice";
+import { logout } from "redux/loginUserAppSlice";
 import { useDispatch } from "react-redux";
 
 export default function NavAccount() {
@@ -31,12 +31,7 @@ export default function NavAccount() {
           </Link>
         </li>
         <li className="action__list--item">
-          <div
-            className="action__list--link"
-            onClick={(e) => {
-              handleLogout(e);
-            }}
-          >
+          <div className="action__list--link" onClick={(e) => handleLogout(e)}>
             Đăng xuất
           </div>
         </li>
