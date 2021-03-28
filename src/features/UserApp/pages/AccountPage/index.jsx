@@ -18,10 +18,12 @@ import "assets/css/base.scss";
 import ModalFormChangePass from "features/UserApp/components/ModalProfile/FormChangePass";
 import ModalFormChangeInfo from "features/UserApp/components/ModalProfile/FormChangeInfo";
 import ModalFormChangePhone from "features/UserApp/components/ModalProfile/FormChangePhone";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import RightColAccount from "features/UserApp/components/RightColAccount";
 
 export default function AccountPage() {
+  const match = useRouteMatch();
+  console.log(match);
   const [account, setAccount] = useState({
     name: "trần duy phong",
     email: "phong75664@st.vimaru.edu.vn",

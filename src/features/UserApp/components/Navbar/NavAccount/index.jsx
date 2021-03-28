@@ -21,12 +21,12 @@ export default function NavAccount() {
 
       <ul className="action__list">
         <li className="action__list--item">
-          <Link to="user/tai-khoan" className="action__list--link">
+          <Link to="/user/tai-khoan" className="action__list--link">
             Hồ sơ của tôi
           </Link>
         </li>
         <li className="action__list--item">
-          <Link to="user/tai-khoan" className="action__list--link">
+          <Link to="/user/tai-khoan" className="action__list--link">
             Lịch sử đơn hàng
           </Link>
         </li>

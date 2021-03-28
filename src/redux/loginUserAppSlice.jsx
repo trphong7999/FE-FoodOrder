@@ -3,14 +3,20 @@ const { createSlice } = require("@reduxjs/toolkit");
 const loginUserAppSlice = createSlice({
   name: "loginUserApp",
   initialState: {
-    user: null,
+    username: sessionStorage.getItem("username") || null,
   },
   reducers: {
     login: (state, action) => {
-      state.user = action.payload;
+      const username = action.payload.username;
+      const token = action.payload.token;
+      state.username = username;
+      sessionStorage.setItem("username", username);
+      sessionStorage.setItem("token", token);
     },
     logout: (state) => {
-      state.user = null;
+      state.username = null;
+      sessionStorage.removeItem("username");
+      sessionStorage.removeItem("auth_token");
     },
   },
 });

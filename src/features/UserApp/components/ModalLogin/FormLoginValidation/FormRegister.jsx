@@ -2,16 +2,13 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import logo from "assets/image/logo.png";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "redux/loginUserAppSlice";
+import userApi from "api/userApi";
 
 import "./style.scss";
 
-export default function FormLoginValidation() {
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
-
+export default function FormLoginValidation({ clickSwitchForm }) {
   const { register, handleSubmit, errors } = useForm({
     mode: "onBlur",
     validationSchema: Yup.object({
@@ -25,16 +22,23 @@ export default function FormLoginValidation() {
   });
 
   // ----------------- HANDLE LOGIN ------------
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
-  const handleSubmitLogin = (e) => {
+  const handleSubmitLogin = async (e) => {
     e.preventDefault();
-    const action = login({
-      userName: userName,
-      password: password,
-      loggedIn: true,
-    });
-    dispatch(action);
+
+    let res = await userApi.login({ username: userName, password });
+    if (typeof res === "string") {
+      const action = login({ username: userName, token: res });
+      dispatch(action);
+    }
+  };
+
+  // ------------------ SWITCH FORM LOGIN----------------
+  const callBackClickSwitchForm = () => {
+    clickSwitchForm(true);
   };
   // ---------------------------------------------
 
@@ -69,11 +73,23 @@ export default function FormLoginValidation() {
       />
       {errors.password && <div>{errors.password.message}</div>}
 
-      <Link to="/" className="link-register">
-        Đăng ký
-      </Link>
+      <label htmlFor="password">Nhập lại mật khẩu</label>
+      <input
+        type="password"
+        name="password"
+        placeholder="Nhập mật khẩu"
+        ref={register}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      {errors.password && <div>{errors.password.message}</div>}
 
-      <input type="submit" value="Đăng nhập" />
+      <div className="link-register">
+        Bạn đã có tài khoản?{" "}
+        <span onClick={callBackClickSwitchForm}>Đăng nhập</span>
+      </div>
+
+      <input type="submit" value="Đăng ký" />
     </form>
   );
 }

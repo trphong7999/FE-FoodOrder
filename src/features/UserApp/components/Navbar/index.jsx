@@ -13,9 +13,7 @@ import { RiUserAddFill } from "react-icons/ri";
 import { useSelector } from "react-redux";
 
 function Navbar(props) {
-  const [loginUser, setLoginUser] = useState(false);
   const user = useSelector((state) => state.loginUserApp);
-  console.log(user);
 
   // -----------SHOW MOBILE MENU-----------------------
   const [showMenu, setShowMenu] = useState(false);
@@ -67,7 +65,7 @@ function Navbar(props) {
           </ul>
 
           <div className="nav__account">
-            {user.user === null ? <ModalLogin /> : <NavAccount />}
+            {user.username === null ? <ModalLogin /> : <NavAccount />}
           </div>
 
           {/* --------------- HANDLE MOBILE MENU START --------------------------------------- */}

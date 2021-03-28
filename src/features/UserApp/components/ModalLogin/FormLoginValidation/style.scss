@@ -52,14 +52,14 @@
   }
 
   input[type="submit"] {
-    background: var(--primary-color);
-    color: white;
-    text-transform: uppercase;
+    background-color: var(--primary-color);
+    color: #fff;
     border: none;
     border-radius: 8px;
     margin: 3rem 0 0;
     padding: 1rem;
     font-size: 1.6rem;
+    flex-basis: 48%;
 
     &:hover {
       opacity: 0.9;
@@ -101,7 +101,13 @@
   }
 
   .link-register {
-    color: blue;
+    color: rgba(0, 0, 0, 0.26);
     font-size: 1.4rem;
+    cursor: pointer;
+
+    span {
+      color: var(--primary-color);
+      opacity: 0.9;
+    }
   }
 }
