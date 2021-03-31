@@ -12,8 +12,8 @@
 .row {
   display: flex;
   flex-wrap: wrap;
-  margin-left: -4px;
-  margin-right: -4px;
+  margin-left: -2px;
+  margin-right: -2px;
 }
 
 .row.no-guter {
