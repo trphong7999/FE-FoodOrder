@@ -2,9 +2,11 @@
   li {
     font-size: 1.5rem;
   }
+
   .field-wrap {
     display: flex;
     justify-content: space-between;
+    margin: 1.5rem 0;
     label {
       flex-basis: 20%;
       margin-top: 5px;
@@ -27,5 +29,59 @@
     .input_address {
       flex-basis: 70%;
     }
+  }
+
+  .checkbox-wrap {
+    display: flex;
+    font-size: 1.6rem;
+    align-items: center;
+    margin: 1.5rem 0;
+
+    .wrap-right {
+      flex-grow: 1;
+      display: flex;
+      justify-content: space-around;
+      margin-top: 0.5rem;
+      .MuiIconButton-colorPrimary {
+        color: rgb(120, 29, 225) !important;
+      }
+      .item {
+        display: flex;
+        flex-basis: 50%;
+        align-items: center;
+
+        .label {
+          width: 100%;
+          text-align: right;
+          font-size: 1.6rem;
+          margin-right: 1.5rem;
+        }
+        .input-check {
+          width: initial;
+          transform: scale(1.5);
+        }
+      }
+    }
+  }
+}
+
+.form-apply-validation {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 50rem;
+  padding-right: 1rem;
+  .required-field::after {
+    content: "*";
+    color: red;
+  }
+  .doneBtn {
+    background: rgb(120, 29, 225);
+    border-width: 2px;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    color: rgb(241, 241, 241);
+    position: absolute;
+    bottom: 2rem;
+    right: 5.5rem;
   }
 }

@@ -4,11 +4,7 @@ import { HiLocationMarker } from "react-icons/hi";
 import Address2Geocode from "components/Address2Geocode";
 import area from "./data";
 import { BsPhone } from "react-icons/bs";
-const AnyReactComponent = () => (
-  <div>
-    <HiLocationMarker style={{ fontSize: "3rem", color: "#781de1" }} />
-  </div>
-);
+
 function Form2({ representative, setRepresentative }) {
   const { name, address, identity, phone } = representative;
   return (
@@ -17,7 +13,7 @@ function Form2({ representative, setRepresentative }) {
         Thông tin người đại diện
       </h1>
       <div className="field-wrap">
-        <label>Họ và tên</label>
+        <label className="required-field">Họ và tên</label>
         <input
           type="text"
           name="name"
@@ -30,7 +26,7 @@ function Form2({ representative, setRepresentative }) {
         />
       </div>
       <div className="field-wrap">
-        <label>Địa chỉ</label>
+        <label className="required-field">Địa chỉ</label>
         <input
           type="text"
           name="name"
@@ -43,7 +39,7 @@ function Form2({ representative, setRepresentative }) {
         />
       </div>
       <div className="field-wrap">
-        <label>Số CMND</label>
+        <label className="required-field">Số CMND</label>
         <input
           type="text"
           name="identity"
@@ -56,7 +52,7 @@ function Form2({ representative, setRepresentative }) {
         />
       </div>
       <div className="field-wrap">
-        <label>SĐT</label>
+        <label className="required-field">SĐT</label>
         <input
           type="text"
           name="phone"

@@ -6,7 +6,7 @@ import {
   getLatLng,
 } from "react-places-autocomplete";
 
-function Address2Geocode({ location, setLocation }) {
+function Address2Geocode({ location, setLocation, geo, setGeo }) {
   const handleChange = (address) => {
     setLocation({ ...location, address: address });
   };
@@ -18,7 +18,8 @@ function Address2Geocode({ location, setLocation }) {
       })
       .then((latLng) => {
         const { lat, lng } = latLng;
-        setLocation({ ...location, lat: lat, lng: lng, address: address });
+        setLocation({ ...location, address: address });
+        setGeo({ lat: lat, lng: lng });
       })
       .catch((error) => console.error("Error"));
   };

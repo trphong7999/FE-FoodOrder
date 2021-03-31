@@ -1,6 +1,5 @@
 import React from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { HiLocationMarker } from "react-icons/hi";
 import Address2Geocode from "components/Address2Geocode";
 import area from "./data";
 import "leaflet/dist/leaflet.css";
@@ -16,8 +15,10 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 function Form1(props) {
-  const { name, setName, location, setLocation } = props;
-  const { address, district, lat, lng } = location;
+  const { name, setName, location, setLocation, geo, setGeo } = props;
+  const { lat, lng } = geo;
+  const { address, district } = location;
+  console.log(geo, location);
 
   function ChangeView({ center, zoom }) {
     const map = useMap();
@@ -31,7 +32,7 @@ function Form1(props) {
         Thông tin quán - Cơ bản
       </h1>
       <div className="field-wrap">
-        <label>Tên cơ sở</label>
+        <label className="required-field">Tên cơ sở</label>
         <input
           type="text"
           name="name"
@@ -42,22 +43,30 @@ function Form1(props) {
         />
       </div>
       <div className="field-wrap">
-        <label>Quận</label>
+        <label className="required-field">Quận</label>
         <select
           name="district"
           value={district}
-          onChange={(e) =>
-            setLocation({ ...location, district: e.target.value })
-          }
+          onChange={(e) => {
+            console.log(e.target);
+            setLocation({ ...location, district: e.target.value });
+          }}
         >
-          {area.map((item) => (
-            <option key={item.key}>{item.value}</option>
+          {area.map((item, index) => (
+            <option key={index} value={item.key}>
+              {item.value}
+            </option>
           ))}
         </select>
       </div>
       <div className="field-wrap">
-        <label>Địa chỉ</label>
-        <Address2Geocode location={location} setLocation={setLocation} />
+        <label className="required-field">Địa chỉ</label>
+        <Address2Geocode
+          location={location}
+          setLocation={setLocation}
+          geo={geo}
+          setGeo={setGeo}
+        />
       </div>
       <br />
       <div>
@@ -69,7 +78,7 @@ function Form1(props) {
           whenReady={(map) => {
             map.target.on("click", function (e) {
               const { lat, lng } = e.latlng;
-              setLocation({ ...location, lat: lat, lng: lng });
+              setGeo({ lat: lat, lng: lng });
             });
           }}
         >

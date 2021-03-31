@@ -4,6 +4,9 @@ import Form1 from "./Form1";
 import Form2 from "./Form2";
 import Form3 from "./Form3";
 import "./style.scss";
+import Form4 from "./Form4";
+import managerApi from "api/managerApi";
+import axios from "axios";
 
 const { makeStyles } = require("@material-ui/core");
 const useStyles = makeStyles((theme) => ({
@@ -16,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(3, 5, 3),
+    padding: theme.spacing(2.5, 6, 3),
   },
 }));
 
@@ -27,7 +30,7 @@ const nextStyle = {
   borderRadius: "8px",
   color: "#f1f1f1",
   position: "absolute",
-  bottom: "3rem",
+  bottom: "2rem",
   right: "5.5rem",
 };
 
@@ -41,12 +44,89 @@ function ModalForm({ handleClose }) {
   const [location, setLocation] = useState({
     address: "",
     district: 1,
+  });
+  const [geo, setGeo] = useState({
     lat: "20.828790101307185",
     lng: "106.71664668177716",
   });
   const [representative, setRepresentative] = useState("");
-  const [emailConfirm, setEmailConfirm] = useState("");
+  const [infoDetail, setInfoDetail] = useState({
+    email: "",
+    typeFood: null,
+    phone: "",
+    openTime: {
+      mon: {
+        label: "Thứ 2",
+        enable: true,
+        time: "09:00-22:00",
+      },
+      tue: {
+        label: "Thứ 3",
+        enable: true,
+        time: "09:00-22:00",
+      },
+      wed: {
+        label: "Thứ 4",
+        enable: true,
+        time: "09:00-22:00",
+      },
+      thu: {
+        label: "Thứ 5",
+        enable: true,
+        time: "09:00-22:00",
+      },
+      fri: {
+        label: "Thứ 6",
+        enable: true,
+        time: "09:00-22:00",
+      },
+      sat: {
+        label: "Thứ 7",
+        enable: true,
+        time: "09:00-22:00",
+      },
+      sun: {
+        label: "Chủ nhật",
+        enable: true,
+        time: "09:00-22:00",
+      },
+    },
+    dayPart: [],
+    avt: {},
+    deduct: 10,
+  });
+  const [dataImg, setDataImg] = useState();
+  const [error, setError] = useState("");
   const classes = useStyles();
+
+  const onSubmitForm = async () => {
+    const resUploadImg = await fetch(
+      "https://api.cloudinary.com/v1_1/vmu/image/upload",
+      {
+        method: "POST",
+        body: dataImg,
+      }
+    );
+    const img = await resUploadImg.json();
+    const merchantObj = {
+      name: name,
+      ...infoDetail,
+      representative: representative,
+      location: {
+        ...location,
+        lat: geo.lat.toString(),
+        lng: geo.lng.toString(),
+      },
+      avt: img.secure_url,
+    };
+    console.log(merchantObj);
+    const res = await managerApi.registerMerchant(merchantObj);
+    console.log(res);
+    if (res.status === "200" || !res.status) handleClose();
+    else if (res.data) setError(res.data);
+    else if (img.error) setError("Chưa thêm ảnh cho quán");
+    else setError("");
+  };
 
   const steps = [
     {
@@ -57,6 +137,8 @@ function ModalForm({ handleClose }) {
           setName={setName}
           location={location}
           setLocation={setLocation}
+          geo={geo}
+          setGeo={setGeo}
         />
       ),
     },
@@ -71,9 +153,28 @@ function ModalForm({ handleClose }) {
     },
     {
       name: "Thông tin quán - Chi tiết",
-      component: <Form3 />,
+      component: (
+        <Form3
+          dataImg={dataImg}
+          setDataImg={setDataImg}
+          infoDetail={infoDetail}
+          setInfoDetail={setInfoDetail}
+        />
+      ),
+    },
+    {
+      name: "Đăng ký ứng dụng Merchant",
+      component: (
+        <Form4
+          infoDetail={infoDetail}
+          setInfoDetail={setInfoDetail}
+          onSubmitForm={onSubmitForm}
+          error={error}
+        />
+      ),
     },
   ];
+
   return (
     <div className={classes.paper}>
       <button
