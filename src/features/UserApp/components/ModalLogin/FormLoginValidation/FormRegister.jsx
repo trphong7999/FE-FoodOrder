@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import logo from "assets/image/logo.png";
-import { useDispatch } from "react-redux";
-import { login } from "redux/loginUserAppSlice";
-import userApi from "api/userApi";
 
 import "./style.scss";
+import axios from "axios";
 
 export default function FormLoginValidation({ clickSwitchForm }) {
   const { register, handleSubmit, errors } = useForm({
@@ -18,22 +16,33 @@ export default function FormLoginValidation({ clickSwitchForm }) {
       password: Yup.string()
         .min(6, "Password should be longer than 6 characters")
         .required(),
+      confirmPassword: Yup.string()
+        .min(6, "Password should be longer than 6 characters")
+        .required(),
     }),
   });
 
-  // ----------------- HANDLE LOGIN ------------
+  // ----------------- HANDLE REGISTER ------------
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleSubmitLogin = async (e) => {
+  const handleSubmitRegister = (e) => {
     e.preventDefault();
 
-    let res = await userApi.login({ username: userName, password });
-    if (typeof res === "string") {
-      const action = login({ username: userName, token: res });
-      dispatch(action);
-    }
+    axios
+      .post("http://localhost:4000/api/users/signup", {
+        username: userName,
+        password: password,
+      })
+      .then(() => {
+        const noti = document.querySelector("#notify");
+        noti.textContent = "Bạn đã đăng ký thành công";
+      });
+
+    setUserName("");
+    setPassword("");
+    setConfirmPassword("");
   };
 
   // ------------------ SWITCH FORM LOGIN----------------
@@ -43,13 +52,11 @@ export default function FormLoginValidation({ clickSwitchForm }) {
   // ---------------------------------------------
 
   return (
-    <form
-      className="form-apply-validation"
-      onSubmit={(e) => handleSubmitLogin(e)}
-    >
+    <form className="form-input" onSubmit={(e) => handleSubmitRegister(e)}>
       <img src={logo} alt="logo" />
 
       <h1>Chào mừng đến với FoodLovers</h1>
+      <p id="notify"></p>
 
       <label htmlFor="username">Tên tài khoản</label>
       <input
@@ -60,7 +67,11 @@ export default function FormLoginValidation({ clickSwitchForm }) {
         value={userName}
         onChange={(e) => setUserName(e.target.value)}
       />
-      {errors.username && <div>{errors.username.message}</div>}
+      {errors.username && (
+        <div>
+          <p>{errors.username.message}</p>
+        </div>
+      )}
 
       <label htmlFor="password">Mật khẩu</label>
       <input
@@ -76,13 +87,13 @@ export default function FormLoginValidation({ clickSwitchForm }) {
       <label htmlFor="password">Nhập lại mật khẩu</label>
       <input
         type="password"
-        name="password"
+        name="confirmPassword"
         placeholder="Nhập mật khẩu"
         ref={register}
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
       />
-      {errors.password && <div>{errors.password.message}</div>}
+      {errors.confirmPassword && <div>{errors.confirmPassword.message}</div>}
 
       <div className="link-register">
         Bạn đã có tài khoản?{" "}

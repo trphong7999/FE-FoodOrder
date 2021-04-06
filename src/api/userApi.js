@@ -1,6 +1,6 @@
 import axiosClient from "./axiosClient";
 
-const managerApi = {
+const userAPi = {
   login: (params) => {
     const url = `/users/login`;
     return axiosClient.post(url, params);
@@ -9,6 +9,10 @@ const managerApi = {
     const url = `/users/auth`;
     return axiosClient.post(url);
   },
+  register: (params) => {
+    const url = `/users/signup`;
+    return axiosClient.post(url, params);
+  },
 };
 
-export default managerApi;
+export default userAPi;

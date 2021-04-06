@@ -44,10 +44,7 @@ export default function FormLoginValidation({ clickSwitchForm }) {
   // ---------------------------------------------
 
   return (
-    <form
-      className="form-apply-validation"
-      onSubmit={(e) => handleSubmitLogin(e)}
-    >
+    <form className="form-input" onSubmit={(e) => handleSubmitLogin(e)}>
       <img src={logo} alt="logo" />
 
       <h1>Chào mừng đến với FoodLovers</h1>
@@ -61,7 +58,6 @@ export default function FormLoginValidation({ clickSwitchForm }) {
         value={userName}
         onChange={(e) => setUserName(e.target.value)}
       />
-      {errors.username && <div>{errors.username.message}</div>}
 
       <label htmlFor="password">Mật khẩu</label>
       <input
@@ -72,7 +68,6 @@ export default function FormLoginValidation({ clickSwitchForm }) {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      {errors.password && <div>{errors.password.message}</div>}
 
       <div className="link-register">
         Bạn chưa có tài khoản?{" "}
