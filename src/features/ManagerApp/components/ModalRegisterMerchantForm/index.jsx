@@ -6,7 +6,6 @@ import Form3 from "./Form3";
 import "./style.scss";
 import Form4 from "./Form4";
 import managerApi from "api/managerApi";
-import axios from "axios";
 
 const { makeStyles } = require("@material-ui/core");
 const useStyles = makeStyles((theme) => ({
@@ -39,7 +38,7 @@ const prevStyle = {
   left: "5.5rem",
 };
 
-function ModalForm({ handleClose }) {
+function ModalRegisterMerchant({ handleClose }) {
   const [name, setName] = useState("");
   const [location, setLocation] = useState({
     address: "",
@@ -98,7 +97,7 @@ function ModalForm({ handleClose }) {
   const [dataImg, setDataImg] = useState();
   const [error, setError] = useState("");
   const classes = useStyles();
-
+  console.log(dataImg);
   const onSubmitForm = async () => {
     const resUploadImg = await fetch(
       "https://api.cloudinary.com/v1_1/vmu/image/upload",
@@ -119,9 +118,7 @@ function ModalForm({ handleClose }) {
       },
       avt: img.secure_url,
     };
-    console.log(merchantObj);
     const res = await managerApi.registerMerchant(merchantObj);
-    console.log(res);
     if (res.status === "200" || !res.status) handleClose();
     else if (res.data) setError(res.data);
     else if (img.error) setError("Chưa thêm ảnh cho quán");
@@ -180,9 +177,13 @@ function ModalForm({ handleClose }) {
       <button
         style={{
           position: "absolute",
+          padding: "0.5rem 1rem",
           right: 20,
           top: 15,
           fontSize: "1.5rem",
+          backgroundColor: "rgb(120, 29, 225)",
+          borderRadius: "8px",
+          color: "rgb(241, 241, 241)",
         }}
         onClick={() => handleClose()}
       >
@@ -195,4 +196,4 @@ function ModalForm({ handleClose }) {
   );
 }
 
-export default ModalForm;
+export default ModalRegisterMerchant;

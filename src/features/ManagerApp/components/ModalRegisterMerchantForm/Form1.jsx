@@ -48,7 +48,6 @@ function Form1(props) {
           name="district"
           value={district}
           onChange={(e) => {
-            console.log(e.target);
             setLocation({ ...location, district: e.target.value });
           }}
         >

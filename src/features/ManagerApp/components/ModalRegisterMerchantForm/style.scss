@@ -10,10 +10,21 @@
     label {
       flex-basis: 20%;
       margin-top: 5px;
+      font-size: 1.6rem;
     }
     input {
       flex-basis: 70%;
-      border-color: gray;
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    input:focus {
+      outline: none;
     }
     select {
       flex-basis: 70%;

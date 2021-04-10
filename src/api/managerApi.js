@@ -10,13 +10,12 @@ const managerApi = {
     return axiosClient.post(url);
   },
   registerMerchant: (merchantObj) => {
-    const config = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
     const url = `merchants/register`;
     return axiosClient.post(url, merchantObj);
+  },
+  registerPartner: (partnerObj) => {
+    const url = `partner/register`;
+    return axiosClient.post(url, partnerObj);
   },
 };
 

@@ -1,0 +1,50 @@
+.modal-register-partner {
+  top: calc((100vh - 70rem) / 2);
+  left: calc((100vw - 70rem) / 2);
+  width: 70rem;
+  border: 2px solid #000;
+  height: 70rem;
+  padding: 5rem 4rem;
+  position: absolute;
+  box-shadow: 0px 3px 5px -1px rgb(0 0 0 / 20%),
+    0px 5px 8px 0px rgb(0 0 0 / 14%), 0px 1px 14px 0px rgb(0 0 0 / 12%);
+  background-color: #fff;
+  .field-wrap {
+    display: flex;
+  }
+  .required-field::after {
+    content: "*";
+    color: red;
+  }
+  label {
+    flex-basis: 30%;
+    line-height: 2;
+    text-align: left;
+    display: block;
+    color: var(--text-color);
+    font-size: 1.6rem;
+    margin-top: 5px;
+  }
+  input {
+    flex-basis: 70%;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  select {
+    flex-basis: 70%;
+    border-radius: 0.7rem;
+    border-color: gray;
+    margin-bottom: 1rem;
+    height: 4rem;
+    padding: 0 1rem;
+    &:focus {
+      outline: none;
+    }
+  }
+}

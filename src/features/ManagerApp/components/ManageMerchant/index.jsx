@@ -3,29 +3,29 @@ import DataTable from "components/DataTable";
 import { Link } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import Modal from "@material-ui/core/Modal";
-import ModalForm from "../ModalForm";
+import ModalForm from "../ModalRegisterMerchantForm";
 import { useEffect } from "react";
 import merchantApi from "api/merchantApi";
 
 const columns = [
   { field: "id", headerName: "STT", width: 80 },
-  { field: "name", headerName: "Tên cơ sở", width: 250 },
-  { field: "representative", headerName: "Người đại diện", width: 250 },
+  { field: "name", headerName: "Tên cơ sở", width: 230 },
+  { field: "representative", headerName: "Người đại diện", width: 220 },
   {
-    field: "username",
+    field: "email",
     headerName: "Tài khoản cấp",
     width: 200,
   },
   {
     field: "address",
     headerName: "Địa chỉ",
-    width: 270,
+    width: 320,
   },
-  {
-    field: "deduct",
-    headerName: "Chiết khấu",
-    width: 130,
-  },
+  // {
+  //   field: "deduct",
+  //   headerName: "Chiết khấu",
+  //   width: 100,
+  // },
   {
     field: "action",
     headerName: "Hành động",
@@ -66,7 +66,7 @@ function ManageMerchant(props) {
           id: index + 1,
           name: merchant.name,
           representative: merchant.representative.name,
-          username: merchant.username,
+          email: merchant.email,
           address: merchant.location.address,
           deduct: merchant.deduct,
         }));

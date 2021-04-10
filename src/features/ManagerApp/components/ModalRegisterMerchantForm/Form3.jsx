@@ -127,7 +127,7 @@ function Form3(props) {
           </div>
         </div>
       </div>
-      <div className="field-wrap required-field">
+      <div className="field-wrap ">
         <label htmlFor="" className="required-field">
           Số điện thoại
         </label>
