@@ -1,0 +1,124 @@
+.login-merchant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2rem;
+  font-size: 1.6rem;
+
+  .login-logo {
+    img {
+      width: 150px;
+    }
+  }
+
+  .login__title {
+    margin-bottom: 2rem;
+    font-weight: bold;
+    font-size: 2rem;
+  }
+
+  .login__with-phone {
+    color: var(--white-color);
+    background-color: #1cacfc;
+    padding: 1.5rem;
+    width: 100%;
+    border-radius: 6px;
+    text-align: center;
+    margin-bottom: 2rem;
+
+    .with-phone__icon {
+      float: left;
+    }
+
+    span {
+      position: relative;
+      left: -7px;
+    }
+  }
+
+  .login__text-change {
+    color: #9a9a9a;
+    margin-bottom: 2rem;
+  }
+
+  .login__input {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 2rem;
+
+    .control-label {
+      font-size: 1.3rem;
+      padding-bottom: 0.5rem;
+    }
+
+    input {
+      padding: 1rem;
+      border: none;
+      border-bottom: 1px solid #c6c6c6;
+      outline: none;
+      color: #e2e2e2;
+      font-size: 1.6rem;
+
+      &:focus {
+        border-bottom: 1px solid #2cdbf6;
+      }
+
+      &::placeholder {
+        color: #e2e2e2;
+        font-size: 1.6rem;
+      }
+    }
+  }
+
+  .login__link {
+    color: #1964d4;
+    margin-bottom: 4rem;
+  }
+
+  .login__button {
+    width: 100%;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    padding: 1.2rem;
+    background-color: white;
+    border: 1px solid #1964d4;
+    color: #1964d4;
+  }
+
+  .login__button--main {
+    text-transform: uppercase;
+    color: white;
+    background-color: #1964d4;
+  }
+
+  .login__support {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    align-items: center;
+    font-size: 1.7rem;
+
+    .login__support-item {
+      display: flex;
+      align-items: center;
+
+      .item-icon {
+        color: #b2b2b2;
+        margin-right: 1rem;
+        font-size: 2.2rem;
+      }
+
+      .phone {
+        color: #0bad24;
+        margin-left: 1rem;
+        margin-right: 0;
+      }
+
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+}
