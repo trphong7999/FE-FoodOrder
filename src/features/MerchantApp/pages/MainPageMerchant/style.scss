@@ -1,0 +1,103 @@
+.main-merchant {
+  .icon {
+    font-size: 3rem;
+  }
+}
+
+.side-bar {
+  .side-bar__overlay {
+    background-color: #666666;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .side-bar__overlay--open {
+    opacity: 0.4;
+    display: block;
+  }
+
+  .side-bar__overlay--close {
+    opacity: 0;
+    display: none;
+  }
+
+  .side-bar__menu {
+    height: 100vh;
+    z-index: 1;
+    position: absolute;
+    width: 75%;
+    top: 0;
+    left: 0;
+    background-color: white;
+    transition: 0.3s ease-in-out;
+
+    .menu-wrap {
+      font-size: 1.6rem;
+
+      .menu-name {
+        background-color: #1964d4;
+        padding: 1.5rem;
+        font-size: 2rem;
+        color: white;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .menu-name__icon {
+          font-size: 2.5rem;
+        }
+      }
+      .menu-content {
+        .menu-content__item {
+          padding: 1.5rem 1rem;
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          border-bottom: 1px solid #f4f5f7;
+
+          .menu-content__item-icon {
+            font-size: 2.2rem;
+            margin-right: 1rem;
+          }
+
+          .menu-content__item-icon--blue {
+            color: #158df3;
+          }
+          .menu-content__item-icon--red {
+            color: #d72e19;
+          }
+          .menu-content__item-icon--yellow {
+            color: #ee780c;
+          }
+          .menu-content__item-icon--purple {
+            color: #532ee0;
+          }
+          .menu-content__item-icon--gray {
+            color: #7b8392;
+          }
+        }
+
+        .menu-content__list {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+          .menu-content__list-item {
+            padding: 1.5rem 1rem;
+          }
+        }
+      }
+    }
+  }
+  .side-bar__menu--close {
+    transform: translateX(-100%);
+  }
+
+  .side-bar__menu--open {
+    transform: translateX(0);
+  }
+}
