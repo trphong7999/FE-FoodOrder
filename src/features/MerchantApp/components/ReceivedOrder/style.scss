@@ -1,0 +1,120 @@
+.received-order {
+  font-size: 1.5rem;
+  .received-confirm {
+    display: flex;
+
+    .confirm {
+      margin: 1rem;
+      padding: 1rem;
+      border: 1px solid #789fc5;
+      border-radius: 18px;
+      color: #789fc5;
+    }
+
+    .active {
+      background-color: #789fc5;
+      color: white;
+    }
+  }
+  .received-note {
+    background-color: #fef7e5;
+
+    .note-wrap {
+      padding: 1rem;
+      display: flex;
+      .note-icon {
+        background-image: linear-gradient(#f2b340, #f7c743);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        margin-right: 1rem;
+
+        .icon {
+          margin: 0.5rem;
+          font-size: 3rem;
+          color: white;
+          z-index: 1;
+        }
+      }
+      .note-content {
+        color: #afaea3;
+      }
+    }
+  }
+
+  .received-list {
+    background-color: #f6f6f6;
+    padding: 1rem;
+    font-size: 1.6rem;
+
+    .list-item {
+      background-color: #fff;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+
+      .list-item__top {
+        display: flex;
+        justify-content: space-between;
+
+        .list-item__top-number {
+          display: flex;
+          div {
+            &:first-child {
+              padding: 0.5rem;
+              background-color: #789fc5;
+              color: white;
+            }
+
+            &:last-child {
+              padding: 0.5rem;
+              color: #789fc5;
+              background-color: #d8e7f5;
+            }
+          }
+        }
+
+        .list-item__top-icon {
+          color: gray;
+          font-size: 2.6rem;
+        }
+      }
+      .list-item__time {
+        padding: 1rem 0;
+        color: #aeafb3;
+        font-size: 1.5rem;
+      }
+      .list-item__customer {
+        margin-bottom: 1rem;
+        font-weight: bold;
+      }
+      .list-item__status-driver {
+        margin-bottom: 1rem;
+        span {
+          &:first-child {
+            color: #5f6267;
+            padding-right: 1rem;
+          }
+          &:last-child {
+            color: #909195;
+          }
+        }
+      }
+      .list-item__bot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .list-item__bot-total {
+          display: flex;
+          align-items: center;
+          .list-item__bot-icon {
+            color: #7e8492;
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+          }
+        }
+      }
+    }
+  }
+}

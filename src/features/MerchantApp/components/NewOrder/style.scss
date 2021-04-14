@@ -1,0 +1,157 @@
+.content {
+  .content-title {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-bottom: 1px dashed #9999995c;
+
+    .title-name {
+      font-size: 1.7rem;
+      margin-bottom: 1rem;
+    }
+    .title-quantity {
+      font-size: 1.3rem;
+      color: #999;
+    }
+  }
+
+  .content-time {
+    display: flex;
+    padding: 2rem 1rem;
+    justify-content: space-between;
+
+    .time-left {
+      display: flex;
+      flex-direction: column;
+      .time-left__limit {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+
+        span {
+          font-size: 1.7rem;
+        }
+      }
+      .time-left__space {
+        font-size: 1.3rem;
+        color: #999;
+      }
+    }
+
+    .time-right {
+      .time-right__button {
+        height: 100%;
+        padding: 0 1rem;
+        border-radius: 4px;
+        background-color: white;
+      }
+    }
+  }
+
+  .content-order {
+    background-color: #fefaef;
+
+    .content-note {
+      background-color: #f5efd9;
+      margin: 0.5rem;
+      padding: 1rem;
+      font-size: 1.4rem;
+
+      .note-title {
+        color: #b59779;
+        font-weight: bold;
+      }
+      .note-content {
+        color: #ccb79d;
+      }
+    }
+
+    .content-order__item {
+      padding: 1rem;
+      display: flex;
+
+      color: #b59779;
+      font-weight: bold;
+      font-size: 1.4rem;
+      border-top: 1px dashed #f5efd9;
+
+      .item-quantity {
+        flex-basis: 15%;
+      }
+      .item-food {
+        flex-basis: 65%;
+
+        .item-food__name {
+          padding-bottom: 1rem;
+        }
+        .item-food__note {
+          font-size: 1.2rem;
+          font-weight: 400;
+          span {
+            padding-left: 1rem;
+          }
+        }
+      }
+      .item-total {
+        flex-basis: 20%;
+        text-align: right;
+      }
+    }
+  }
+
+  .confirm-order {
+    padding: 0 1rem;
+    .confirm-order__text {
+      display: flex;
+      justify-content: space-between;
+      margin: 1rem 0;
+
+      span {
+        font-size: 1.4rem;
+        font-weight: bold;
+      }
+
+      .text-total {
+        display: flex;
+        align-items: center;
+        .text-total__icon {
+          color: #7c8493;
+          margin-right: 1rem;
+          font-size: 2rem;
+        }
+
+        span {
+          font-size: 2rem;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .confirm-order__button {
+      display: flex;
+      justify-content: space-between;
+      font-size: 3rem;
+      font-weight: bold;
+      padding-bottom: 1rem;
+
+      button {
+        background-color: white;
+        padding: 1.3rem;
+        width: 100%;
+        font-size: 1.7rem;
+        font-weight: bold;
+        flex-basis: 48%;
+
+        &:first-child {
+          border: 2px solid #288bde;
+          color: #007fdc;
+        }
+
+        &:last-child {
+          background-color: #288bde;
+          color: white;
+          border: 2px solid #007fdc;
+        }
+      }
+    }
+  }
+}
