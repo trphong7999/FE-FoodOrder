@@ -6,7 +6,7 @@ import Manager from "./pages/Manager";
 
 function ManagerApp(props) {
   const match = useRouteMatch();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.manager);
 
   return (
     <Switch>
