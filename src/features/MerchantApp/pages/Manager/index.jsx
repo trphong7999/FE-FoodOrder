@@ -9,6 +9,9 @@ import ReceivedOrder from "features/MerchantApp/components/ReceivedOrder";
 import TookOrder from "features/MerchantApp/components/TookOrder";
 import CaceledOrder from "features/MerchantApp/components/CaceledOrder";
 import "./style.scss";
+import merchantApi from "api/merchantApi";
+import { useDispatch } from "react-redux";
+import { logoutMerchant } from "redux/loginMerchantAppSlice";
 
 function MainPageMerchant() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -19,6 +22,18 @@ function MainPageMerchant() {
     { id: 3, title: "Đã hủy", active: false },
   ]);
   const [serial, setSerial] = useState(1);
+  const dispatch = useDispatch();
+
+  // Check login is the manager
+  merchantApi.checkAuth().then((res) => {
+    try {
+      if (res.status === 400) {
+        dispatch(logoutMerchant());
+      }
+    } catch {
+      return;
+    }
+  });
 
   const handleActive = (index) => {
     const list = tabNavOrder;

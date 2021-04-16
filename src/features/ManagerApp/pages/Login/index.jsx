@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./style.scss";
 import { FaUsersCog, FaKey } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { login } from "redux/userSlice";
+import { login } from "redux/loginManagerAppSlice";
 import logo from "assets/image/logo.png";
 import managerApi from "api/managerApi";
 

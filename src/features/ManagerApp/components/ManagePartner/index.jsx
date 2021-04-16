@@ -67,7 +67,7 @@ function ManagePartner(props) {
           id: index + 1,
           name: partner.name,
           email: partner.email,
-          gender: partner.gender,
+          gender: partner.gender === "male" ? "Nam" : "Nữ",
           address: partner.address,
           phone: partner.phone,
         }));

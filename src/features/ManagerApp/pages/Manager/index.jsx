@@ -8,7 +8,7 @@ import DashBoard from "features/ManagerApp/components/DashBoard";
 import ManagePartner from "features/ManagerApp/components/ManagePartner";
 import ManageCustomer from "features/ManagerApp/components/ManageCustomer";
 import managerApi from "api/managerApi";
-import { logout } from "redux/userSlice";
+import { logout } from "redux/loginManagerAppSlice";
 import { useDispatch } from "react-redux";
 
 function Manager(props) {
