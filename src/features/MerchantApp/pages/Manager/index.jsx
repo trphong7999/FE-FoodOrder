@@ -23,14 +23,10 @@ function MainPageMerchant() {
 
   return (
     <div className="grid">
-      {/* --------------------NAVBAR--------------------- */}
       <NavBar />
-      {/* ----------------------NAVBAR END-------------------- */}
-
-      {/* ----------------------TAB MENU----------------------- */}
       <TabMenu />
+
       <div className="main-merchant">
-        {/* ----------------------TAB MENU END----------------------- */}
         <NewOrder />
       </div>
     </div>

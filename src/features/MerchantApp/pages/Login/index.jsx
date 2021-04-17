@@ -62,7 +62,9 @@ function LoginMerchant() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <Link className="login__link">Quên mật khẩu</Link>
+        <Link to="" className="login__link">
+          Quên mật khẩu
+        </Link>
         <button
           className="login__button login__button--main"
           onClick={(e) => Login(e)}

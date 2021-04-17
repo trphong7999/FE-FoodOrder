@@ -1,33 +1,24 @@
 import React from "react";
-import "../style.scss";
+import "./styleDetail.scss";
 import { FaPhoneAlt } from "react-icons/fa";
 import { BsChevronLeft } from "react-icons/bs";
 import { RiFileCopyLine } from "react-icons/ri";
 import ava1 from "assets/image/avartar/ava1.jpg";
 import taixe1 from "assets/image/avartar/taixe1.jpg";
-import { Link, useRouteMatch } from "react-router-dom";
+import deliveryMan from "assets/image/icons/delivery-man.png";
+import { Link } from "react-router-dom";
 
-function ReceivedConfirm() {
-  const match = useRouteMatch();
+function ReceivedPrepareDetail() {
   return (
-    <div className="received-confirm">
+    <div className="received-confirm-detail">
       <div className="detail-head">
         <Link to="/merchant/da-nhan" className="detail-head__link">
           <BsChevronLeft className="detail-head__icon" />
-          <span>Đã đã nhận</span>
+          <span>Đã nhận</span>
         </Link>
       </div>
 
-      <div className="detail-customer">
-        <div
-          className="customer-avatar"
-          style={{ backgroundImage: `url(${ava1})` }}
-        ></div>
-        <div className="customer-info">
-          <span>Huynh Nhi</span>
-          <span>Đã đặt 1 đơn</span>
-        </div>
-      </div>
+      <div className="detail-approve">Đơn đã được quán xác nhận</div>
 
       <div className="detail-note">
         <span>Ghi chú khách hàng:</span>
@@ -37,10 +28,26 @@ function ReceivedConfirm() {
       <div className="detail-partner">
         <div
           className="partner-avatar"
-          style={{ backgroundImage: `url(${taixe1})` }}
+          style={{ backgroundImage: `url(${ava1})` }}
         ></div>
         <div className="partner-info">
-          <span>Nguyễn Đức Huy</span>
+          <span>Tran Duy Phong</span>
+          <span>Đã đặt: 1 đơn</span>
+        </div>
+        <div className="partner-action">
+          <FaPhoneAlt className="icon" />
+        </div>
+      </div>
+
+      <div className="detail-partner">
+        <div
+          className="partner-avatar"
+          style={{ backgroundImage: `url(${deliveryMan})` }}
+        >
+          <img src={taixe1} alt="" />
+        </div>
+        <div className="partner-info">
+          <span>Phùng Hoàng Đại</span>
           <span>0858888486</span>
         </div>
         <div className="partner-action">
@@ -103,8 +110,12 @@ function ReceivedConfirm() {
           <span>4.2km</span>
         </div>
       </div>
+
+      <div className="detail-action">
+        <button className="detail-action__btn">Báo cho tài xế đã xong</button>
+      </div>
     </div>
   );
 }
 
-export default ReceivedConfirm;
+export default ReceivedPrepareDetail;

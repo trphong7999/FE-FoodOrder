@@ -142,12 +142,12 @@
         flex-basis: 48%;
 
         &:first-child {
-          border: 2px solid #288bde;
-          color: #007fdc;
+          border: 2px solid var(--merchant-color);
+          color: var(--merchant-color);
         }
 
         &:last-child {
-          background-color: #288bde;
+          background-color: var(--merchant-color);
           color: white;
           border: 2px solid #007fdc;
         }
