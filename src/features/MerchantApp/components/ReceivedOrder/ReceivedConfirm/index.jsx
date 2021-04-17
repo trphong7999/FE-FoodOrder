@@ -1,17 +1,21 @@
 import React from "react";
-import "./style.scss";
+import "../style.scss";
 import { FaPhoneAlt } from "react-icons/fa";
 import { BsChevronLeft } from "react-icons/bs";
 import { RiFileCopyLine } from "react-icons/ri";
 import ava1 from "assets/image/avartar/ava1.jpg";
 import taixe1 from "assets/image/avartar/taixe1.jpg";
+import { Link, useRouteMatch } from "react-router-dom";
 
-function ReceivedOrderDetail() {
+function ReceivedConfirm() {
+  const match = useRouteMatch();
   return (
-    <div className="received-order-detail">
+    <div className="received-confirm">
       <div className="detail-head">
-        <BsChevronLeft className="detail-head__icon" />
-        <span>Đã lấy</span>
+        <Link to="/merchant/da-nhan" className="detail-head__link">
+          <BsChevronLeft className="detail-head__icon" />
+          <span>Đã đã nhận</span>
+        </Link>
       </div>
 
       <div className="detail-customer">
@@ -103,4 +107,4 @@ function ReceivedOrderDetail() {
   );
 }
 
-export default ReceivedOrderDetail;
+export default ReceivedConfirm;

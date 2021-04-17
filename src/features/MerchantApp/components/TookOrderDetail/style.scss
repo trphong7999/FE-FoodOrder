@@ -10,18 +10,22 @@
 
   .detail-head {
     background-color: #789fc5;
-    color: white;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    font-size: 1.8rem;
 
-    .detail-head__icon {
-      font-size: 2.4rem;
-    }
+    .detail-head__link {
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      text-decoration: none;
 
-    span {
-      margin-left: 1rem;
+      .detail-head__icon {
+        font-size: 2.4rem;
+      }
+
+      span {
+        margin-left: 1rem;
+      }
     }
   }
 
