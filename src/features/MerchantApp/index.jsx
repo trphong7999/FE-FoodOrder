@@ -36,7 +36,7 @@ function MerchantApp(props) {
         />
         <Route path={`${match.url}/da-lay`} exact component={TookOrder} />
         <Route path={`${match.url}/da-lay/:id`} component={TookOrderDetail} />
-        <Route path={`${match.url}/da-huy`} component={CaceledOrder} />
+        <Route path={`${match.url}/lich-su`} component={CaceledOrder} />
       </Switch>
     </div>
   );

@@ -26,20 +26,22 @@ export default function ReceivedConfirm() {
           <div className="list-item">
             <div className="list-item__top">
               <div className="list-item__top-number">
-                <div>23</div>
-                <div>#0229</div>
+                <span>23</span>
+                <span>#0229</span>
               </div>
               <AiFillPushpin className="list-item__top-icon" />
             </div>
             <div className="list-item__time">
-              <span>Giao hàng lúc 23:10 (trong - 17h 12m)</span>
+              <span>Giao hàng lúc 22:10 (trong - 23 phút)</span>
             </div>
             <div className="list-item__customer">
               <span>Tran Duy Phong</span>
             </div>
             <div className="list-item__status-driver">
-              <span>Trạng thái:</span>
-              <span className="status-driver-1">Đang chỉ định tài xế</span>
+              <div className="status-driver__text">
+                Trạng thái:
+                <span className="status-driver-1">Đang chỉ định tài xế</span>
+              </div>
             </div>
             <div className="list-item__bot">
               <span>3 món</span>
@@ -54,21 +56,23 @@ export default function ReceivedConfirm() {
         <div className="list-item">
           <div className="list-item__top">
             <div className="list-item__top-number">
-              <div>23</div>
-              <div>#0229</div>
+              <span>24</span>
+              <span>#0230</span>
             </div>
             <AiFillPushpin className="list-item__top-icon" />
           </div>
 
           <div className="list-item__time">
-            <span>Giao hàng lúc 23:10 (trong - 17h 12m)</span>
+            <span>Giao hàng lúc 23:10 (trong - 30 phút)</span>
           </div>
           <div className="list-item__customer">
             <span>Huynh Nhi</span>
           </div>
           <div className="list-item__status-driver">
-            <span>Trạng thái:</span>
-            <span>Đang chỉ định tài xế</span>
+            <div className="status-driver__text">
+              Trạng thái:
+              <span className="status-driver-1">Đang chỉ định tài xế</span>
+            </div>
           </div>
 
           <div className="list-item__bot">

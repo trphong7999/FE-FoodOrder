@@ -1,4 +1,6 @@
+@import "App.scss";
 .received-content {
+  font-size: 1.3rem;
   .received-note {
     background-color: #fef7e5;
 
@@ -45,13 +47,20 @@
       border-radius: 4px;
       box-shadow: var(--box-shadow);
 
+      .list-item__dashed-boder {
+        @include dashed-border;
+      }
+
+      .list-item--p1 {
+        padding: 1rem 0;
+      }
+
       .list-item__top {
         display: flex;
         justify-content: space-between;
 
         .list-item__top-number {
-          display: flex;
-          div {
+          span {
             &:first-child {
               padding: 0.5rem;
               background-color: #789fc5;
@@ -67,15 +76,14 @@
         }
 
         .list-item__top-icon {
-          color: gray;
-          font-size: 2.6rem;
+          color: #ccc;
+          font-size: 2rem;
         }
       }
 
       .list-item__time {
         padding: 1rem 0;
         color: #aeafb3;
-        font-size: 1.5rem;
       }
 
       .list-item__customer {
@@ -85,17 +93,34 @@
 
       .list-item__status-driver {
         margin-bottom: 1rem;
-        span {
-          &:first-child {
-            color: #5f6267;
-            padding-right: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .status-driver__text {
+          color: #5f6267;
+
+          .status-driver-1 {
+            color: #aeafb3;
+            padding-left: 0.5rem;
+          }
+          .status-driver-2 {
+            color: #f5cda2;
+            padding-left: 0.5rem;
           }
         }
-        .status-driver-1 {
-          color: #aeafb3;
-        }
-        .status-driver-2 {
-          color: #f5cda2;
+
+        .status-driver__action {
+          display: flex;
+          align-items: center;
+          border: 1px solid #ccc;
+          border-radius: 16px;
+          padding: 0.1rem 1rem;
+          .status-driver__action-icon {
+            color: var(--merchant-color);
+            font-size: 2.2rem;
+            margin-right: 0.5rem;
+          }
         }
       }
 
@@ -113,6 +138,15 @@
             font-size: 1.8rem;
           }
         }
+      }
+
+      .list-item__wait-time {
+        padding: 0.5rem 0;
+        color: #ccc;
+      }
+      .list-item__wait-cus {
+        padding-bottom: 0.5rem;
+        font-weight: bold;
       }
     }
   }

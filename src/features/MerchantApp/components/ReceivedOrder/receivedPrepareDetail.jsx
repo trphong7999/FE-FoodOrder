@@ -31,7 +31,7 @@ function ReceivedPrepareDetail() {
           style={{ backgroundImage: `url(${ava1})` }}
         ></div>
         <div className="partner-info">
-          <span>Tran Duy Phong</span>
+          <span>Huynh Nhi</span>
           <span>Đã đặt: 1 đơn</span>
         </div>
         <div className="partner-action">

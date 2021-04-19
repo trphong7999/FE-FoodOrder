@@ -2,15 +2,15 @@ import React from "react";
 import NavBar from "../NavBar";
 import TabMenu from "../TabMenu";
 
-function CanceledOrder() {
+function OrderHistory() {
   return (
     <div className="grid">
       <NavBar />
       <TabMenu />
       <div className="cancel-order"></div>
-      <b>this is cancel order</b>
+      <b>this is lich su</b>
     </div>
   );
 }
 
-export default CanceledOrder;
+export default OrderHistory;

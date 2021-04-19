@@ -64,3 +64,15 @@ $small-width: 376px;
     @content;
   }
 }
+
+@mixin dashed-border {
+  background-image: linear-gradient(
+    to left,
+    #ccc 0%,
+    #ccc 50%,
+    transparent 50%
+  );
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+  background-position: bottom;
+}

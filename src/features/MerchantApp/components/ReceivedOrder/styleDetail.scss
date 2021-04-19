@@ -1,3 +1,4 @@
+@import "App.scss";
 .received-confirm-detail {
   font-size: 1.5rem;
   background-color: var(--bg-color);
@@ -117,7 +118,8 @@
       display: flex;
       justify-content: space-between;
       font-weight: 500;
-      border-bottom: 1px dashed var(--bg-color);
+
+      @include dashed-border;
 
       .item-quantity {
         flex-basis: 15%;
