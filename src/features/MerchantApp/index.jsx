@@ -1,5 +1,4 @@
 import React from "react";
-import TookOrderDetail from "./components/TookOrderDetail";
 import { useSelector } from "react-redux";
 import { Switch, useRouteMatch, Route, Router } from "react-router";
 import Login from "./pages/Login";
@@ -9,6 +8,8 @@ import TookOrder from "./components/TookOrder";
 import CaceledOrder from "./components/CanceledOrder";
 import ReceivedConfirm from "./components/ReceivedOrder/receivedConfirmDetail";
 import ReceivedPrepareDetail from "./components/ReceivedOrder/receivedPrepareDetail";
+import TookOrderDetail from "./components/TookOrderDetail";
+import ReasonRefusal from "./components/ReasonRefusal";
 
 function MerchantApp(props) {
   const match = useRouteMatch();
@@ -24,7 +25,10 @@ function MerchantApp(props) {
           // component={() => (merchant.email ? <Manager /> : <Login />)}
           component={Manager}
         />
-
+        <Route
+          path={`${match.url}/moi-tu-choi/:id`}
+          component={ReasonRefusal}
+        />
         <Route path={`${match.url}/da-nhan`} exact component={ReceivedOrder} />
         <Route
           path={`${match.url}/da-nhan/xac-nhan/:id`}

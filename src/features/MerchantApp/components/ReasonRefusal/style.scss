@@ -1,0 +1,72 @@
+.reason-refusal {
+  font-size: 1.6rem;
+  color: #43434a;
+  .reason-refusal__head {
+    background-color: var(--merchant-color);
+
+    .reason-refusal__link {
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      font-size: 1.8rem;
+      text-decoration: none;
+    }
+    .reason-refusal__icon {
+      font-size: 2.4rem;
+    }
+
+    span {
+      margin-left: 1rem;
+    }
+  }
+
+  .reason-refusal__body {
+    .reason-refusal__list {
+      margin: 0;
+      padding-left: 0;
+
+      .reason-refusal__item {
+        padding: 2rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+
+        .item__input-check {
+          background-color: white;
+
+          &:hover {
+            cursor: pointer;
+          }
+
+          &:checked {
+            background-color: var(--merchant-color);
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  .reason-refusal__bot {
+    margin: 1rem;
+    .reason-refusal__bot-button {
+      background-color: var(--merchant-color);
+      border: none;
+      width: 100%;
+      padding: 1rem;
+      border-radius: 4px;
+      font-size: 1.8rem;
+      font-weight: 500;
+
+      a {
+        text-decoration: none;
+        color: white;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

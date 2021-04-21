@@ -12,7 +12,7 @@ function TookOrderDetail() {
   return (
     <div className="received-order-detail">
       <div className="detail-head">
-        <Link to="/merchant" className="detail-head__link">
+        <Link to="/merchant/da-lay" className="detail-head__link">
           <BsChevronLeft className="detail-head__icon" />
           <span>Đã lấy</span>
         </Link>

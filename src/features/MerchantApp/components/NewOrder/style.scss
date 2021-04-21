@@ -179,16 +179,26 @@
 
         button {
           background-color: white;
-          padding: 1rem;
+
           width: 100%;
           font-size: 1.7rem;
-          font-weight: bold;
+          font-weight: 500;
           flex-basis: 48%;
           border-radius: 4px;
 
+          &:hover {
+            cursor: pointer;
+          }
+
           &:first-child {
             border: 2px solid var(--merchant-color);
-            color: var(--merchant-color);
+
+            a {
+              display: block;
+              padding: 1rem;
+              color: var(--merchant-color);
+              text-decoration: none;
+            }
           }
 
           &:last-child {
