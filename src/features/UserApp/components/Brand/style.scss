@@ -10,12 +10,15 @@
     box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 15%);
     overflow: hidden;
 
-    .brand__banner {
-      width: 100%;
-      height: 200px;
-      background-size: cover;
-      background-position: center;
-      margin-bottom: 24px;
+    .brand-banner-wrap {
+      display: flex;
+      .brand__banner {
+        flex-basis: 25%;
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        margin-bottom: 24px;
+      }
     }
 
     .brand__info {
@@ -34,11 +37,36 @@
         padding: 5px;
       }
 
-      .brand-info__open {
+      .brand-info__time {
+        display: flex;
         margin: 22px 0 16px;
-        color: #7ed321;
         font-size: 1.6rem;
-        font-weight: bold;
+
+        .brand-info__open {
+          display: flex;
+          align-items: center;
+          color: #7ed321;
+          font-weight: bold;
+        }
+
+        .brand-info__close {
+          display: flex;
+          align-items: center;
+          color: #9c9c9c;
+          font-weight: bold;
+        }
+
+        .brand-info__text {
+          display: flex;
+          align-items: center;
+          font-size: 1.5rem;
+          padding-left: 2rem;
+
+          .brand-info__text-icon {
+            font-size: 1.7rem;
+            margin-right: 0.5rem;
+          }
+        }
       }
 
       .brand-info__location {

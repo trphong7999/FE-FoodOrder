@@ -1,10 +1,45 @@
 import React, { useEffect, useState } from "react";
-import banner1 from "assets/image/brand/brand-banner1.jpg";
 import { HashLink as Link } from "react-router-hash-link";
 import "./style.scss";
 import productimg from "assets/image/dishes/trasua.jpg";
+import { BiTimeFive } from "react-icons/bi";
+import { GoPrimitiveDot } from "react-icons/go";
+import {
+  getDistanceFromLatLonInKm,
+  validatePrice,
+  getLocationUser,
+} from "func.js";
 
-export default function Brand() {
+export default function Brand({ merchant }) {
+  const getStrDayOfWeek = () => {
+    const now = new Date();
+    const dayOfWeek = now.toString().split(" ")[0];
+    return dayOfWeek.toLowerCase();
+  };
+
+  const computeDistant = () => {
+    const { latitude, longitude } = getLocationUser().coords;
+    return getDistanceFromLatLonInKm(
+      latitude,
+      longitude,
+      merchant.location.lat,
+      merchant.location.lng
+    );
+  };
+
+  const computeStatus = (openTime) => {
+    const now = new Date();
+    const openTimeToDay = openTime[getStrDayOfWeek()];
+    const [timeOpen, timeClose] = openTimeToDay.time.split("-");
+    const [hourOpen, minuteOpen] = timeOpen.split(":");
+    const [hourClose, minuteClose] = timeClose.split(":");
+    if (
+      hourOpen < now.getHours() < hourClose &&
+      minuteOpen < now.getMinutes() < minuteClose
+    )
+      return true;
+    return false;
+  };
   useEffect(() => {
     const catList = document.getElementById("category-list");
     const sticky = catList.offsetTop;
@@ -23,18 +58,52 @@ export default function Brand() {
   return (
     <div className="brand">
       <div className="brand-top">
-        <div
-          className="brand__banner"
-          style={{ backgroundImage: `url("${banner1}")` }}
-        ></div>
+        <div className="brand-banner-wrap">
+          <div
+            className="brand__banner"
+            style={{ backgroundImage: `url("${merchant.avt}")` }}
+          ></div>
+          <div
+            className="brand__banner"
+            style={{ backgroundImage: `url("${merchant.avt}")` }}
+          ></div>
+          <div
+            className="brand__banner"
+            style={{ backgroundImage: `url("${merchant.avt}")` }}
+          ></div>
+          <div
+            className="brand__banner"
+            style={{ backgroundImage: `url("${merchant.avt}")` }}
+          ></div>
+        </div>
+
         <div className="brand__info">
-          <div className="brand-info__name">
-            Trà Sữa Thiên Hội - Khánh Tường
+          <div className="brand-info__name">{merchant.name}</div>
+          <span className="brand-info__type">
+            {merchant.typeFood === 0 ? "Đồ ăn" : "Đồ uống"}
+          </span>
+          {computeDistant().toFixed(1)}
+          <div className="brand-info__time">
+            {computeStatus(merchant.openTime) ? (
+              <div className="brand-info__open">
+                <GoPrimitiveDot />
+                Đang mở cửa
+              </div>
+            ) : (
+              <div className="brand-info__close">
+                <GoPrimitiveDot />
+                Chưa mở cửa
+              </div>
+            )}
+            <div className="brand-info__text">
+              <BiTimeFive className="brand-info__text-icon" />
+              {merchant.openTime[getStrDayOfWeek()].label}{" "}
+              {merchant.openTime[getStrDayOfWeek()].time.split("-").join(" - ")}
+            </div>
           </div>
-          <span className="brand-info__type">Trà Sữa</span>
-          <div className="brand-info__open">Đang mở cửa</div>
+
           <div className="brand-info__location">
-            238 Khánh Hội, Phường 6 Quận 4 Hồ Chí Minh
+            {merchant.location.address}
           </div>
         </div>
       </div>
@@ -42,213 +111,48 @@ export default function Brand() {
       <div className="brand-content row">
         <div className="col l-3 brand__category">
           <ul id="category-list" className="category__list">
-            <li>
-              <Link to="#group1" className="category__item">
-                collagen
-              </Link>
-            </li>
-            <li>
-              <Link to="#group2" className="category__item">
-                kem tuyết
-              </Link>
-            </li>
-            <li>
-              <Link to="#group3" className="category__item">
-                macchiato series
-              </Link>
-            </li>
-            <li>
-              <Link to="#group4" className="category__item">
-                trà nguyên chất
-              </Link>
-            </li>
+            {merchant.category.map((item, index) => (
+              <li>
+                <Link to={`#group${index}`} className="category__item">
+                  {item.name}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 
         <div className="col l-9 brand__products">
-          <div id="group1" className="product__category">
-            <div className="product__category-name">collagen</div>
-            <div className="product__list-item">
-              <div className="product__item">
-                <div
-                  className="product__item-img hover-mode"
-                  style={{ backgroundImage: `url("${productimg}")` }}
-                >
-                  <div className="img-big__wrapper hidden">
+          {merchant.category.map((cat, index) => (
+            <div id={`group${index}`} className="product__category">
+              <div className="product__category-name">{cat.name}</div>
+              <div className="product__list-item">
+                {cat.foods.map((food, index) => (
+                  <div className="product__item">
                     <div
-                      className="img-big"
+                      className="product__item-img hover-mode"
                       style={{ backgroundImage: `url("${productimg}")` }}
-                    ></div>
+                    >
+                      <div className="img-big__wrapper hidden">
+                        <div
+                          className="img-big"
+                          style={{ backgroundImage: `url("${productimg}")` }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div className="product__item-content">
+                      <div className="product__name">{food.name}</div>
+                      <div className="product__price">
+                        {validatePrice(food.price)} đ
+                      </div>
+                    </div>
+                    <div className="product__add">
+                      <button className="product__add-btn">+</button>
+                    </div>
                   </div>
-                </div>
-                <div className="product__item-content">
-                  <div className="product__name">Trà Sữa Collagen</div>
-                  <div className="product__price">64.000 đ</div>
-                </div>
-                <div className="product__add">
-                  <button className="product__add-btn">+</button>
-                </div>
-              </div>
-              <div className="product__item">
-                <div
-                  className="product__item-img hover-mode"
-                  style={{ backgroundImage: `url("${productimg}")` }}
-                >
-                  <div className="img-big__wrapper hidden">
-                    <div
-                      className="img-big"
-                      style={{ backgroundImage: `url("${productimg}")` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="product__item-content">
-                  <div className="product__name">Đào Collagen</div>
-                  <div className="product__price">64.000 đ</div>
-                </div>
-                <div className="product__add">
-                  <button className="product__add-btn">+</button>
-                </div>
+                ))}
               </div>
             </div>
-          </div>
-
-          <div id="group2" className="product__category">
-            <div className="product__category-name">kem tuyết</div>
-            <div className="product__list-item">
-              <div className="product__item">
-                <div
-                  className="product__item-img hover-mode"
-                  style={{ backgroundImage: `url("${productimg}")` }}
-                >
-                  <div className="img-big__wrapper hidden">
-                    <div
-                      className="img-big"
-                      style={{ backgroundImage: `url("${productimg}")` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="product__item-content">
-                  <div className="product__name">Trà Sữa Collagen</div>
-                  <div className="product__price">64.000 đ</div>
-                </div>
-                <div className="product__add">
-                  <button className="product__add-btn">+</button>
-                </div>
-              </div>
-              <div className="product__item">
-                <div
-                  className="product__item-img hover-mode"
-                  style={{ backgroundImage: `url("${productimg}")` }}
-                >
-                  <div className="img-big__wrapper hidden">
-                    <div
-                      className="img-big"
-                      style={{ backgroundImage: `url("${productimg}")` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="product__item-content">
-                  <div className="product__name">Đào Collagen</div>
-                  <div className="product__price">64.000 đ</div>
-                </div>
-                <div className="product__add">
-                  <button className="product__add-btn">+</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div id="group3" className="product__category">
-            <div className="product__category-name">MACCHIATO SERIES</div>
-            <div className="product__list-item">
-              <div className="product__item">
-                <div
-                  className="product__item-img hover-mode"
-                  style={{ backgroundImage: `url("${productimg}")` }}
-                >
-                  <div className="img-big__wrapper hidden">
-                    <div
-                      className="img-big"
-                      style={{ backgroundImage: `url("${productimg}")` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="product__item-content">
-                  <div className="product__name">Trà Sữa Collagen</div>
-                  <div className="product__price">64.000 đ</div>
-                </div>
-                <div className="product__add">
-                  <button className="product__add-btn">+</button>
-                </div>
-              </div>
-              <div className="product__item">
-                <div
-                  className="product__item-img hover-mode"
-                  style={{ backgroundImage: `url("${productimg}")` }}
-                >
-                  <div className="img-big__wrapper hidden">
-                    <div
-                      className="img-big"
-                      style={{ backgroundImage: `url("${productimg}")` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="product__item-content">
-                  <div className="product__name">Đào Collagen</div>
-                  <div className="product__price">64.000 đ</div>
-                </div>
-                <div className="product__add">
-                  <button className="product__add-btn">+</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div id="group4" className="product__category">
-            <div className="product__category-name">TRÀ NGUYÊN CHẤT</div>
-            <div className="product__list-item">
-              <div className="product__item">
-                <div
-                  className="product__item-img hover-mode"
-                  style={{ backgroundImage: `url("${productimg}")` }}
-                >
-                  <div className="img-big__wrapper hidden">
-                    <div
-                      className="img-big"
-                      style={{ backgroundImage: `url("${productimg}")` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="product__item-content">
-                  <div className="product__name">Trà Sữa Collagen</div>
-                  <div className="product__price">64.000 đ</div>
-                </div>
-                <div className="product__add">
-                  <button className="product__add-btn">+</button>
-                </div>
-              </div>
-              <div className="product__item">
-                <div
-                  className="product__item-img hover-mode"
-                  style={{ backgroundImage: `url("${productimg}")` }}
-                >
-                  <div className="img-big__wrapper hidden">
-                    <div
-                      className="img-big"
-                      style={{ backgroundImage: `url("${productimg}")` }}
-                    ></div>
-                  </div>
-                </div>
-                <div className="product__item-content">
-                  <div className="product__name">Đào Collagen</div>
-                  <div className="product__price">64.000 đ</div>
-                </div>
-                <div className="product__add">
-                  <button className="product__add-btn">+</button>
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

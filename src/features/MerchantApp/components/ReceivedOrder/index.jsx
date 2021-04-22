@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "../NavBar";
 import TabMenu from "../TabMenu";
 import ReceivedConfirm from "./receivedConfirm";
 import ReceivedPrepare from "./receivedPrepare";
 import ReceivedWait from "./receivedWait";
 import "./style.scss";
+import axios from "axios";
 
 function ReceivedOrder() {
   const [listConfirm, setListConfirm] = useState([
@@ -13,9 +14,11 @@ function ReceivedOrder() {
     { id: 2, title: "Chờ đến lấy", active: false },
   ]);
   const [countTabList, setCountTabList] = useState(1);
+  const [listReceived, setListReceived] = useState([]);
+  const [listPrepare, setListPrepare] = useState([]);
 
   const handleActiveReceivedTabList = (index) => {
-    const newList = listConfirm;
+    const newListTab = listConfirm;
     listConfirm.map((item, i) => {
       if (i === index) {
         item.active = true;
@@ -24,11 +27,29 @@ function ReceivedOrder() {
       }
       return item;
     });
-    setListConfirm(newList);
+    setListConfirm(newListTab);
     setCountTabList(index + 1);
-    console.log(index);
-    console.log(newList);
   };
+
+  useEffect(() => {
+    const getReceivedList = async () => {
+      const result = await axios(`http://localhost:5000/receivedOrder`);
+      if (result) {
+        setListReceived(result.data);
+      }
+    };
+    getReceivedList();
+  }, []);
+
+  useEffect(() => {
+    const getPrepareList = async () => {
+      const result = await axios(`http://localhost:5000/receivedPrepare`);
+      if (result) {
+        setListPrepare(result.data);
+      }
+    };
+    getPrepareList();
+  }, []);
 
   return (
     <div className="grid">
@@ -58,9 +79,9 @@ function ReceivedOrder() {
 
         {/* ----------RECEIVED CONFIRM--------------- */}
         {countTabList === 1 ? (
-          <ReceivedConfirm />
+          <ReceivedConfirm listReceived={listReceived} />
         ) : countTabList === 2 ? (
-          <ReceivedPrepare />
+          <ReceivedPrepare listPrepare={listPrepare} />
         ) : (
           <ReceivedWait />
         )}

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { BsChevronLeft } from "react-icons/bs";
 import axios from "axios";
 import "./style.scss";
 
 export default function ReasonRefusal() {
   const { id } = useParams();
-  console.log(id);
+  const history = useHistory();
+
   const [newOrder, setNewOrder] = useState([]);
 
   const addCancelOrder = async (order) => {
@@ -20,6 +21,7 @@ export default function ReasonRefusal() {
   const handleConfirmRemove = () => {
     addCancelOrder(newOrder);
     removeListNewOrderItem(id);
+    history.goBack();
   };
 
   useEffect(() => {
@@ -33,10 +35,15 @@ export default function ReasonRefusal() {
   return (
     <div className="reason-refusal">
       <div className="reason-refusal__head">
-        <Link to="/merchant" className="reason-refusal__link">
+        <div
+          className="reason-refusal__link"
+          onClick={() => {
+            history.goBack();
+          }}
+        >
           <BsChevronLeft className="reason-refusal__icon" />
           <span>Lý do từ chối</span>
-        </Link>
+        </div>
       </div>
 
       <div className="reason-refusal__body">
@@ -91,7 +98,7 @@ export default function ReasonRefusal() {
             handleConfirmRemove();
           }}
         >
-          <Link to="/merchant">Xác nhận</Link>
+          Xác nhận
         </button>
       </div>
     </div>

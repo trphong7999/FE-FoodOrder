@@ -185,6 +185,8 @@
           font-weight: 500;
           flex-basis: 48%;
           border-radius: 4px;
+          padding: 1rem;
+          color: var(--merchant-color);
 
           &:hover {
             cursor: pointer;
@@ -192,13 +194,6 @@
 
           &:first-child {
             border: 2px solid var(--merchant-color);
-
-            a {
-              display: block;
-              padding: 1rem;
-              color: var(--merchant-color);
-              text-decoration: none;
-            }
           }
 
           &:last-child {

@@ -4,6 +4,7 @@ const loginUserAppSlice = createSlice({
   name: "loginUserApp",
   initialState: {
     username: sessionStorage.getItem("username") || null,
+    pos: {},
   },
   reducers: {
     login: (state, action) => {
@@ -18,9 +19,12 @@ const loginUserAppSlice = createSlice({
       sessionStorage.removeItem("username");
       sessionStorage.removeItem("auth_token");
     },
+    getPos: (state, action) => {
+      state.pos = action.payload;
+    },
   },
 });
 
 const { reducer, actions } = loginUserAppSlice;
-export const { login, logout } = actions;
+export const { login, logout, getPos } = actions;
 export default reducer;

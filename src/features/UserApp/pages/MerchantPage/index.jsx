@@ -1,5 +1,5 @@
 import Navbar from "features/UserApp/components/Navbar";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "features/UserApp/components/Footer";
 import Brand from "features/UserApp/components/Brand";
 import CartOrder from "features/UserApp/components/CartOrder";
@@ -10,6 +10,7 @@ import merchantApi from "api/merchantApi";
 
 export default function MerchantPage() {
   const match = useRouteMatch();
+  const [merchant, setMerchant] = useState(false);
 
   useEffect(() => {
     const fetchMerchant = async () => {
@@ -20,7 +21,7 @@ export default function MerchantPage() {
 
         // };
         const res = await merchantApi.get(match.params.id);
-        console.log(res);
+        setMerchant(res);
       } catch (error) {
         console.log("Failed to fetch product list: ", error);
       }
@@ -36,7 +37,7 @@ export default function MerchantPage() {
         <section className="grid wide">
           <div className="row">
             <div className="col l-8">
-              <Brand />
+              {merchant ? <Brand merchant={merchant} /> : ""}
             </div>
             <div className="col l-4">
               <CartOrder />
