@@ -18,6 +18,7 @@ const merchantApi = {
     const url = `/merchants/${id}`;
     return axiosClient.get(url);
   },
+  //------------------------------------------------
 };
 
 export default merchantApi;

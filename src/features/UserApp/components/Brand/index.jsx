@@ -4,13 +4,20 @@ import "./style.scss";
 import productimg from "assets/image/dishes/trasua.jpg";
 import { BiTimeFive } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
+import { IoLocationOutline } from "react-icons/io5";
 import {
   getDistanceFromLatLonInKm,
   validatePrice,
   getLocationUser,
 } from "func.js";
+import { useDispatch, useSelector } from "react-redux";
+import { addCartOrder } from "redux/cartOrderSlice";
 
 export default function Brand({ merchant }) {
+  const dispatch = useDispatch();
+  const listCartOrder = useSelector((state) => state.cartOrder);
+
+  // ------------------------ HANDLE TIME OPEN - CLOSE ------------------
   const getStrDayOfWeek = () => {
     const now = new Date();
     const dayOfWeek = now.toString().split(" ")[0];
@@ -40,6 +47,20 @@ export default function Brand({ merchant }) {
       return true;
     return false;
   };
+  // ------------------------ HANDLE TIME OPEN - CLOSE END------------------
+
+  const handleAddCartOrder = (name, price, merchantId) => {
+    const dish = { merchantId: merchantId, name: name, price: price };
+    const dishesExisted = listCartOrder.filter(
+      (item) => item.merchantId === merchantId && item.name === name
+    );
+    if (!dishesExisted.length) {
+      console.log("ok");
+      const action = addCartOrder(dish);
+      dispatch(action);
+    }
+  };
+
   useEffect(() => {
     const catList = document.getElementById("category-list");
     const sticky = catList.offsetTop;
@@ -82,7 +103,10 @@ export default function Brand({ merchant }) {
           <span className="brand-info__type">
             {merchant.typeFood === 0 ? "Đồ ăn" : "Đồ uống"}
           </span>
-          {computeDistant().toFixed(1)}
+          <div className="brand-info__distant">
+            <IoLocationOutline className="brand-info__distant-icon" />
+            {computeDistant().toFixed(1)}km
+          </div>
           <div className="brand-info__time">
             {computeStatus(merchant.openTime) ? (
               <div className="brand-info__open">
@@ -112,7 +136,7 @@ export default function Brand({ merchant }) {
         <div className="col l-3 brand__category">
           <ul id="category-list" className="category__list">
             {merchant.category.map((item, index) => (
-              <li>
+              <li key={index}>
                 <Link to={`#group${index}`} className="category__item">
                   {item.name}
                 </Link>
@@ -123,11 +147,11 @@ export default function Brand({ merchant }) {
 
         <div className="col l-9 brand__products">
           {merchant.category.map((cat, index) => (
-            <div id={`group${index}`} className="product__category">
+            <div id={`group${index}`} className="product__category" key={index}>
               <div className="product__category-name">{cat.name}</div>
               <div className="product__list-item">
                 {cat.foods.map((food, index) => (
-                  <div className="product__item">
+                  <div className="product__item" key={index}>
                     <div
                       className="product__item-img hover-mode"
                       style={{ backgroundImage: `url("${productimg}")` }}
@@ -146,7 +170,18 @@ export default function Brand({ merchant }) {
                       </div>
                     </div>
                     <div className="product__add">
-                      <button className="product__add-btn">+</button>
+                      <button
+                        className="product__add-btn"
+                        onClick={() => {
+                          handleAddCartOrder(
+                            food.name,
+                            food.price,
+                            merchant._id
+                          );
+                        }}
+                      >
+                        +
+                      </button>
                     </div>
                   </div>
                 ))}

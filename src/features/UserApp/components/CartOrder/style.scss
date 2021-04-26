@@ -86,8 +86,9 @@
           }
         }
         .item-price {
-          text-align: center;
+          text-align: right;
           flex-basis: 30%;
+          font-weight: bold;
         }
       }
     }
@@ -97,7 +98,7 @@
       color: var(--text-color);
       font-weight: bold;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       margin: 15px 0;
 
       .amount__num {

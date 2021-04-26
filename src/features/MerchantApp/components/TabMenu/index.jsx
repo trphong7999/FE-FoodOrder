@@ -6,7 +6,7 @@ function TabMenu() {
   const [tabNavOrder, setTabNavOrder] = useState([
     { id: 0, title: "Mới", active: true, link: "/merchant" },
     { id: 1, title: "Đã nhận", active: false, link: "/merchant/da-nhan" },
-    { id: 2, title: "Đã lấy", active: false, link: "/merchant/da-lay" },
+    { id: 2, title: "Đã hủy", active: false, link: "/merchant/da-huy" },
     { id: 3, title: "Lịch sử", active: false, link: "/merchant/lich-su" },
   ]);
 

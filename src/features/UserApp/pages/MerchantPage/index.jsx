@@ -7,11 +7,11 @@ import CartOrder from "features/UserApp/components/CartOrder";
 import "./style.scss";
 import { useRouteMatch } from "react-router";
 import merchantApi from "api/merchantApi";
+import NotFound from "components/pages/NotFound";
 
 export default function MerchantPage() {
   const match = useRouteMatch();
-  const [merchant, setMerchant] = useState(false);
-
+  const [merchant, setMerchant] = useState(1);
   useEffect(() => {
     const fetchMerchant = async () => {
       try {
@@ -21,7 +21,8 @@ export default function MerchantPage() {
 
         // };
         const res = await merchantApi.get(match.params.id);
-        setMerchant(res);
+        if (res.status !== 400) setMerchant(res);
+        else setMerchant(false);
       } catch (error) {
         console.log("Failed to fetch product list: ", error);
       }
@@ -31,22 +32,30 @@ export default function MerchantPage() {
   }, []);
   return (
     <div className="merchant__main">
-      <Navbar />
+      {typeof merchant === "object" ? (
+        <div>
+          <Navbar />
 
-      <div className="merchant__content">
-        <section className="grid wide">
-          <div className="row">
-            <div className="col l-8">
-              {merchant ? <Brand merchant={merchant} /> : ""}
-            </div>
-            <div className="col l-4">
-              <CartOrder />
-            </div>
+          <div className="merchant__content">
+            <section className="grid wide">
+              <div className="row">
+                <div className="col l-8">
+                  <Brand merchant={merchant} />
+                </div>
+                <div className="col l-4">
+                  <CartOrder merchantId={merchant._id} />
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
-      </div>
 
-      <Footer />
+          <Footer />
+        </div>
+      ) : merchant === 1 ? (
+        ""
+      ) : (
+        <NotFound />
+      )}
     </div>
   );
 }

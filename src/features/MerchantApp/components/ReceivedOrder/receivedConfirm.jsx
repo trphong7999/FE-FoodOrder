@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./styleContent.scss";
 import { HiLightBulb } from "react-icons/hi";
 import { AiFillPushpin } from "react-icons/ai";
 import { IoWallet } from "react-icons/io5";
-import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
-import axios from "axios";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import { validatePrice, sumQuantity, sumTotal } from "func";
 
 export default function ReceivedConfirm({ listReceived }) {
@@ -12,9 +11,9 @@ export default function ReceivedConfirm({ listReceived }) {
   const history = useHistory();
   // const location = useLocation();
 
-  const changeUrlToDetail = (id, order) => {
+  const changeUrlToDetail = (order) => {
     const location = {
-      pathname: `${match.url}/xac-nhan/${id}`,
+      pathname: `${match.url}/xac-nhan/${order.id}`,
       state: { orderDetail: order },
     };
     history.push(location);
@@ -41,7 +40,7 @@ export default function ReceivedConfirm({ listReceived }) {
             className="list-item"
             key={order.id}
             onClick={() => {
-              changeUrlToDetail(order.id, order);
+              changeUrlToDetail(order);
             }}
           >
             <div className="list-item__top">

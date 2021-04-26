@@ -27,7 +27,7 @@
       .brand-info__name {
         font-size: 2rem;
         font-weight: bold;
-        margin-bottom: 20px;
+        margin-bottom: 2rem;
       }
 
       .brand-info__type {
@@ -37,9 +37,22 @@
         padding: 5px;
       }
 
+      .brand-info__distant {
+        display: flex;
+        align-items: center;
+        font-size: 1.5rem;
+        margin: 2rem 0 1.5rem;
+
+        .brand-info__distant-icon {
+          margin-right: 0.5rem;
+          font-size: 2rem;
+          color: var(--);
+        }
+      }
+
       .brand-info__time {
         display: flex;
-        margin: 22px 0 16px;
+        margin-bottom: 1.5rem;
         font-size: 1.6rem;
 
         .brand-info__open {
@@ -91,14 +104,14 @@
       .category__list {
         background-color: var(--white-color);
         list-style: none;
-        padding: 0 0 3rem;
+        padding-left: 0;
         margin: 0 0;
         border-radius: 8px;
         box-shadow: 2px 2px 4px 0px rgb(0 0 0 / 15%);
 
         li {
           margin: 0 1.5rem;
-
+          border-bottom: 1px solid #3333333b;
           .category__item {
             text-decoration: none;
             display: block;
@@ -106,12 +119,14 @@
             color: var(--text-color);
             text-transform: uppercase;
             padding: 10px 0;
-            border-bottom: 1px solid #3333333b;
 
             &:hover {
               color: var(--primary-color);
               cursor: pointer;
             }
+          }
+          &:last-child {
+            border: none;
           }
         }
       }

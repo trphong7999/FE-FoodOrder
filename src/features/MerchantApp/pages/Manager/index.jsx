@@ -10,7 +10,7 @@ import axios from "axios";
 
 function MainPageMerchant() {
   const dispatch = useDispatch();
-  const [newListOrder, setNewListOrder] = useState(false);
+  const [newListOrder, setNewListOrder] = useState([]);
 
   // Check login is the manager
   merchantApi.checkAuth().then((res) => {
@@ -39,7 +39,11 @@ function MainPageMerchant() {
       <TabMenu />
 
       <div className="main-merchant">
-        {newListOrder.length ? <NewOrder newListOrder={newListOrder} /> : ""}
+        {newListOrder.length > 0 ? (
+          <NewOrder newListOrder={newListOrder} />
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

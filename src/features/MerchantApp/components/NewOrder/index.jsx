@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IoWallet } from "react-icons/io5";
 import "./style.scss";
-import { Link, useHistory, useRouteMatch } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import axios from "axios";
 import { validatePrice } from "func";
 
@@ -35,7 +35,12 @@ function NewOrder({ newListOrder }) {
   };
   // ------------------------------------------------------------
   const changeUrlToRefusal = () => {
-    history.push(`${match.url}/moi-tu-choi/${detailOrder.id}`);
+    const location = {
+      pathname: `${match.url}/moi-tu-choi/${detailOrder.id}`,
+      state: { detailOrderNeedCancel: detailOrder },
+    };
+    history.push(location);
+    history.replace(location);
   };
 
   return (

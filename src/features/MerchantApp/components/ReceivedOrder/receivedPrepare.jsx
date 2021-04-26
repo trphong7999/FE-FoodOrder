@@ -8,7 +8,6 @@ import { validatePrice } from "func";
 export default function ReceivedPrepare({ listPrepare }) {
   const match = useRouteMatch();
   const history = useHistory();
-  console.log(listPrepare);
 
   const changeUrlToDetailPrepare = (order) => {
     const location = {
@@ -24,6 +23,7 @@ export default function ReceivedPrepare({ listPrepare }) {
         {listPrepare.map((order, index) => (
           <div
             className="list-item"
+            key={index}
             onClick={() => {
               changeUrlToDetailPrepare(order);
             }}
@@ -61,7 +61,8 @@ export default function ReceivedPrepare({ listPrepare }) {
             <div className="list-item__bot">
               <span>{order.totalNumberOfDishes} món</span>
               <div className="list-item__bot-total">
-                <IoWallet className="list-item__bot-icon" />
+                <span className="list-item__bot-cash">Cash</span>
+
                 <span>{validatePrice(order.finalAmount)} đ</span>
               </div>
             </div>

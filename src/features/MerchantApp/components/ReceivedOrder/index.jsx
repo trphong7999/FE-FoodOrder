@@ -16,6 +16,7 @@ function ReceivedOrder() {
   const [countTabList, setCountTabList] = useState(1);
   const [listReceived, setListReceived] = useState([]);
   const [listPrepare, setListPrepare] = useState([]);
+  const [listWait, setListWait] = useState([]);
 
   const handleActiveReceivedTabList = (index) => {
     const newListTab = listConfirm;
@@ -51,6 +52,16 @@ function ReceivedOrder() {
     getPrepareList();
   }, []);
 
+  useEffect(() => {
+    const getWaitList = async () => {
+      const result = await axios(`http://localhost:5000/receivedWait`);
+      if (result) {
+        setListWait(result.data);
+      }
+    };
+    getWaitList();
+  }, []);
+
   return (
     <div className="grid">
       <NavBar />
@@ -83,7 +94,7 @@ function ReceivedOrder() {
         ) : countTabList === 2 ? (
           <ReceivedPrepare listPrepare={listPrepare} />
         ) : (
-          <ReceivedWait />
+          <ReceivedWait listWait={listWait} />
         )}
 
         {/* ----------RECEIVED CONFIRM END--------------- */}

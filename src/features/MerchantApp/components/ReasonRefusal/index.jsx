@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import React from "react";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { BsChevronLeft } from "react-icons/bs";
 import axios from "axios";
 import "./style.scss";
@@ -7,8 +7,8 @@ import "./style.scss";
 export default function ReasonRefusal() {
   const { id } = useParams();
   const history = useHistory();
-
-  const [newOrder, setNewOrder] = useState([]);
+  const location = useLocation();
+  const orderNeedCancel = location.state.detailOrderNeedCancel;
 
   const addCancelOrder = async (order) => {
     await axios.post(`http://localhost:5000/canceledOrder`, order);
@@ -19,18 +19,10 @@ export default function ReasonRefusal() {
   };
 
   const handleConfirmRemove = () => {
-    addCancelOrder(newOrder);
+    addCancelOrder({ ...orderNeedCancel, reason: [] });
     removeListNewOrderItem(id);
     history.goBack();
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios(`http://localhost:5000/newListOrder/${id}`);
-      setNewOrder(result.data);
-    };
-    fetchData();
-  }, []);
 
   return (
     <div className="reason-refusal">

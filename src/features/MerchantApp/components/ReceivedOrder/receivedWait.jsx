@@ -3,28 +3,30 @@ import "./styleContent.scss";
 import { AiFillPushpin } from "react-icons/ai";
 import { IoWallet, IoNotificationsCircleSharp } from "react-icons/io5";
 import { Link, useRouteMatch } from "react-router-dom";
+import { validatePrice } from "func";
 
-export default function ReceivedWait() {
+export default function ReceivedWait({ listWait }) {
   const match = useRouteMatch();
   return (
     <div className="received-content">
       <div className="received-content-list">
-        <Link to={`${match.url}/cho-lay/1`}>
-          <div className="list-item">
+        {listWait.map((item, index) => (
+          <div className="list-item" key={index}>
             <div className="list-item__top">
               <div className="list-item__top-number">
-                <span>21</span>
-                <span>#0227</span>
+                <span>{index + 1}</span>
+                <span>#{item.id}</span>
               </div>
               <AiFillPushpin className="list-item__top-icon" />
             </div>
 
             <div className="list-item__wait-time">
-              Giao hàng lúc 9:10 (trong - 30 phút)
+              Giao hàng lúc {item.time.startOrder} (trong - {item.time.limit}{" "}
+              phút)
             </div>
 
             <div className="list-item__wait-cus list-item__dashed-boder">
-              Duy Phong
+              {item.customer.name}
             </div>
 
             <div className="list-item__status-driver list-item__dashed-boder list-item--p1">
@@ -38,14 +40,14 @@ export default function ReceivedWait() {
               </div>
             </div>
             <div className="list-item__bot">
-              <span>3 món</span>
+              <span>{item.totalNumberOfDishes} món</span>
               <div className="list-item__bot-total">
-                <IoWallet className="list-item__bot-icon" />
-                <span>49.700 đ</span>
+                <span className="list-item__bot-cash">Cash</span>
+                <span>{validatePrice(item.finalAmount)} đ</span>
               </div>
             </div>
           </div>
-        </Link>
+        ))}
       </div>
     </div>
   );

@@ -9,12 +9,13 @@ import {
 import Login from "./pages/Login";
 import Manager from "./pages/Manager";
 import ReceivedOrder from "./components/ReceivedOrder";
-import TookOrder from "./components/TookOrder";
-import CaceledOrder from "./components/CanceledOrder";
+import CancelOrder from "./components/CancelOrder";
+import OrderHistory from "./components/OrderHistory";
 import ReceivedConfirm from "./components/ReceivedOrder/receivedConfirmDetail";
 import ReceivedPrepareDetail from "./components/ReceivedOrder/receivedPrepareDetail";
-import TookOrderDetail from "./components/TookOrderDetail";
+import CancelOrderDetail from "./components/CancelOrderDetail";
 import ReasonRefusal from "./components/ReasonRefusal";
+import OrderHistoryDetail from "./components/OrderHistoryDetail";
 
 function MerchantApp(props) {
   const match = useRouteMatch();
@@ -48,9 +49,16 @@ function MerchantApp(props) {
             path={`${match.url}/da-nhan/chuan-bi/:id`}
             component={ReceivedPrepareDetail}
           />
-          <Route path={`${match.url}/da-lay`} exact component={TookOrder} />
-          <Route path={`${match.url}/da-lay/:id`} component={TookOrderDetail} />
-          <Route path={`${match.url}/lich-su`} component={CaceledOrder} />
+          <Route path={`${match.url}/da-huy`} exact component={CancelOrder} />
+          <Route
+            path={`${match.url}/da-huy/:id`}
+            component={CancelOrderDetail}
+          />
+          <Route path={`${match.url}/lich-su`} exact component={OrderHistory} />
+          <Route
+            path={`${match.url}/lich-su/:id`}
+            component={OrderHistoryDetail}
+          />
         </Switch>
       </div>
     </Router>
