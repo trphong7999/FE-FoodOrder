@@ -1,0 +1,81 @@
+.food-menu {
+  font-size: 1.4rem;
+  background-color: var(--bg-color);
+
+  .food-menu__head {
+    padding: 1rem;
+    .top-select {
+      margin-right: 1rem;
+      border-radius: 16px;
+      padding: 0.5rem 1rem;
+      background-color: white;
+      border: 1px solid #ccc;
+
+      &:focus {
+        outline: none;
+      }
+
+      option {
+        &:first-child {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .food-menu__body {
+    background-color: white;
+    .body-title {
+      padding: 1.2rem 1rem;
+      text-transform: uppercase;
+      border-top: 1px solid #ccc;
+    }
+
+    .body-list {
+      h2 {
+        text-align: center;
+      }
+      .body-list__item {
+        padding: 1rem;
+        display: flex;
+        position: relative;
+        border-top: 1px solid #ebebeb;
+        opacity: 0.9;
+
+        &:last-child {
+          border-bottom: 1px solid #ebebeb;
+        }
+
+        .item-img {
+          width: 8rem;
+          height: 8rem;
+          background-size: cover;
+        }
+
+        .item-content {
+          font-weight: 500;
+          padding: 0 1rem;
+          font-size: 1.5rem;
+          .item-content__name {
+            margin-bottom: 2rem;
+          }
+          .item-content__price {
+            color: #4c97d7;
+            span {
+              text-decoration: underline;
+              font-size: 1.3rem;
+            }
+          }
+        }
+        .item-action {
+          position: absolute;
+          bottom: 1rem;
+          right: 1rem;
+          .item-action__icon {
+            font-size: 3rem;
+          }
+        }
+      }
+    }
+  }
+}

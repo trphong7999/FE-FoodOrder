@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
@@ -16,52 +16,65 @@ import ReceivedPrepareDetail from "./components/ReceivedOrder/receivedPrepareDet
 import CancelOrderDetail from "./components/CancelOrderDetail";
 import ReasonRefusal from "./components/ReasonRefusal";
 import OrderHistoryDetail from "./components/OrderHistoryDetail";
+import FoodMenu from "./components/FoodMenu";
+import merchantApi from "api/merchantApi";
 
-function MerchantApp(props) {
+function MerchantApp() {
   const match = useRouteMatch();
   const merchant = useSelector((state) => state.merchant);
-  console.log(merchant);
+
+  // const [infoMerchant, setInfoMerchant] = useState(1);
+  // useEffect(() => {
+  //   const fetchMerchant = async () => {
+  //     try {
+  //       // const params = {
+  //       //   _page: 1,
+  //       //   _limit: 10,
+
+  //       // };
+  //       const res = await merchantApi.get(merchantId);
+  //       if (res.status !== 400) setInfoMerchant(res);
+  //       else setInfoMerchant(false);
+  //     } catch (error) {
+  //       console.log("Failed to fetch merchant info: ", error);
+  //     }
+  //   };
+
+  //   fetchMerchant();
+  // }, []);
 
   return (
-    <Router>
-      <div className="merchant-app">
-        <Switch>
-          <Route
-            exact
-            path={match.url}
-            // component={() => (merchant.email ? <Manager /> : <Login />)}
-            component={Manager}
-          />
-          <Route
-            path={`${match.url}/moi-tu-choi/:id`}
-            component={ReasonRefusal}
-          />
-          <Route
-            path={`${match.url}/da-nhan`}
-            exact
-            component={ReceivedOrder}
-          />
-          <Route
-            path={`${match.url}/da-nhan/xac-nhan/:id`}
-            component={ReceivedConfirm}
-          />
-          <Route
-            path={`${match.url}/da-nhan/chuan-bi/:id`}
-            component={ReceivedPrepareDetail}
-          />
-          <Route path={`${match.url}/da-huy`} exact component={CancelOrder} />
-          <Route
-            path={`${match.url}/da-huy/:id`}
-            component={CancelOrderDetail}
-          />
-          <Route path={`${match.url}/lich-su`} exact component={OrderHistory} />
-          <Route
-            path={`${match.url}/lich-su/:id`}
-            component={OrderHistoryDetail}
-          />
-        </Switch>
-      </div>
-    </Router>
+    <div className="merchant-app" style={{ color: "var(--text-color)" }}>
+      <Switch>
+        <Route
+          exact
+          path={`${match.url}/quan-ly`}
+          component={() => (merchant.email ? <Manager /> : <Login />)}
+          // component={Manager}
+        />
+        <Route
+          path={`${match.url}/moi-tu-choi/:id`}
+          component={ReasonRefusal}
+        />
+        <Route path={`${match.url}/da-nhan`} exact component={ReceivedOrder} />
+        <Route
+          path={`${match.url}/da-nhan/xac-nhan/:id`}
+          component={ReceivedConfirm}
+        />
+        <Route
+          path={`${match.url}/da-nhan/chuan-bi/:id`}
+          component={ReceivedPrepareDetail}
+        />
+        <Route path={`${match.url}/da-huy`} exact component={CancelOrder} />
+        <Route path={`${match.url}/da-huy/:id`} component={CancelOrderDetail} />
+        <Route path={`${match.url}/lich-su`} exact component={OrderHistory} />
+        <Route
+          path={`${match.url}/lich-su/:id`}
+          component={OrderHistoryDetail}
+        />
+        <Route path={`${match.url}/thuc-don`} component={FoodMenu} />
+      </Switch>
+    </div>
   );
 }
 

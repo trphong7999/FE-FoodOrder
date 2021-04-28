@@ -3,11 +3,25 @@ import "./style.scss";
 import { TiThMenu } from "react-icons/ti";
 import { IoWallet } from "react-icons/io5";
 import { HiClipboardList, HiDocumentReport } from "react-icons/hi";
-import { GiStorkDelivery } from "react-icons/gi";
 import { MdClear } from "react-icons/md";
+import {
+  Link,
+  Redirect,
+  useHistory,
+  useLocation,
+  useRouteMatch,
+  NavLink,
+} from "react-router-dom";
 
 export default function NavBar() {
   const [openMenu, setOpenMenu] = useState(false);
+  const match = useRouteMatch();
+  const history = useHistory();
+  const location = useLocation();
+
+  const createNewPlace = (place) => {
+    history.push("thuc-don");
+  };
 
   return (
     <div className="navbar-merchant">
@@ -19,16 +33,16 @@ export default function NavBar() {
           />
         </div>
 
-        <select name="" id="" className="header-select">
+        {/* <select name="" id="" className="header-select">
           <option value="0">Hôm nay</option>
           <option value="1">Tuần này</option>
-        </select>
+        </select> */}
 
         <div className="header-search">
           <input
             type="text"
             className="header-search__input"
-            placeholder="Tìm kiếm đơn hàng"
+            placeholder="Tìm kiếm"
           />
         </div>
       </div>
@@ -64,10 +78,6 @@ export default function NavBar() {
                 <span>Đơn hàng</span>
               </div>
               <div className="menu-content__item">
-                <GiStorkDelivery className="menu-content__item-icon menu-content__item-icon--red" />
-                <span>Ship</span>
-              </div>
-              <div className="menu-content__item">
                 <HiClipboardList className="menu-content__item-icon menu-content__item-icon--yellow" />
                 <span>Khuyến mãi</span>
               </div>
@@ -81,11 +91,32 @@ export default function NavBar() {
               </div>
 
               <ul className="menu-content__list">
-                <li className="menu-content__list-item">Thực đơn</li>
-                <li className="menu-content__list-item">Lịch sử đổi quà</li>
-                <li className="menu-content__list-item">Khách hàng của tôi</li>
-                <li className="menu-content__list-item">Quản lý nhân viên</li>
-                <li className="menu-content__list-item">Cài đặt</li>
+                <li
+                  className="menu-content__list-item"
+                  onClick={() => {
+                    createNewPlace(`thuc-don`);
+                  }}
+                >
+                  Thực đơn
+                </li>
+                <li>
+                  <NavLink
+                    to="merchat/thuc-don"
+                    className="menu-content__list-item"
+                  >
+                    Khách hàng của tôi
+                  </NavLink>
+                </li>
+                <li>
+                  <Link to="" className="menu-content__list-item">
+                    Quản lý nhân viên
+                  </Link>
+                </li>
+                <li>
+                  <Link to="" className="menu-content__list-item">
+                    Cài đặt
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>

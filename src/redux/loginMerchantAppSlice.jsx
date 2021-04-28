@@ -9,9 +9,11 @@ const merchantSlice = createSlice({
     loginMerchant: (state, action) => {
       const email = action.payload.email;
       const token = action.payload.token;
+      const merchantId = action.payload.merchantId;
       state.email = email;
       sessionStorage.setItem("email", email);
       sessionStorage.setItem("token", token);
+      sessionStorage.setItem("merchantId", merchantId);
     },
     logoutMerchant: (state) => {
       state.email = null;

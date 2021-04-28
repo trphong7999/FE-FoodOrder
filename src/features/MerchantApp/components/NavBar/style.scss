@@ -94,7 +94,7 @@
       }
       .menu-content {
         .menu-content__item {
-          padding: 1.5rem 1rem;
+          padding: 2rem 1rem;
           font-weight: bold;
           display: flex;
           align-items: center;
@@ -127,7 +127,10 @@
           padding: 0;
           list-style: none;
           .menu-content__list-item {
-            padding: 1.5rem 1rem;
+            padding: 2rem 1rem;
+            display: block;
+            text-decoration: none;
+            color: var(--text-color);
           }
         }
       }
