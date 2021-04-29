@@ -48,7 +48,7 @@ function MerchantApp() {
       <Switch>
         <Route
           exact
-          path={`${match.url}/quan-ly`}
+          path={`${match.url}`}
           component={() => (merchant.email ? <Manager /> : <Login />)}
           // component={Manager}
         />
@@ -72,7 +72,7 @@ function MerchantApp() {
           path={`${match.url}/lich-su/:id`}
           component={OrderHistoryDetail}
         />
-        <Route path={`${match.url}/thuc-don`} component={FoodMenu} />
+        <Route path={`${match.url}/thuc-don`} exact component={FoodMenu} />
       </Switch>
     </div>
   );
