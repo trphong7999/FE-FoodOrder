@@ -101,7 +101,7 @@ export default function NavBar() {
                 </li>
                 <li>
                   <NavLink
-                    to="merchat/thuc-don"
+                    to="merchant/thuc-don"
                     className="menu-content__list-item"
                   >
                     Khách hàng của tôi
