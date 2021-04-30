@@ -3,30 +3,71 @@
   margin: 1rem 0;
   padding: 15px 0;
 
-  .title {
-    text-transform: uppercase;
-    font-size: 1.4rem;
-
-    @include mobile {
-      padding: 1rem;
+  .filter {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding: 1.3rem 0;
+    .filter-cat {
+      display: flex;
+      align-items: center;
+      .filter-cat--item {
+        font-size: 1.3rem;
+        color: #6d6f71;
+        text-transform: uppercase;
+        margin: 0 2rem;
+        position: relative;
+        cursor: pointer;
+      }
+      .filter-cat--item::after {
+        content: "";
+        border: solid #6d6f71;
+        border-width: 0 1px 1px 0;
+        display: inline-block;
+        padding: 2px;
+        transform: translate(-50%) rotate(45deg);
+        -webkit-transform: translate(-50%) rotate(45deg);
+        position: absolute;
+        top: 1.8rem;
+        left: 50%;
+      }
+    }
+    .filter-sort {
+      font-size: 1.4rem;
+      color: #6d6f71;
+      @include mobile {
+        padding: 1rem;
+      }
+      .filter-sort--item {
+        margin-left: 1.5rem;
+        padding: 1rem 1rem;
+        background: #fff;
+        border-radius: 3px;
+        border: 1px solid #d7d7d7;
+        color: #6d6f71;
+        outline: none;
+      }
     }
   }
 
-  .view-all {
-    text-decoration: none;
-    display: block;
-    text-align: center;
-    font-size: 1.8rem;
-    text-transform: uppercase;
-    font-weight: bold;
-    color: var(--text-color);
-    padding: 10px;
+  .content {
+    padding-top: 1.8rem;
+    .view-all {
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      font-size: 1.8rem;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: var(--text-color);
+      padding: 10px;
 
-    .view-all-icon {
-      position: relative;
-      top: 4px;
-      left: 3px;
-      font-size: 2rem;
+      .view-all-icon {
+        position: relative;
+        top: 4px;
+        left: 3px;
+        font-size: 2rem;
+      }
     }
   }
 }

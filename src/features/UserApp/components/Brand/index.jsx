@@ -5,33 +5,20 @@ import productimg from "assets/image/dishes/trasua.jpg";
 import { BiTimeFive } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { IoLocationOutline } from "react-icons/io5";
-import {
-  getDistanceFromLatLonInKm,
-  validatePrice,
-  getLocationUser,
-} from "func.js";
+import { validatePrice, computeDistant, getLocationUser } from "func.js";
 import { useDispatch, useSelector } from "react-redux";
 import { addCartOrder } from "redux/cartOrderSlice";
 
 export default function Brand({ merchant }) {
   const dispatch = useDispatch();
   const listCartOrder = useSelector((state) => state.cartOrder);
+  const { latitude: userLat, longitude: userLng } = getLocationUser().coords;
 
   // ------------------------ HANDLE TIME OPEN - CLOSE ------------------
   const getStrDayOfWeek = () => {
     const now = new Date();
     const dayOfWeek = now.toString().split(" ")[0];
     return dayOfWeek.toLowerCase();
-  };
-
-  const computeDistant = () => {
-    const { latitude, longitude } = getLocationUser().coords;
-    return getDistanceFromLatLonInKm(
-      latitude,
-      longitude,
-      merchant.location.lat,
-      merchant.location.lng
-    );
   };
 
   const computeStatus = (openTime) => {
@@ -105,7 +92,13 @@ export default function Brand({ merchant }) {
           </span>
           <div className="brand-info__distant">
             <IoLocationOutline className="brand-info__distant-icon" />
-            {computeDistant().toFixed(1)}km
+            {computeDistant(
+              userLat,
+              userLng,
+              merchant.location.lat,
+              merchant.location.lng
+            ).toFixed(1)}
+            km
           </div>
           <div className="brand-info__time">
             {computeStatus(merchant.openTime) ? (

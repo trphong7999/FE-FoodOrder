@@ -1,32 +1,31 @@
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import { IoLocationOutline } from "react-icons/io5";
-import ImageDish from "assets/image/dishes/dish1.jpg";
 import iconDiscount from "assets/image/icons/discount.png";
 import "./style.scss";
 
 export default function Card({ merchant, index }) {
-  const { merchantId, merchantImg, merchantName, merchantLocation } = merchant;
+  const { _id, avt, name, location } = merchant;
   let match = useRouteMatch();
+  console.log(merchant);
 
   return (
     <div className="col l-2 m-4 c-6">
-      <Link to={`${match.url}/quan-an/${merchantId}`} className="dish-link">
+      <Link to={`${match.url}/quan-an/${_id}`} className="dish-link">
         <div className="dish-item">
-          <img src={ImageDish} alt="ImageDish" className="dish-img" />
+          <img src={avt} alt="ImageDish" className="dish-img" />
           <div className="dish-info">
-            <div className="dish-name">{merchantName}</div>
+            <div className="dish-name">{name}</div>
             <div className="dish-location">
-              <IoLocationOutline className="location-icon" />
-              <div className="location-km">{merchantLocation}</div>
+              <div className="location">{location.address}</div>
             </div>
-            <div className="dish-location">
+            <div className="dish-discount">
               <img
                 src={iconDiscount}
                 alt="icon-discount"
                 className="dish-img__discount"
               />
-              <div className="location-km">Freeship 2km</div>
+              <div className="dish-discount_detail">Freeship 2km</div>
             </div>
           </div>
         </div>

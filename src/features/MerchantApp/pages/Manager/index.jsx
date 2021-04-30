@@ -15,10 +15,12 @@ function MainPageMerchant() {
   // Check login is the manager
   merchantApi.checkAuth().then((res) => {
     try {
+      console.log("out");
       if (res.status === 400) {
         dispatch(logoutMerchant());
       }
     } catch {
+      console.log("ok");
       return;
     }
   });

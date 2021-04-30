@@ -18,7 +18,6 @@ export default function MainPage() {
       <GlobalAddress />
       <SlickList />
       <Newfeed />
-      <Newfeed />
       <Footer />
     </div>
   );

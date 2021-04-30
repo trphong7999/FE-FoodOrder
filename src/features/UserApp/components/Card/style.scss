@@ -16,7 +16,7 @@
   .dish-info {
     padding: 0 10px;
     margin: 10px 0;
-    height: 100px;
+    height: 70px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -26,7 +26,9 @@
       font-size: 1.6rem;
       font-weight: bold;
       line-height: var(--line-height);
-      height: calc(var(--line-height) * 2);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .dish-price {
@@ -43,14 +45,40 @@
         margin-right: 8px;
         font-size: 1.8rem;
       }
-      .location-km {
-        font-size: 1.5rem;
+      .location {
+        font-size: 1.3rem;
+        color: #959595;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
+    }
+    .dish-discount {
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding-top: 1rem;
 
       .dish-img__discount {
         width: 20px;
         margin-right: 10px;
       }
+
+      .dish-discount_detail {
+        color: #187caa;
+        font-size: 1.3rem;
+        font-weight: bold;
+      }
+    }
+
+    .dish-discount::before {
+      content: "";
+      width: 190px;
+      top: 2px;
+      left: -10px;
+      background: #ddd;
+      position: absolute;
+      height: 1px;
     }
   }
 
