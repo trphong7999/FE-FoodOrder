@@ -18,6 +18,7 @@ import ReasonRefusal from "./components/ReasonRefusal";
 import OrderHistoryDetail from "./components/OrderHistoryDetail";
 import FoodMenu from "./components/FoodMenu";
 import merchantApi from "api/merchantApi";
+import FoodMenuEdit from "./components/FoodMenuEdit";
 
 function MerchantApp() {
   const match = useRouteMatch();
@@ -73,6 +74,7 @@ function MerchantApp() {
           component={OrderHistoryDetail}
         />
         <Route path={`${match.url}/thuc-don`} exact component={FoodMenu} />
+        <Route path={`${match.url}/thuc-don/:id`} component={FoodMenuEdit} />
       </Switch>
     </div>
   );

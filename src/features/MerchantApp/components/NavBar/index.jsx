@@ -6,7 +6,6 @@ import { HiClipboardList, HiDocumentReport } from "react-icons/hi";
 import { MdClear } from "react-icons/md";
 import {
   Link,
-  Redirect,
   useHistory,
   useLocation,
   useRouteMatch,
@@ -20,7 +19,7 @@ export default function NavBar() {
   const location = useLocation();
 
   const createNewPlace = (place) => {
-    history.push("thuc-don");
+    history.push(place);
   };
 
   return (
@@ -73,7 +72,10 @@ export default function NavBar() {
               />
             </div>
             <div className="menu-content">
-              <div className="menu-content__item">
+              <div
+                className="menu-content__item"
+                onClick={() => createNewPlace(`/merchant`)}
+              >
                 <HiClipboardList className="menu-content__item-icon menu-content__item-icon--blue" />
                 <span>Đơn hàng</span>
               </div>
@@ -94,16 +96,13 @@ export default function NavBar() {
                 <li
                   className="menu-content__list-item"
                   onClick={() => {
-                    createNewPlace(`thuc-don`);
+                    createNewPlace(`/merchant/thuc-don`);
                   }}
                 >
                   Thực đơn
                 </li>
                 <li>
-                  <NavLink
-                    to="merchant/thuc-don"
-                    className="menu-content__list-item"
-                  >
+                  <NavLink to="" className="menu-content__list-item">
                     Khách hàng của tôi
                   </NavLink>
                 </li>

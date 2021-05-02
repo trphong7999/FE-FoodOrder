@@ -1,9 +1,4 @@
 import React from "react";
-import GoogleMapReact from "google-map-react";
-import { HiLocationMarker } from "react-icons/hi";
-import Address2Geocode from "components/Address2Geocode";
-import area from "./data";
-import { BsPhone } from "react-icons/bs";
 
 function Form2({ representative, setRepresentative }) {
   const { name, address, identity, phone } = representative;

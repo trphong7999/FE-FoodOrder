@@ -9,6 +9,7 @@ function NewOrder({ newListOrder }) {
   const match = useRouteMatch();
   const history = useHistory();
   const [serialOrder, setSerialOrder] = useState(0);
+
   const detailOrder = newListOrder[serialOrder];
   const id = detailOrder.id;
 

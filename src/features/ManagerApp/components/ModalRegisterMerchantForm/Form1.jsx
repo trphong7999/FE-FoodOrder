@@ -1,7 +1,7 @@
 import React from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import Address2Geocode from "components/Address2Geocode";
-import area from "./data";
+import area from "assets/data/districtName";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 

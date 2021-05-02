@@ -1,6 +1,5 @@
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import { IoLocationOutline } from "react-icons/io5";
 import iconDiscount from "assets/image/icons/discount.png";
 import "./style.scss";
 
@@ -10,7 +9,7 @@ export default function Card({ merchant, index }) {
   console.log(merchant);
 
   return (
-    <div className="col l-2 m-4 c-6">
+    <div className="col l-2-4 m-4 c-6">
       <Link to={`${match.url}/quan-an/${_id}`} className="dish-link">
         <div className="dish-item">
           <img src={avt} alt="ImageDish" className="dish-img" />

@@ -7,17 +7,32 @@ import "./style.scss";
 import { validatePrice } from "func";
 import axios from "axios";
 import merchantApi from "api/merchantApi";
+import { useHistory, useLocation, useRouteMatch } from "react-router";
 
 export default function FoodMenu({ categories }) {
+  const match = useRouteMatch();
+  const history = useHistory();
   const merchantId = sessionStorage.merchantId;
   const [category, setCategory] = useState([]);
   const [menu, setMenu] = useState([]);
   const [showAction, setShowAction] = useState(false);
+  const [dataModal, setDataModal] = useState(null);
 
   const noMenu = !menu || (menu && menu.length === 0);
 
-  const handleChangeShowAction = () => {
+  const handleChangeShowAction = (value) => {
     setShowAction(!showAction);
+    setDataModal(value);
+  };
+  console.log(dataModal);
+
+  const changeUrlEditFood = () => {
+    const location = {
+      pathname: `${match.url}/${dataModal.id}`,
+      state: { foodDetail: dataModal },
+    };
+    history.push(location);
+    history.replace(location);
   };
 
   const getDataMenu = (arr) => {
@@ -121,7 +136,10 @@ export default function FoodMenu({ categories }) {
                     <GoPrimitiveDot /> Còn hàng
                   </div>
                 </div>
-                <div className="item-action">
+                <div
+                  className="item-action"
+                  onClick={() => handleChangeShowAction(item)}
+                >
                   <BsThreeDots className="item-action__icon" />
                 </div>
               </div>
@@ -167,7 +185,14 @@ export default function FoodMenu({ categories }) {
             }`}
           >
             <ul className="content-list">
-              <li className="content-list__item">Xem chi tiết</li>
+              <li
+                className="content-list__item"
+                onClick={() => {
+                  changeUrlEditFood();
+                }}
+              >
+                Xem chi tiết
+              </li>
               <li className="content-list__item">Xóa</li>
             </ul>
             <div className="content-close">

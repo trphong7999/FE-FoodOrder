@@ -11,14 +11,16 @@ const merchantSlice = createSlice({
       const token = action.payload.token;
       const merchantId = action.payload.merchantId;
       state.email = email;
+      console.log(action.payload);
       sessionStorage.setItem("email", email);
-      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("token", token.token);
       sessionStorage.setItem("merchantId", merchantId);
     },
     logoutMerchant: (state) => {
       state.email = null;
       sessionStorage.removeItem("email");
       sessionStorage.removeItem("auth_token");
+      sessionStorage.removeItem("merchantId");
     },
   },
 });

@@ -17,8 +17,8 @@ function LoginMerchant() {
   const Login = async (event) => {
     event.preventDefault();
     let res = await merchantApi.login({ email: email, password });
-    console.log(typeof res);
-    if (res.length !== "object") {
+    console.log(res);
+    if (typeof res === "object") {
       const action = loginMerchant({
         email: email,
         token: res,
@@ -27,6 +27,7 @@ function LoginMerchant() {
       dispatch(action);
     }
   };
+  console.log(email, password);
 
   return (
     <div className="grid">
