@@ -12,8 +12,8 @@ import { addCartOrder } from "redux/cartOrderSlice";
 export default function Brand({ merchant }) {
   const dispatch = useDispatch();
   const listCartOrder = useSelector((state) => state.cartOrder);
-  const { latitude: userLat, longitude: userLng } = getLocationUser().coords;
-  console.log(userLat, userLng);
+  const userLat = sessionStorage.getItem("lat") || 20.8351;
+  const userLng = sessionStorage.getItem("lng") || 106.7071;
   // ------------------------ HANDLE TIME OPEN - CLOSE ------------------
   const getStrDayOfWeek = () => {
     const now = new Date();
