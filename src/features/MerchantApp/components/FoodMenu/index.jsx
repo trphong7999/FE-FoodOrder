@@ -28,8 +28,8 @@ export default function FoodMenu({ categories }) {
 
   const changeUrlEditFood = () => {
     const location = {
-      pathname: `${match.url}/${dataModal.id}`,
-      state: { foodDetail: dataModal },
+      pathname: `${match.url}/${dataModal._id}`,
+      state: { foodDetail: dataModal, catList: category },
     };
     history.push(location);
     history.replace(location);
