@@ -13,7 +13,7 @@ export default function Brand({ merchant }) {
   const dispatch = useDispatch();
   const listCartOrder = useSelector((state) => state.cartOrder);
   const { latitude: userLat, longitude: userLng } = getLocationUser().coords;
-
+  console.log(userLat, userLng);
   // ------------------------ HANDLE TIME OPEN - CLOSE ------------------
   const getStrDayOfWeek = () => {
     const now = new Date();

@@ -29,11 +29,19 @@ const validatePrice = (price) => {
 const sumQuantity = (acc, curr) => acc + curr.quantity;
 
 const sumTotal = (acc, curr) => acc + curr.total;
-
-var pos;
+var lat;
 const getLocationUser = () => {
-  navigator.geolocation.getCurrentPosition((p) => (pos = p));
-  return pos;
+  navigator.geolocation.getCurrentPosition(
+    callback,
+    (e) => console.log("fail", e),
+    { timeout: 10000 }
+  );
+  function callback(position) {
+    console.log(position);
+    sessionStorage.setItem("lat", position.coords.latitude);
+    sessionStorage.setItem("lng", position.coords.longitude);
+  }
+  return lat;
 };
 getLocationUser();
 

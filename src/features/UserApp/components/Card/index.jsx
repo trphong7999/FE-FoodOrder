@@ -6,7 +6,6 @@ import "./style.scss";
 export default function Card({ merchant, index }) {
   const { _id, avt, name, location } = merchant;
   let match = useRouteMatch();
-  console.log(merchant);
 
   return (
     <div className="col l-2-4 m-4 c-6">
