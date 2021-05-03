@@ -4,7 +4,7 @@ import "./style.scss";
 import { makeStyles } from "@material-ui/core/styles";
 import Pagination from "@material-ui/lab/Pagination";
 import merchantApi from "api/merchantApi";
-import { computeDistant, getLocationUser } from "func";
+import { computeDistant } from "func";
 import area from "assets/data/districtName";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,18 +20,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Newfeed() {
   const [merchant, setMerchant] = useState([]);
-  const [merchantRender, setMerchantRender] = useState([]);
   const [openDrop1, setOpenDrop1] = useState(false);
   const [openDrop2, setOpenDrop2] = useState(false);
   const [page, setPage] = useState(1);
-
   const numPerPage = 20;
   let pageCount = parseInt(merchant.length / numPerPage);
 
   const handleChangePage = (event, value) => {
-    setMerchantRender(
-      merchant.slice((page - 1) * numPerPage, page * numPerPage)
-    );
     setPage(value);
   };
 
@@ -44,10 +39,6 @@ export default function Newfeed() {
     setOpenDrop2(!openDrop2);
     if (openDrop1) setOpenDrop1(!openDrop1);
   };
-
-  useEffect(() => {
-    handleChangePage("a", 1);
-  }, [merchant]);
 
   useEffect(() => {
     const fetchMerchantsList = async () => {
@@ -174,9 +165,11 @@ export default function Newfeed() {
 
         <div className="content">
           <div className="list-view row sm-gutter">
-            {merchantRender.map((mer, index) => (
-              <Card merchant={mer} key={index} index={index} />
-            ))}
+            {merchant
+              .slice((page - 1) * numPerPage, page * numPerPage)
+              .map((mer, index) => (
+                <Card merchant={mer} key={index} index={index} />
+              ))}
           </div>
           <div className={classes.root}>
             <Pagination
