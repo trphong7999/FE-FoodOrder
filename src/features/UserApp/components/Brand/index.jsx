@@ -15,6 +15,7 @@ export default function Brand({ merchant }) {
   const userLat = sessionStorage.getItem("lat") || 20.8351;
   const userLng = sessionStorage.getItem("lng") || 106.7071;
   // ------------------------ HANDLE TIME OPEN - CLOSE ------------------
+
   const getStrDayOfWeek = () => {
     const now = new Date();
     const dayOfWeek = now.toString().split(" ")[0];

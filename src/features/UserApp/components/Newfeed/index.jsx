@@ -129,8 +129,8 @@ export default function Newfeed() {
               <div
                 className={
                   openDrop2
-                    ? "filter-dropdown filter-dropdown--open"
-                    : "filter-dropdown filter-dropdown--close"
+                    ? "filter-dropdown filter-dropdown--open align-left"
+                    : "filter-dropdown filter-dropdown--close align-left"
                 }
               >
                 <div className="filter-dropdown__item">
