@@ -36,6 +36,12 @@ $tablet-width: 740px;
 $desktop-width: 1024px;
 $small-width: 376px;
 
+@mixin tiny {
+  @media (max-width: 320px) {
+    @content;
+  }
+}
+
 @mixin small {
   @media (max-width: #{$small-width - 1px}) {
     @content;

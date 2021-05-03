@@ -16,6 +16,7 @@ export default function Brand({ merchant }) {
   console.log(userLat, userLng);
 
   // ------------------------ HANDLE TIME OPEN - CLOSE ------------------
+
   const getStrDayOfWeek = () => {
     const now = new Date();
     const dayOfWeek = now.toString().split(" ")[0];

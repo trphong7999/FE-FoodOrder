@@ -29,6 +29,14 @@
 
         .filter-cat--item-label {
           padding: 1rem 1.8rem;
+
+          @include mobile {
+            padding: 1rem;
+          }
+
+          @include tiny {
+            padding: 0.5rem;
+          }
         }
 
         .filter-dropdown--open {
@@ -51,12 +59,22 @@
           border-bottom-left-radius: 8px;
           padding: 1rem;
           box-shadow: var(--box-shadow);
+          z-index: 1;
+
+          @include mobile {
+            width: 98vw;
+            left: 0.3rem;
+          }
 
           .filter-dropdown__item {
             display: flex;
             align-items: center;
             flex-basis: 33.333%;
             margin-bottom: 1rem;
+
+            @include mobile {
+              flex-basis: 50%;
+            }
 
             .filter-dropdown__input {
               -ms-transform: scale(1.5); /* IE */
@@ -87,15 +105,28 @@
         left: 50%;
       }
     }
+
+    .align-left {
+      @include mobile {
+        left: -7rem !important;
+      }
+    }
     .filter-sort {
       font-size: 1.4rem;
       color: #6d6f71;
+      display: flex;
+      align-items: center;
+
       @include mobile {
-        padding: 1rem;
+        padding: 0.5rem;
+      }
+
+      @include tiny {
+        padding: 0.5rem;
       }
       .filter-sort--item {
-        margin-left: 1.5rem;
-        padding: 1rem 1rem;
+        margin-left: 0.5rem;
+        padding: 1rem 0;
         background: #fff;
         border-radius: 3px;
         border: 1px solid #d7d7d7;

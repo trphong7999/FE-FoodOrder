@@ -18,6 +18,10 @@
     left: 16px;
   }
 
+  @include tiny {
+    left: 5px;
+  }
+
   .slide-item {
     outline: none;
     display: inline-block;
@@ -37,6 +41,11 @@
       @include small {
         width: 345px;
         height: 200px;
+      }
+
+      @include tiny {
+        width: 310px;
+        height: 166px;
       }
     }
   }
