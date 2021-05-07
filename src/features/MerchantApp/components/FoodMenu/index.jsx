@@ -24,7 +24,6 @@ export default function FoodMenu({ categories }) {
     setShowAction(!showAction);
     setDataModal(value);
   };
-  console.log(dataModal);
 
   const changeUrlEditFood = () => {
     const location = {
@@ -38,6 +37,27 @@ export default function FoodMenu({ categories }) {
   const getDataMenu = (arr) => {
     const list = arr.reduce((acc, curr) => acc.concat(curr.foods), []);
     return list;
+  };
+
+  const findByStatus = (elementOfList, compare) => {
+    let newC = elementOfList;
+    if (elementOfList !== []) {
+      return newC.filter((element) => element.status === compare);
+    }
+    return `nothing`;
+  };
+
+  const getDataMenuByStatus = (cat, boolean) => {
+    let listFoodByStatus = cat;
+
+    if (boolean !== "0") {
+      listFoodByStatus = cat.reduce(
+        (acc, curr) => acc.concat(findByStatus(curr.foods, boolean)),
+        []
+      );
+    }
+
+    return listFoodByStatus;
   };
 
   const fetchMerchant = async () => {
@@ -55,6 +75,9 @@ export default function FoodMenu({ categories }) {
 
   const handleSelectStatus = (e) => {
     console.log(e.target.value);
+    let status = e.target.value;
+    let catList = getDataMenu(category);
+    getDataMenuByStatus(catList, status);
   };
 
   const handleSelectCategories = (e) => {
@@ -69,7 +92,6 @@ export default function FoodMenu({ categories }) {
     }
 
     setMenu(newList);
-    console.log(nameCat);
   };
 
   useEffect(() => {
@@ -110,8 +132,8 @@ export default function FoodMenu({ categories }) {
               Trạng thái
             </option>
             <option value="0">Tất cả</option>
-            <option value="1">Còn hàng</option>
-            <option value="2">Hết hàng</option>
+            <option value={true}>Còn hàng</option>
+            <option value={false}>Hết hàng</option>
           </select>
         </div>
 
@@ -125,16 +147,24 @@ export default function FoodMenu({ categories }) {
               <div className="body-list__item" key={index}>
                 <div
                   className="item-img"
-                  style={{ backgroundImage: `url(${mi1})` }}
+                  style={{
+                    backgroundImage: `url(${item.avt === "" ? mi1 : item.avt})`,
+                  }}
                 ></div>
                 <div className="item-content">
                   <div className="item-content__name">{item.name}</div>
                   <div className="item-content__price">
                     {validatePrice(item.price)} <span>đ</span>
                   </div>
-                  <div className="item-content__status">
-                    <GoPrimitiveDot /> Còn hàng
-                  </div>
+                  {item.status ? (
+                    <div className="item-content__status--true">
+                      <GoPrimitiveDot /> Còn hàng
+                    </div>
+                  ) : (
+                    <div className="item-content__status--false">
+                      <GoPrimitiveDot /> Hêt hàng
+                    </div>
+                  )}
                 </div>
                 <div
                   className="item-action"

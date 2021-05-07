@@ -73,10 +73,15 @@
               text-decoration: underline;
             }
           }
-          .item-content__status {
+          .item-content__status--true {
             display: flex;
             align-items: center;
             color: #43b581;
+          }
+          .item-content__status--false {
+            display: flex;
+            align-items: center;
+            color: #ccc;
           }
         }
         .item-action {

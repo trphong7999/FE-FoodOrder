@@ -54,7 +54,7 @@ export default function FormLoginValidation({ clickSwitchForm }) {
         type="text"
         name="username"
         placeholder="Nhập tài khoản"
-        ref={register}
+        {...register("username")}
         value={userName}
         onChange={(e) => setUserName(e.target.value)}
       />
@@ -64,7 +64,7 @@ export default function FormLoginValidation({ clickSwitchForm }) {
         type="password"
         name="password"
         placeholder="Nhập mật khẩu"
-        ref={register}
+        {...register("password")}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />

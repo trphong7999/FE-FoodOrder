@@ -1,0 +1,179 @@
+.order-manager {
+  font-size: 1.5rem;
+  --receiver-color: #659e55;
+  --shop-color: #d53f3a;
+  .order-manager__tab {
+    .order-manager__tab-list {
+      display: flex;
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      background-color: #282d35;
+
+      .tab-list__item {
+        color: #54545c;
+        flex-basis: 30%;
+        padding: 1rem 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 3px solid #54545c;
+
+        &:last-child {
+          flex-basis: 10%;
+          line-height: 1.5rem;
+          background-color: #e0322b;
+          color: white;
+          font-size: 2rem;
+          border-bottom: none;
+        }
+      }
+
+      .tab-list__item--active {
+        color: white;
+        border-bottom: 3px solid #2b97d5;
+      }
+    }
+  }
+
+  .order-manager__content {
+    background-color: #cbcacc;
+    height: calc(100vh - 40px);
+  }
+}
+
+.making-food {
+  background-color: white;
+
+  .making-food__head {
+    display: flex;
+    padding: 1rem;
+    align-items: center;
+    position: relative;
+    background-color: #eff6fe;
+
+    .head-serial {
+      padding: 1rem;
+      background-color: #999a9b;
+      color: white;
+      border-radius: 50%;
+    }
+    .head-code {
+      padding: 1rem;
+    }
+    .head-status {
+      display: flex;
+      align-items: center;
+      position: absolute;
+      right: 1rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      background-color: #c84333;
+      color: white;
+
+      .head-status__icon {
+        font-size: 1.8rem;
+        margin-right: 0.5rem;
+      }
+    }
+  }
+  .making-food__shop {
+    .shop-title {
+      color: #9f9e9f;
+      display: flex;
+      align-items: center;
+      padding: 1rem 0;
+      position: relative;
+
+      .shop-title__type {
+        display: flex;
+        align-items: center;
+        padding: 0 1rem;
+
+        .type-icon {
+          color: var(--shop-color);
+        }
+      }
+
+      .shop-title__name {
+        padding: 0 1rem;
+        color: var(--text-color);
+      }
+
+      .shop-title__amount {
+        position: absolute;
+        right: 1rem;
+        span {
+          &:last-child {
+            color: var(--shop-color);
+            font-weight: 500;
+          }
+        }
+      }
+    }
+    .shop-address {
+      padding: 0 1rem;
+      font-weight: 500;
+    }
+    .shop-take {
+      padding: 1rem;
+
+      .shop-take__time {
+        span {
+          &:last-child {
+            margin-left: 0.5rem;
+            color: var(--shop-color);
+          }
+        }
+      }
+    }
+  }
+
+  .making-food__shop--receiver {
+    background-color: #eff4fc;
+    .shop-title {
+      .shop-title__type {
+        .type-icon {
+          color: var(--receiver-color);
+        }
+      }
+
+      .shop-title__amount {
+        span {
+          &:last-child {
+            color: var(--receiver-color);
+          }
+        }
+      }
+    }
+
+    .shop-take {
+      display: flex;
+      align-items: center;
+      .shop-take__time {
+        background-color: white;
+        padding: 0.5rem;
+        span {
+          &:last-child {
+            margin-left: 0.5rem;
+            color: var(--receiver-color);
+          }
+        }
+      }
+
+      .shop-take__distance {
+        background-color: #dfe2e9;
+        margin-left: 2rem;
+        padding: 0.5rem;
+        color: #adadb2;
+      }
+    }
+  }
+
+  .making-food__confirm {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    color: #6d6c6d;
+  }
+}

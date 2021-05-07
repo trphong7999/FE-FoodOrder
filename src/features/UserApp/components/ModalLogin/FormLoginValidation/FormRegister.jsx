@@ -63,37 +63,29 @@ export default function FormLoginValidation({ clickSwitchForm }) {
         type="text"
         name="username"
         placeholder="Nhập tài khoản"
-        ref={register}
         value={userName}
         onChange={(e) => setUserName(e.target.value)}
       />
-      {errors.username && (
-        <div>
-          <p>{errors.username.message}</p>
-        </div>
-      )}
 
       <label htmlFor="password">Mật khẩu</label>
       <input
         type="password"
         name="password"
         placeholder="Nhập mật khẩu"
-        ref={register}
+        {...register("password")}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      {errors.password && <div>{errors.password.message}</div>}
 
       <label htmlFor="password">Nhập lại mật khẩu</label>
       <input
         type="password"
         name="confirmPassword"
         placeholder="Nhập mật khẩu"
-        ref={register}
+        {...register("confirmPassword")}
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
       />
-      {errors.confirmPassword && <div>{errors.confirmPassword.message}</div>}
 
       <div className="link-register">
         Bạn đã có tài khoản?{" "}
