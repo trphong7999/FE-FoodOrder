@@ -14,7 +14,6 @@ function PlaceAutocomplete({ location, setLocation }) {
   const handleSelect = (address) => {
     geocodeByAddress(address)
       .then((results) => {
-        console.log(results);
         return getLatLng(results[0]);
       })
       .then((latLng) => {

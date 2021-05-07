@@ -37,7 +37,6 @@ const getLocationUser = () => {
     { timeout: 10000 }
   );
   function callback(position) {
-    console.log(position);
     sessionStorage.setItem("lat", position.coords.latitude);
     sessionStorage.setItem("lng", position.coords.longitude);
   }

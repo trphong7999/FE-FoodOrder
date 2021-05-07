@@ -18,7 +18,6 @@ function Form1(props) {
   const { name, setName, location, setLocation, geo, setGeo } = props;
   const { lat, lng } = geo;
   const { address, district } = location;
-  console.log(geo, location);
 
   function ChangeView({ center, zoom }) {
     const map = useMap();

@@ -13,6 +13,10 @@ const userAPi = {
     const url = `/users/signup`;
     return axiosClient.post(url, params);
   },
+  getProfile: () => {
+    const url = `/users/profile`;
+    return axiosClient.get(url);
+  },
 };
 
 export default userAPi;

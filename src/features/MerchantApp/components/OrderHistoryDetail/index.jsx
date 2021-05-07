@@ -12,7 +12,6 @@ function OrderHistoryDetail() {
   const history = useHistory();
   const location = useLocation();
   const detail = location.state.detailHistory;
-  console.log(location);
 
   return (
     <div className="received-order-detail">

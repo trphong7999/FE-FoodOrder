@@ -97,7 +97,6 @@ function ModalRegisterMerchant({ handleClose }) {
   const [dataImg, setDataImg] = useState();
   const [error, setError] = useState("");
   const classes = useStyles();
-  console.log(dataImg);
   const onSubmitForm = async () => {
     const resUploadImg = await fetch(
       "https://api.cloudinary.com/v1_1/vmu/image/upload",

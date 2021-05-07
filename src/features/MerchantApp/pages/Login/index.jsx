@@ -26,7 +26,6 @@ function LoginMerchant() {
       dispatch(action);
     }
   };
-  console.log(email, password);
 
   return (
     <div className="grid">

@@ -23,7 +23,6 @@ import RightColAccount from "features/UserApp/components/RightColAccount";
 
 export default function AccountPage() {
   const match = useRouteMatch();
-  console.log(match);
   const [account, setAccount] = useState({
     name: "trần duy phong",
     email: "phong75664@st.vimaru.edu.vn",

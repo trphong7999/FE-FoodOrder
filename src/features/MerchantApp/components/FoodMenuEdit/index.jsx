@@ -11,7 +11,6 @@ export default function FoodMenuEdit() {
   const location = useLocation();
   const infoFood = location.state.foodDetail;
   const category = location.state.catList;
-  console.log(location.state);
   const { register, handleSubmit, errors } = useForm();
 
   const submitFormEdit = (data) => {

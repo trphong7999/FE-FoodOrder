@@ -20,7 +20,6 @@ function ModalRegisterPartner({ handleClose }) {
       backImg: "",
     },
   });
-  console.log(partner);
   const [error, setError] = useState("");
 
   // const crop = {
@@ -77,7 +76,6 @@ function ModalRegisterPartner({ handleClose }) {
       },
     };
     const res = await managerApi.registerPartner(partnerObj);
-    console.log(res);
     if (res.status === "200" || !res.status) handleClose();
     else if (res.data) setError(res.data);
     else if (avt.error) setError("Chưa thêm ảnh đại diện");

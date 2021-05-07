@@ -70,7 +70,6 @@ function ManageMerchant(props) {
           address: merchant.location.address,
           deduct: merchant.deduct,
         }));
-        console.log(res.username);
         setMerchantList(data);
       } catch (error) {
         console.log("Failed to fetch product list: ", error);

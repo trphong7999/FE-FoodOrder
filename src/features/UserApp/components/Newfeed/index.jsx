@@ -24,7 +24,7 @@ export default function Newfeed() {
   const [openDrop2, setOpenDrop2] = useState(false);
   const [page, setPage] = useState(1);
   const numPerPage = 20;
-  let pageCount = parseInt(merchant.length / numPerPage);
+  let pageCount = Math.ceil(merchant.length / numPerPage);
 
   const handleChangePage = (event, value) => {
     setPage(value);
@@ -51,7 +51,6 @@ export default function Newfeed() {
         let res = await merchantApi.getAll();
         let userLat = sessionStorage.getItem("lat") || 20.8351;
         let userLng = sessionStorage.getItem("lng") || 106.7071;
-        console.log(userLat, userLng);
         res = res.map((merchant) => ({
           ...merchant,
           distance: computeDistant(
