@@ -1,17 +1,17 @@
 import Footer from "features/UserApp/components/Footer";
 import Navbar from "features/UserApp/components/Navbar";
 import React, { useState } from "react";
-import ava1 from "assets/image/avartar/ava1.jpg";
 import {
   RiAccountCircleFill,
-  RiCalendarTodoFill,
   RiLockPasswordLine,
   RiMessage2Line,
   RiPhoneLine,
 } from "react-icons/ri";
+import { HiLocationMarker } from "react-icons/hi";
 import { MdEmail } from "react-icons/md";
 import { FaChevronRight, FaRegSmileBeam } from "react-icons/fa";
 import { SiFacebook } from "react-icons/si";
+import avt from "assets/image/avartar/slide1.jpg";
 
 import "./style.scss";
 import "assets/css/base.scss";
@@ -20,10 +20,18 @@ import ModalFormChangeInfo from "features/UserApp/components/ModalProfile/FormCh
 import ModalFormChangePhone from "features/UserApp/components/ModalProfile/FormChangePhone";
 import { Link, useRouteMatch } from "react-router-dom";
 import RightColAccount from "features/UserApp/components/RightColAccount";
+import { useSelector } from "react-redux";
 
 export default function AccountPage() {
   const match = useRouteMatch();
-  console.log(match);
+<<<<<<< HEAD
+<<<<<<< HEAD
+  const user = useSelector((state) => state.loginUserApp);
+  const [account, setAccount] = useState(user.profile.info);
+  console.log(account);
+=======
+=======
+>>>>>>> 166f7a186110516ace7274a45ee1e67c456e3f15
   const [account, setAccount] = useState({
     name: "trần duy phong",
     email: "phong75664@st.vimaru.edu.vn",
@@ -32,6 +40,7 @@ export default function AccountPage() {
     sex: 0,
   });
 
+>>>>>>> 166f7a186110516ace7274a45ee1e67c456e3f15
   const [showModal, setShowModal] = useState({
     passForm: false,
     infoForm: false,
@@ -72,11 +81,7 @@ export default function AccountPage() {
             <div className="col l-3">
               <div className="account-left">
                 <div className="account-avatar">
-                  <img
-                    src={ava1}
-                    alt="avatar"
-                    className="account-avatar__img"
-                  />
+                  <img src={avt} alt="avatar" className="account-avatar__img" />
                 </div>
 
                 <div className="account-info">
@@ -93,17 +98,19 @@ export default function AccountPage() {
                     <div className="content__item">
                       <RiAccountCircleFill className="content-item__icon" />
                       <div className="content-item__text text__uppercase">
-                        {account.name}
+                        {account.name || `Bổ sung thông tin`}
                       </div>
                     </div>
                     <div className="content__item">
                       <MdEmail className="content-item__icon" />
-                      <div className="content-item__text">{account.email}</div>
+                      <div className="content-item__text">
+                        {account.email || `Bổ sung thông tin`}
+                      </div>
                     </div>
                     <div className="content__item">
-                      <RiCalendarTodoFill className="content-item__icon" />
+                      <HiLocationMarker className="content-item__icon" />
                       <div className="content-item__text">
-                        {account.dateOfBirth}
+                        {account.location.address || `Bổ sung thông tin`}
                       </div>
                     </div>
                   </div>
@@ -124,7 +131,9 @@ export default function AccountPage() {
                   <div className="account-info__content">
                     <div className="content__item ">
                       <RiPhoneLine className="content-item__icon" />
-                      <div className="content-item__text">{account.phone}</div>
+                      <div className="content-item__text">
+                        {account.phone || `Bổ sung thông tin`}
+                      </div>
                     </div>
                     <div
                       className="content__item  content__item--hover"

@@ -1,3 +1,4 @@
+import api from "api/userApi";
 const { createSlice } = require("@reduxjs/toolkit");
 
 const loginUserAppSlice = createSlice({
@@ -5,26 +6,36 @@ const loginUserAppSlice = createSlice({
   initialState: {
     username: sessionStorage.getItem("username") || null,
     pos: {},
+    profile: JSON.parse(sessionStorage.getItem("profile")) || {},
   },
   reducers: {
-    login: (state, action) => {
+    login: async (state, action) => {
       const username = action.payload.username;
       const token = action.payload.token;
+
       state.username = username;
       sessionStorage.setItem("username", username);
       sessionStorage.setItem("token", token);
+
+      sessionStorage.setItem("profile", JSON.stringify(await api.getProfile()));
     },
     logout: (state) => {
       state.username = null;
       sessionStorage.removeItem("username");
-      sessionStorage.removeItem("auth_token");
+      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("profile");
     },
     getPos: (state, action) => {
       state.pos = action.payload;
+    },
+    getProfile: (state, action) => {
+      state.profile = action.payload;
+      console.log(action.payload);
+      sessionStorage.setItem("profile", JSON.stringify(action.payload));
     },
   },
 });
 
 const { reducer, actions } = loginUserAppSlice;
-export const { login, logout, getPos } = actions;
+export const { login, logout, getPos, getProfile } = actions;
 export default reducer;

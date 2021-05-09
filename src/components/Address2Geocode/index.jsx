@@ -39,6 +39,7 @@ function Address2Geocode({ location, setLocation, geo, setGeo }) {
               className: "location-search-input",
             })}
             name="address"
+            value={location}
             required
           />
           <div

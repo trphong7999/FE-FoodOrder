@@ -1,0 +1,44 @@
+.main-page__partner {
+  font-size: 1rem;
+  color: var(--text-color);
+
+  .main-body {
+  }
+
+  .main-foot {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    .foot-tab {
+      .tab-list {
+        background-color: white;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+
+        .tab-list__item {
+          color: #a7a6a7;
+          flex-basis: 20%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          padding: 1rem 0;
+          text-align: center;
+
+          .tab-list__item-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+          }
+        }
+
+        .tab-list__item--active {
+          color: #0276c6;
+        }
+      }
+    }
+  }
+}

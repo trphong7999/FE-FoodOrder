@@ -43,7 +43,6 @@ export default function Brand({ merchant }) {
       (item) => item.merchantId === merchantId && item.name === name
     );
     if (!dishesExisted.length) {
-      console.log("ok");
       const action = addCartOrder(dish);
       dispatch(action);
     }

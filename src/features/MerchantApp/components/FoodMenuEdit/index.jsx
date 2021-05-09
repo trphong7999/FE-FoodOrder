@@ -4,13 +4,13 @@ import { BsChevronLeft } from "react-icons/bs";
 import loading from "assets/image/icons/loading.png";
 import "./style.scss";
 import { useForm } from "react-hook-form";
+import { validatePrice } from "func";
 
 export default function FoodMenuEdit() {
   const history = useHistory();
   const location = useLocation();
   const infoFood = location.state.foodDetail;
   const category = location.state.catList;
-  console.log(location.state);
   const { register, handleSubmit, errors } = useForm();
 
   const submitFormEdit = (data) => {
@@ -33,7 +33,11 @@ export default function FoodMenuEdit() {
 
       <div
         className="edit-img"
-        style={{ backgroundImage: `url(${loading})` }}
+        style={{
+          backgroundImage: `url(${
+            infoFood.avt === "" ? loading : infoFood.avt
+          })`,
+        }}
       ></div>
 
       <div className="edit-form">
@@ -76,6 +80,7 @@ export default function FoodMenuEdit() {
               <input
                 type="checkbox"
                 name="statusFood"
+                checked={infoFood.status}
                 {...register("statusFood")}
               />
               <span className="slider round"></span>

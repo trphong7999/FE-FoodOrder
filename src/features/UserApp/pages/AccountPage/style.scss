@@ -54,6 +54,10 @@
 
             .content-item__text {
               flex-grow: 1;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              width: 100%;
             }
 
             .text__uppercase {
