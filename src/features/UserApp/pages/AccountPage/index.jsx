@@ -26,10 +26,13 @@ export default function AccountPage() {
   const match = useRouteMatch();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   const user = useSelector((state) => state.loginUserApp);
   const [account, setAccount] = useState(user.profile.info);
   console.log(account);
 =======
+=======
+>>>>>>> 166f7a186110516ace7274a45ee1e67c456e3f15
 =======
 >>>>>>> 166f7a186110516ace7274a45ee1e67c456e3f15
   const [account, setAccount] = useState({

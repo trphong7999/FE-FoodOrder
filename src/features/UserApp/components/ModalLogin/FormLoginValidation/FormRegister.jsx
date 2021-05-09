@@ -64,7 +64,10 @@ export default function FormLoginValidation({ clickSwitchForm }) {
         name="username"
         placeholder="Nhập tài khoản"
 <<<<<<< HEAD
+<<<<<<< HEAD
         {...register("username")}
+=======
+>>>>>>> 166f7a186110516ace7274a45ee1e67c456e3f15
 =======
 >>>>>>> 166f7a186110516ace7274a45ee1e67c456e3f15
         value={userName}

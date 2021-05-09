@@ -16,7 +16,6 @@ const loginUserAppSlice = createSlice({
       state.username = username;
       sessionStorage.setItem("username", username);
       sessionStorage.setItem("token", token);
-
       sessionStorage.setItem("profile", JSON.stringify(await api.getProfile()));
     },
     logout: (state) => {
