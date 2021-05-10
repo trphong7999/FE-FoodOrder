@@ -17,8 +17,6 @@ const userAPi = {
     const url = `/users/profile`;
     return axiosClient.get(url);
   },
-<<<<<<< HEAD
-<<<<<<< HEAD
   changeProfile: (params) => {
     const url = `users/changeprofile`;
     return axiosClient.post(url, params);
@@ -27,10 +25,6 @@ const userAPi = {
     const url = `users/changephone`;
     return axiosClient.post(url, params);
   },
-=======
->>>>>>> 166f7a186110516ace7274a45ee1e67c456e3f15
-=======
->>>>>>> 166f7a186110516ace7274a45ee1e67c456e3f15
 };
 
 export default userAPi;
