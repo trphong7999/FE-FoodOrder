@@ -17,7 +17,6 @@ const userAPi = {
     const url = `/users/profile`;
     return axiosClient.get(url);
   },
-
   changeProfile: (params) => {
     const url = `users/changeprofile`;
     return axiosClient.post(url, params);

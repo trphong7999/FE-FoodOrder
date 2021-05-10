@@ -8,9 +8,12 @@ import {
 
 function Address2Geocode({ location, setLocation, geo, setGeo }) {
   const handleChange = (address) => {
+    if (typeof location === "string") {
+      setLocation(address);
+      return;
+    }
     setLocation({ ...location, address: address });
   };
-
   const handleSelect = (address) => {
     geocodeByAddress(address)
       .then((results) => {
@@ -18,7 +21,8 @@ function Address2Geocode({ location, setLocation, geo, setGeo }) {
       })
       .then((latLng) => {
         const { lat, lng } = latLng;
-        setLocation({ ...location, address: address });
+        if (typeof location !== "string")
+          setLocation({ ...location, address: address });
         setGeo({ lat: lat, lng: lng });
       })
       .catch((error) => console.error("Error"));
@@ -26,7 +30,7 @@ function Address2Geocode({ location, setLocation, geo, setGeo }) {
 
   return (
     <PlacesAutocomplete
-      value={location.address}
+      value={typeof location === "string" ? location : location.address}
       onChange={handleChange}
       onSelect={handleSelect}
       onClick={handleChange}
@@ -39,7 +43,7 @@ function Address2Geocode({ location, setLocation, geo, setGeo }) {
               className: "location-search-input",
             })}
             name="address"
-            value={location}
+            value={typeof location === "string" ? location : location.address}
             required
           />
           <div

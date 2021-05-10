@@ -28,7 +28,6 @@ const loginUserAppSlice = createSlice({
     },
     getProfile: (state, action) => {
       state.profile = action.payload;
-      console.log(action.payload);
       sessionStorage.setItem("profile", JSON.stringify(action.payload));
     },
   },
