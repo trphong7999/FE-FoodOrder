@@ -44,6 +44,8 @@
 
 .making-food {
   background-color: white;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--box-shadow);
 
   .making-food__head {
     display: flex;
@@ -68,13 +70,19 @@
       right: 1rem;
       padding: 0.5rem;
       border-radius: 8px;
-      background-color: #c84333;
+
       color: white;
 
       .head-status__icon {
         font-size: 1.8rem;
         margin-right: 0.5rem;
       }
+    }
+    .head-status--delivery {
+      background-color: var(--shop-color);
+    }
+    .head-status--finished {
+      background-color: var(--receiver-color);
     }
   }
   .making-food__shop {

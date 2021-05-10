@@ -65,7 +65,11 @@ function Navbar(props) {
           </ul>
 
           <div className="nav__account">
-            {user.username === null ? <ModalLogin /> : <NavAccount />}
+            {user.username === null ? (
+              <ModalLogin />
+            ) : (
+              <NavAccount avt={user.profile.info.avt} />
+            )}
           </div>
 
           {/* --------------- HANDLE MOBILE MENU START --------------------------------------- */}

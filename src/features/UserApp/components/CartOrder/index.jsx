@@ -25,9 +25,25 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CartOrder({ merchantId }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.loginUserApp);
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
+    if (user.username === null) {
+      alert("Bạn cần đăng nhập để tiếp tục đặt hàng!");
+      return;
+    } else if (
+      !user.profile.info.name ||
+      !user.profile.info.phone ||
+      !user.profile.info.location.address
+    ) {
+      alert("Bạn cần bổ sung thông tin trước khi đặt hàng!");
+      return;
+    } else if (listCartOrder.length < 1) {
+      alert("Bạn chưa thêm món ăn vào giỏ!");
+      return;
+    }
     setOpen(true);
   };
 
@@ -38,7 +54,6 @@ export default function CartOrder({ merchantId }) {
   const listItem = listCartOrder.filter(
     (item) => item.merchantId === merchantId
   );
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const cartList = document.getElementById("cart2");

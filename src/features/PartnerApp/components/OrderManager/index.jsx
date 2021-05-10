@@ -66,7 +66,13 @@ export default function OrderManager() {
         </ul>
       </div>
       <div className="order-manager__content">
-        {tab === 0 ? <MapPick /> : tab === 1 ? <MakingFood /> : "da xong"}
+        {tab === 0 ? (
+          <MapPick />
+        ) : tab === 1 ? (
+          <MakingFood data={1} />
+        ) : (
+          <FinishedDelivery data={2} />
+        )}
       </div>
     </div>
   );
@@ -103,19 +109,40 @@ function MapPick() {
 }
 
 function MakingFood() {
+  return <Detail />;
+}
+
+function FinishedDelivery() {
+  return (
+    <div className="finish-delivery-list">
+      <Detail />
+      <Detail />
+    </div>
+  );
+}
+
+function Detail({ data }) {
   const history = useHistory();
   const match = useRouteMatch();
-  const handleChangeUrlToDetail = () => {
-    history.push(`${match.url}/making-detail`);
+  const handleChangeUrlToDetail = (id) => {
+    history.push(`${match.url}/making-detail/${id}`);
   };
+
   return (
-    <div className="making-food" onClick={() => handleChangeUrlToDetail()}>
+    <div
+      className="making-food"
+      onClick={() => handleChangeUrlToDetail("06345-63454234")}
+    >
       <div className="making-food__head">
         <div className="head-serial">29</div>
         <div className="head-code">06345-63454234</div>
-        <div className="head-status">
+        <div
+          className={`head-status ${
+            data === 0 ? "head-status--delivery" : "head-status--finished"
+          }`}
+        >
           <AiFillShop className="head-status__icon" />
-          Delivery
+          {data === 0 ? "Delivery" : "Finised"}
         </div>
       </div>
 
@@ -145,12 +172,12 @@ function MakingFood() {
         <div className="shop-title">
           <div className="shop-title__type">
             <GoPrimitiveDot className="type-icon" />
-            Lấy
+            Giao
           </div>
           {"-"}
           <div className="shop-title__name">wind7689</div>
           <div className="shop-title__amount">
-            <span>Trả: </span>
+            <span>Thu: </span>
             <span>{validatePrice(25000)}đ</span>
           </div>
         </div>
@@ -165,7 +192,9 @@ function MakingFood() {
       </div>
 
       <div className="making-food__confirm">
-        <div className="confirm-text">Đã nhận đơn hàng</div>
+        <div className="confirm-text">
+          {data === 0 ? "Đã nhận đơn hàng" : "Đã giao đơn hàng"}
+        </div>
         <div className="confirm-time">Lúc 09:22 06/06/2021</div>
       </div>
     </div>

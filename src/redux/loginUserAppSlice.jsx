@@ -9,14 +9,13 @@ const loginUserAppSlice = createSlice({
     profile: JSON.parse(sessionStorage.getItem("profile")) || {},
   },
   reducers: {
-    login: async (state, action) => {
+    login: (state, action) => {
       const username = action.payload.username;
       const token = action.payload.token;
 
       state.username = username;
       sessionStorage.setItem("username", username);
       sessionStorage.setItem("token", token);
-      sessionStorage.setItem("profile", JSON.stringify(await api.getProfile()));
     },
     logout: (state) => {
       state.username = null;

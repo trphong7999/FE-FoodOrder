@@ -12,8 +12,10 @@ import { addCartOrder } from "redux/cartOrderSlice";
 export default function Brand({ merchant }) {
   const dispatch = useDispatch();
   const listCartOrder = useSelector((state) => state.cartOrder);
+
   const userLat = sessionStorage.getItem("lat") || 20.8351;
   const userLng = sessionStorage.getItem("lng") || 106.7071;
+
   // ------------------------ HANDLE TIME OPEN - CLOSE ------------------
 
   const getStrDayOfWeek = () => {
@@ -45,6 +47,9 @@ export default function Brand({ merchant }) {
     if (!dishesExisted.length) {
       const action = addCartOrder(dish);
       dispatch(action);
+    } else {
+      alert("Bạn đã có món ăn này trong giỏ!");
+      return;
     }
   };
 

@@ -23,27 +23,9 @@ import RightColAccount from "features/UserApp/components/RightColAccount";
 import { useSelector } from "react-redux";
 
 export default function AccountPage() {
-  const match = useRouteMatch();
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
   const user = useSelector((state) => state.loginUserApp);
   const [account, setAccount] = useState(user.profile.info);
-  console.log(account);
-=======
-=======
->>>>>>> 166f7a186110516ace7274a45ee1e67c456e3f15
-=======
->>>>>>> 166f7a186110516ace7274a45ee1e67c456e3f15
-  const [account, setAccount] = useState({
-    name: "trần duy phong",
-    email: "phong75664@st.vimaru.edu.vn",
-    dateOfBirth: "07/09/1999",
-    phone: "0345029068",
-    sex: 0,
-  });
 
->>>>>>> 166f7a186110516ace7274a45ee1e67c456e3f15
   const [showModal, setShowModal] = useState({
     passForm: false,
     infoForm: false,

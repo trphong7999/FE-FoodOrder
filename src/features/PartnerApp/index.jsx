@@ -1,13 +1,19 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 import MakingDetail from "./components/MakingDetail";
 import Manager from "./pages/Manager";
 
 function ParterApp(props) {
+  const match = useRouteMatch();
   return (
     <div>
-      {/* <Manager /> */}
-      <MakingDetail />
+      <Switch>
+        <Route exact path={match.url} component={Manager} />
+        <Route
+          path={`${match.url}/making-detail/:id`}
+          component={MakingDetail}
+        />
+      </Switch>
     </div>
   );
 }
