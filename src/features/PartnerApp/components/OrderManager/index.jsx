@@ -3,6 +3,11 @@ import { FiPower } from "react-icons/fi";
 import { AiFillShop } from "react-icons/ai";
 import { GoPrimitiveDot } from "react-icons/go";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import Modal from "@material-ui/core/Modal";
+import Fade from "@material-ui/core/Fade";
+import Backdrop from "@material-ui/core/Backdrop";
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
 import Address2Geocode from "components/Address2Geocode";
 import area from "assets/data/districtName";
 import "leaflet/dist/leaflet.css";
@@ -26,11 +31,46 @@ function ChangeView({ center, zoom }) {
   return null;
 }
 
+const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    outline: "none",
+    borderRadius: "4px",
+  },
+  container: {
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 100,
+    color: "white",
+  },
+}));
+
 export default function OrderManager() {
   const [tab, setTab] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [setSelectorTime, setSetSelectorTime] = useState();
+  const classes = useStyles();
 
   const handleChangeTab = (tab) => {
     setTab(tab);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
   return (
     <div className="order-manager">
@@ -61,10 +101,11 @@ export default function OrderManager() {
             ĐÃ XONG
           </li>
           <li className="tab-list__item">
-            <FiPower />
+            <FiPower onClick={handleOpen} />
           </li>
         </ul>
       </div>
+
       <div className="order-manager__content">
         {tab === 0 ? (
           <MapPick />
@@ -74,6 +115,25 @@ export default function OrderManager() {
           <FinishedDelivery data={2} />
         )}
       </div>
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className={classes.paper}>
+            <CheckInToday />
+          </div>
+        </Fade>
+      </Modal>
     </div>
   );
 }
@@ -198,5 +258,80 @@ function Detail({ data }) {
         <div className="confirm-time">Lúc 09:22 06/06/2021</div>
       </div>
     </div>
+  );
+}
+
+function CheckInToday() {
+  return (
+    <div className="check-in">
+      <div className="check-in__head">
+        <div className="head-title">Check-in Hôm nay</div>
+        <div className="head-time">2021-06-06</div>
+      </div>
+      <div className="check-in__pick">
+        <div className="pick-title">
+          <span>Đăng ký</span>
+          <span>Part Time 00:00 - 23:59</span>
+        </div>
+        <div className="pick-action">
+          <div className="pick-action__item">
+            <div className="item-text">Bắt đầu</div>
+            <div className="item-current">Hiện tại</div>
+          </div>
+          <div className="pick-action__item">
+            <div className="item-text">Kết thúc</div>
+            <div className="item-time">
+              <TimePickers />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="check-in__location">
+        <div className="location-text">Vị trí hiện tại</div>
+        <div className="location-address">
+          244 Ngô Gia Tự, Đằng Giang, Ngô Quyền, Hải Phòng, Việt Nam
+        </div>
+        <div className="location-coordinates">
+          <span>Lat: 10,5435346; </span>
+          <span>Lng: 106,436436</span>
+        </div>
+      </div>
+
+      <div className="check-in__action">
+        <div className="action-out">Thoát</div>
+        <div className="action-in">Check-in</div>
+      </div>
+    </div>
+  );
+}
+
+function TimePickers() {
+  const classes = useStyles();
+  const [time, setTime] = useState("23:59");
+  const handleChangeTime = (e) => {
+    setTime(e.target.value);
+    console.log(time);
+  };
+  console.log(time);
+  return (
+    <form className={classes.container} noValidate>
+      <TextField
+        id="time"
+        label=""
+        type="time"
+        defaultValue={time}
+        onChange={(e) => {
+          handleChangeTime(e);
+        }}
+        className={classes.textField}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        inputProps={{
+          step: 300, // 5 min
+        }}
+      />
+    </form>
   );
 }

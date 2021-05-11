@@ -185,3 +185,113 @@
     color: #6d6c6d;
   }
 }
+
+// --------------- CHECK IN TO DAY ---------------------
+.check-in {
+  font-size: 1.4rem;
+  width: 90vw;
+  padding: 0 1rem;
+
+  .check-in__head {
+    padding: 2rem 0;
+    text-align: center;
+    .head-title {
+      font-weight: bold;
+    }
+    .head-time {
+      margin-top: 0.5rem;
+    }
+  }
+
+  .check-in__pick {
+    .pick-title {
+      padding-bottom: 1rem;
+      span {
+        &:first-child {
+          color: #b8b6b8;
+        }
+
+        &:last-child {
+          margin-left: 1rem;
+          font-weight: bold;
+        }
+      }
+    }
+    .pick-action {
+      display: flex;
+      padding: 0 2rem;
+      justify-content: space-between;
+
+      .pick-action__item {
+        text-align: center;
+        .item-text {
+          color: #b8b6b8;
+        }
+
+        .item-current {
+          font-weight: bold;
+          color: #539d4c;
+          padding: 0.6rem;
+        }
+        .item-time {
+          color: white;
+          background-color: #e2524b;
+          border-radius: 4px;
+          .makeStyles-textField-4 {
+            margin-right: 0;
+          }
+          .MuiInput-underline {
+            &::before {
+              display: none;
+            }
+          }
+          .MuiInputBase-input {
+            color: white;
+            font-size: 1.4rem;
+            padding: 0.5rem 0;
+          }
+        }
+      }
+    }
+  }
+
+  .check-in__location {
+    margin-top: 2rem;
+    text-align: center;
+    .location-text {
+      color: #b8b6b8;
+      padding-bottom: 0.4rem;
+    }
+    .location-address {
+      font-weight: bold;
+      text-decoration: underline #b8b6b8;
+      padding-bottom: 1rem;
+    }
+    .location-coordinates {
+      font-weight: 500;
+    }
+  }
+
+  .check-in__action {
+    margin: 2rem 0;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+
+    .action-out,
+    .action-in {
+      padding: 1rem 0;
+      text-align: center;
+      border-radius: 4px;
+    }
+
+    .action-out {
+      flex-basis: 46%;
+      background-color: #7f7e7f;
+    }
+    .action-in {
+      flex-basis: 46%;
+      background-color: #0276c6;
+    }
+  }
+}
