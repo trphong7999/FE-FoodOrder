@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FiPower } from "react-icons/fi";
-import { AiFillShop } from "react-icons/ai";
+import { AiFillShop, AiOutlineInfoCircle } from "react-icons/ai";
 import { GoPrimitiveDot } from "react-icons/go";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import Modal from "@material-ui/core/Modal";
@@ -32,10 +32,16 @@ function ChangeView({ center, zoom }) {
 }
 
 const useStyles = makeStyles((theme) => ({
-  modal: {
+  modalCheckIn: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+  },
+  modalCurrentOrder: {
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "center",
+    marginBottom: "80px",
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
@@ -59,6 +65,7 @@ export default function OrderManager() {
   const [tab, setTab] = useState(0);
   const [open, setOpen] = useState(false);
   const [setSelectorTime, setSetSelectorTime] = useState();
+  const [statusCheckIn, setStatusCheckIn] = useState(false);
   const classes = useStyles();
 
   const handleChangeTab = (tab) => {
@@ -71,6 +78,10 @@ export default function OrderManager() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleChangeStatusCheckIn = () => {
+    setStatusCheckIn(!statusCheckIn);
   };
   return (
     <div className="order-manager">
@@ -100,7 +111,11 @@ export default function OrderManager() {
           >
             ĐÃ XONG
           </li>
-          <li className="tab-list__item">
+          <li
+            className={`tab-list__item ${
+              statusCheckIn ? "tab-list__item--on" : "tab-list__item--off"
+            }`}
+          >
             <FiPower onClick={handleOpen} />
           </li>
         </ul>
@@ -119,18 +134,22 @@ export default function OrderManager() {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        className={classes.modal}
+        className={classes.modalCurrentOrder}
         open={open}
         onClose={handleClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
-          timeout: 500,
+          timeout: 300,
         }}
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <CheckInToday />
+            {/* <CheckInToday
+              handleClose={handleClose}
+              callBackStatusCheckIn={handleChangeStatusCheckIn}
+            /> */}
+            <CurrentOrder />
           </div>
         </Fade>
       </Modal>
@@ -261,7 +280,11 @@ function Detail({ data }) {
   );
 }
 
-function CheckInToday() {
+function CheckInToday({ handleClose, callBackStatusCheckIn }) {
+  const startCheckIn = () => {
+    callBackStatusCheckIn();
+    handleClose();
+  };
   return (
     <div className="check-in">
       <div className="check-in__head">
@@ -299,8 +322,12 @@ function CheckInToday() {
       </div>
 
       <div className="check-in__action">
-        <div className="action-out">Thoát</div>
-        <div className="action-in">Check-in</div>
+        <div className="action-out" onClick={handleClose}>
+          Thoát
+        </div>
+        <div className="action-in" onClick={startCheckIn}>
+          Check-in
+        </div>
       </div>
     </div>
   );
@@ -333,5 +360,66 @@ function TimePickers() {
         }}
       />
     </form>
+  );
+}
+
+function CurrentOrder() {
+  return (
+    <div className="current-order">
+      <div className="current-order__content">
+        <div className="content-head">
+          <div className="content-head__type">
+            <AiFillShop className="type-icon" />
+            <span>Delivery</span>
+          </div>
+          <div className="content-head__text">
+            <div className="text-distance">2.2km</div>
+            <div className="text-cost">
+              19K
+              <AiOutlineInfoCircle className="cost-icon" />
+            </div>
+            <div className="text-time">
+              Giao <span>14:10</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="content-cus cotent-cus__color-green">
+          <div className="cus-title">
+            <div className="cus-title__name">
+              <GoPrimitiveDot className="name-icon" />
+              <div className="name-text">
+                Lấy: RoyalTea - Trà sữa HongKhong - Lạch Tray
+              </div>
+            </div>
+            <div className="cus-title__price">
+              Trả: <span>412,000đ</span>
+            </div>
+          </div>
+          <div className="cus-address">
+            178 Lạch Tray, Đằng Giang, Ngô Quyền, Hải Phòng, Việt Nam
+          </div>
+        </div>
+
+        <div className="content-cus cotent-cus__color-red">
+          <div className="cus-title">
+            <div className="cus-title__name">
+              <GoPrimitiveDot className="name-icon" />
+              <div className="name-text">Giao: Thy Nguyễn</div>
+            </div>
+            <div className="cus-title__price">
+              Thu: <span>431,000đ</span>
+            </div>
+          </div>
+          <div className="cus-address">
+            49 Đường Số 2, Trần Hưng Đạo, Hồng Bàng, Hải Phòng
+          </div>
+        </div>
+
+        <div className="content-action">
+          <button className="content-action__button">Lấy đơn hàng này</button>
+        </div>
+      </div>
+    </div>
   );
 }

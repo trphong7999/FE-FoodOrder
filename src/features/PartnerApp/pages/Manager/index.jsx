@@ -7,6 +7,7 @@ import "./style.scss";
 import OrderManager from "features/PartnerApp/components/OrderManager";
 import InCome from "features/PartnerApp/components/InCome";
 import Profile from "features/PartnerApp/components/Profile";
+import Wallet from "features/PartnerApp/components/Wallet";
 
 export default function Manager() {
   const [footTabList, setFootTabList] = useState(1);
@@ -23,7 +24,7 @@ export default function Manager() {
           ) : footTabList === 2 ? (
             <InCome />
           ) : footTabList === 3 ? (
-            "vi tien"
+            <Wallet />
           ) : footTabList === 4 ? (
             "chate"
           ) : (

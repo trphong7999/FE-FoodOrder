@@ -1,0 +1,46 @@
+.wallet {
+  font-size: 1.4rem;
+  .wallet-head {
+    background-color: #242831;
+    padding: 1rem;
+    color: white;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .wallet-content {
+    .wallet-content__card {
+      background-color: #4da3e7;
+      margin: 1rem;
+      border-radius: 10px;
+      padding: 1rem 0;
+      color: white;
+
+      .card-head {
+        text-align: center;
+        margin-bottom: 2rem;
+        .card-head__title {
+          margin-bottom: 0.5rem;
+        }
+        .card-head__number {
+          font-size: 2rem;
+        }
+      }
+      .card-action {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 1rem;
+        .card-action__item {
+          text-align: center;
+        }
+      }
+      .card-peding {
+        border-top: 2px solid white;
+        padding: 1.5rem 1rem 0.5rem;
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }
+}
