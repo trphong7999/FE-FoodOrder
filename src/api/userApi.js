@@ -15,6 +15,7 @@ const userAPi = {
   },
   getProfile: () => {
     const url = `/users/profile`;
+    console.log("co vao ");
     return axiosClient.get(url);
   },
   changeProfile: (params) => {
@@ -23,6 +24,7 @@ const userAPi = {
   },
   changePhone: (params) => {
     const url = `users/changephone`;
+
     return axiosClient.post(url, params);
   },
 };

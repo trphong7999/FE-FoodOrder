@@ -1,3 +1,6 @@
+import { getPos } from "redux/loginUserAppSlice";
+import { useDispatch } from "react-redux";
+
 function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
@@ -14,7 +17,7 @@ function computeDistant(lat1, lon1, lat2, lon2) {
       Math.sin(dLon / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   var d = R * c; // Distance in km
-  return d;
+  return d.toFixed(1);
 }
 
 const validatePrice = (price) => {
@@ -37,12 +40,11 @@ const getLocationUser = () => {
     { timeout: 10000 }
   );
   function callback(position) {
-    sessionStorage.setItem("lat", position.coords.latitude);
-    sessionStorage.setItem("lng", position.coords.longitude);
+    localStorage.setItem("lat", position.coords.latitude);
+    localStorage.setItem("lng", position.coords.longitude);
   }
   return lat;
 };
-getLocationUser();
 
 export {
   validatePrice,

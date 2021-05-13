@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import logo from "assets/image/logo.png";
 import "./style.scss";
 import { Link } from "react-router-dom";
+import avt from "assets/image/avartar/slide1.jpg";
 
 import ModalLogin from "features/UserApp/components/ModalLogin";
 import NavAccount from "features/UserApp/components/Navbar/NavAccount";
@@ -68,7 +69,7 @@ function Navbar(props) {
             {user.username === null ? (
               <ModalLogin />
             ) : (
-              <NavAccount avt={user.profile.info.avt} />
+              <NavAccount avt={user.profile.avt || avt} />
             )}
           </div>
 

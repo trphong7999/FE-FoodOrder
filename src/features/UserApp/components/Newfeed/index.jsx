@@ -6,6 +6,7 @@ import Pagination from "@material-ui/lab/Pagination";
 import merchantApi from "api/merchantApi";
 import { computeDistant } from "func";
 import area from "assets/data/districtName";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,6 +24,7 @@ export default function Newfeed() {
   const [openDrop1, setOpenDrop1] = useState(false);
   const [openDrop2, setOpenDrop2] = useState(false);
   const [page, setPage] = useState(1);
+  const user = useSelector((state) => state.loginUserApp.profile);
   const numPerPage = 20;
   let pageCount = Math.ceil(merchant.length / numPerPage);
 
@@ -49,8 +51,14 @@ export default function Newfeed() {
 
         // };
         let res = await merchantApi.getAll();
-        let userLat = sessionStorage.getItem("lat") || 20.8351;
-        let userLng = sessionStorage.getItem("lng") || 106.7071;
+        var userLat, userLng;
+        if (typeof user.info == "undefined") {
+          userLat = localStorage.getItem("lat");
+          userLng = localStorage.getItem("lng");
+        } else {
+          userLat = user.info.location.lat;
+          userLng = user.info.location.lng;
+        }
         res = res.map((merchant) => ({
           ...merchant,
           distance: computeDistant(

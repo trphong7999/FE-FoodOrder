@@ -4,9 +4,22 @@ const { createSlice } = require("@reduxjs/toolkit");
 const loginUserAppSlice = createSlice({
   name: "loginUserApp",
   initialState: {
-    username: sessionStorage.getItem("username") || null,
+    username: localStorage.getItem("username") || null,
     pos: {},
-    profile: JSON.parse(sessionStorage.getItem("profile")) || {},
+    profile: JSON.parse(localStorage.getItem("profile")) || {
+      info: {
+        name: "",
+        gender: "",
+        avt: "",
+        phone: "",
+        email: "",
+        location: {
+          address: "",
+          lat: null,
+          lng: null,
+        },
+      },
+    },
   },
   reducers: {
     login: (state, action) => {
@@ -14,21 +27,22 @@ const loginUserAppSlice = createSlice({
       const token = action.payload.token;
 
       state.username = username;
-      sessionStorage.setItem("username", username);
-      sessionStorage.setItem("token", token);
+      localStorage.setItem("username", username);
+      localStorage.setItem("token", token);
     },
     logout: (state) => {
       state.username = null;
-      sessionStorage.removeItem("username");
-      sessionStorage.removeItem("token");
-      sessionStorage.removeItem("profile");
+      localStorage.removeItem("username");
+      localStorage.removeItem("token");
+      localStorage.removeItem("profile");
     },
     getPos: (state, action) => {
       state.pos = action.payload;
     },
     getProfile: (state, action) => {
       state.profile = action.payload;
-      sessionStorage.setItem("profile", JSON.stringify(action.payload));
+      console.log(action.payload);
+      localStorage.setItem("profile", JSON.stringify(action.payload));
     },
   },
 });

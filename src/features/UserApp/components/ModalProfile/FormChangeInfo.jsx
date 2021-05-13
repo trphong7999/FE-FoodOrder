@@ -46,8 +46,8 @@ export default function ModalFormChangeInfo({ account, changeShowModalInfo }) {
 
   const [geo, setGeo] = useState(
     geoUser || {
-      lat: sessionStorage.getItem("lat") || 20.828790101307185,
-      lng: sessionStorage.getItem("lng") || 106.71664668177716,
+      lat: localStorage.getItem("lat") || 20.828790101307185,
+      lng: localStorage.getItem("lng") || 106.71664668177716,
     }
   );
   const [address, setAddress] = useState(location.address || "");
