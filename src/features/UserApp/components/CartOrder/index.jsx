@@ -292,8 +292,15 @@ function CheckOut({ user, items, merchant }) {
 
   const handleOrder = () => {
     const order = {
-      userOrder: user._id,
-      merchant: merchant._id,
+      userInfo: {
+        name: user.name,
+        phone: user.phone,
+        avt: user.avt,
+        distance: distance,
+        note: "asdasd",
+      },
+      userOrderId: user._id,
+      merchantId: merchant._id,
       status: "processing",
       detail: {
         foods: items.map((item) => ({
@@ -304,10 +311,9 @@ function CheckOut({ user, items, merchant }) {
         })),
         fee: feeShip,
         discount: applyVoucher.discount || 0,
-        total: totalPrice + feeShip - (applyVoucher.discount || 0),
+        total: totalPrice,
       },
     };
-    console.log(order);
     socket.emit("startOrder", order);
   };
 

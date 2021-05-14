@@ -44,12 +44,19 @@ function NewOrder({ newListOrder }) {
     history.replace(location);
   };
 
+  const datetimeFromTimestamp = (timestamp) => {
+    const datetime = new Date(timestamp);
+    return `${("0" + datetime.getHours()).slice(-2)}:${(
+      "0" + datetime.getMinutes()
+    ).slice(-2)}`;
+  };
+
   return (
     <div className="content">
       <ul className="content-new-come">
         {newListOrder.map((item, index) => (
           <li
-            key={item.id}
+            key={item._id}
             index={index}
             className={
               serialOrder === index
@@ -61,27 +68,27 @@ function NewOrder({ newListOrder }) {
             }}
           >
             <span className="new-come__item-stt">{index + 1}</span>
-            <span className="new-come__item-time">({item.time.limit}')</span>
+            <span className="new-come__item-time">({15}')</span>
           </li>
         ))}
       </ul>
 
       <div className="content-body">
         <div className="content-title">
-          <span className="title-name">{detailOrder.customer.name}</span>
+          <span className="title-name">{detailOrder.userInfo.name}</span>
           <span className="title-quantity">
-            Đã đặt: {detailOrder.customer.quantityOrdered}
+            Đã đặt: 0{/* {detailOrder.customer.quantityOrdered} */}
           </span>
         </div>
 
         <div className="content-time">
           <div className="time-left">
             <span className="time-left__limit">
-              Lấy trong <span>{detailOrder.time.limit}</span> phút (
-              {detailOrder.time.startOrder})
+              Lấy trong <span>{15}</span> phút (
+              {datetimeFromTimestamp(parseInt(detailOrder.timeOrder))})
             </span>
             <span className="time-left__space">
-              cách: {detailOrder.space} km
+              cách: {detailOrder.userInfo.distance} km
             </span>
           </div>
           <div className="time-right">
@@ -92,10 +99,10 @@ function NewOrder({ newListOrder }) {
         <div className="content-order">
           <div className="content-note">
             <span className="note-title">Ghi chú khách hàng: </span>
-            <span className="note-content">{detailOrder.note}</span>
+            <span className="note-content">{detailOrder.userInfo.note}</span>
           </div>
 
-          {detailOrder.listFood.map((food, index) => (
+          {detailOrder.detail.foods.map((food, index) => (
             <div key={index} index={index} className="content-order__item">
               <div className="item-quantity">{food.quantity} x</div>
               <div className="item-food">
@@ -109,14 +116,12 @@ function NewOrder({ newListOrder }) {
         <div className="confirm-order">
           <div className="confirm-order__text">
             <span>
-              Thu của khách hàng ({detailOrder.listFood.reduce(sumQuantity, 0)}{" "}
-              món)
+              Thu của khách hàng (
+              {detailOrder.detail.foods.reduce(sumQuantity, 0)} món)
             </span>
             <div className="text-total">
               <IoWallet className="text-total__icon" />
-              <span>
-                {validatePrice(detailOrder.listFood.reduce(sumTotal, 0))} đ
-              </span>
+              <span>{validatePrice(detailOrder.detail.total)} đ</span>
             </div>
           </div>
 
