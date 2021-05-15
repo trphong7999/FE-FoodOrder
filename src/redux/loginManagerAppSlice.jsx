@@ -3,20 +3,20 @@ const { createSlice } = require("@reduxjs/toolkit");
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    username: sessionStorage.getItem("username") || null,
+    username: localStorage.getItem("username") || null,
   },
   reducers: {
     login: (state, action) => {
       const username = action.payload.username;
       const token = action.payload.token;
       state.username = username;
-      sessionStorage.setItem("username", username);
-      sessionStorage.setItem("token", token);
+      localStorage.setItem("username", username);
+      localStorage.setItem("token", token);
     },
     logout: (state) => {
       state.username = null;
-      sessionStorage.removeItem("username");
-      sessionStorage.removeItem("auth_token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("auth_token");
     },
   },
 });

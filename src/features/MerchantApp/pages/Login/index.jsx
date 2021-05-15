@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginMerchant } from "redux/loginMerchantAppSlice";
 import merchantApi from "api/merchantApi";
+import socket from "socket-io.js";
 
 function LoginMerchant() {
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ function LoginMerchant() {
         merchantId: res.id,
       });
       dispatch(action);
+      socket.emit("storeClientInfo", res.id);
     }
   };
 

@@ -6,12 +6,12 @@ import { useDispatch } from "react-redux";
 import { logoutMerchant } from "redux/loginMerchantAppSlice";
 import TabMenu from "features/MerchantApp/components/TabMenu";
 import NavBar from "features/MerchantApp/components/NavBar";
-import axios from "axios";
+import socket from "socket-io.js";
 
 function MainPageMerchant() {
   const dispatch = useDispatch();
   const [newListOrder, setNewListOrder] = useState([]);
-
+  console.log(newListOrder);
   // Check login is the manager
   merchantApi.checkAuth().then((res) => {
     try {
@@ -24,15 +24,12 @@ function MainPageMerchant() {
     }
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios(`http://localhost:5000/newListOrder`);
-      if (result) {
-        setNewListOrder(result.data);
-      }
-    };
-    fetchData();
-  }, []);
+  socket.on("newOrder", (data) => {
+    setNewListOrder([...newListOrder, data]);
+  });
+  socket.on("ordersMerchant", (data) => {
+    setNewListOrder(data);
+  });
 
   return (
     <div className="grid">

@@ -11,7 +11,7 @@ export default function NavBar() {
   const [openMenu, setOpenMenu] = useState(false);
   const [name, setName] = useState("");
   const history = useHistory();
-  const merchantId = sessionStorage.merchantId;
+  const merchantId = localStorage.merchantId;
 
   const createNewPlace = (place) => {
     history.push(place);

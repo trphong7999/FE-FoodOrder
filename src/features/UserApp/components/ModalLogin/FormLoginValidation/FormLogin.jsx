@@ -38,7 +38,9 @@ export default function FormLoginValidation({ clickSwitchForm }) {
     if (typeof res === "string") {
       const action = login({ username: userName, token: res });
       dispatch(action);
+      console.log("profile");
       const profile = await userApi.getProfile();
+      console.log("profile");
       const actionGetProfile = getProfile(profile);
       dispatch(actionGetProfile);
     }

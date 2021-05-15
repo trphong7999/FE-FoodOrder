@@ -25,6 +25,7 @@ import { useSelector } from "react-redux";
 export default function AccountPage() {
   const user = useSelector((state) => state.loginUserApp);
   const [account, setAccount] = useState(user.profile.info);
+  console.log(account);
 
   const [showModal, setShowModal] = useState({
     passForm: false,

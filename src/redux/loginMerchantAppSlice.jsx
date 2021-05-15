@@ -3,7 +3,7 @@ const { createSlice } = require("@reduxjs/toolkit");
 const merchantSlice = createSlice({
   name: "user",
   initialState: {
-    email: sessionStorage.getItem("email") || null,
+    email: localStorage.getItem("email") || null,
   },
   reducers: {
     loginMerchant: (state, action) => {
@@ -11,15 +11,15 @@ const merchantSlice = createSlice({
       const token = action.payload.token;
       const merchantId = action.payload.merchantId;
       state.email = email;
-      sessionStorage.setItem("email", email);
-      sessionStorage.setItem("token", token.token);
-      sessionStorage.setItem("merchantId", merchantId);
+      localStorage.setItem("email", email);
+      localStorage.setItem("token", token.token);
+      localStorage.setItem("merchantId", merchantId);
     },
     logoutMerchant: (state) => {
       state.email = null;
-      sessionStorage.removeItem("email");
-      sessionStorage.removeItem("auth_token");
-      sessionStorage.removeItem("merchantId");
+      localStorage.removeItem("email");
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("merchantId");
     },
   },
 });

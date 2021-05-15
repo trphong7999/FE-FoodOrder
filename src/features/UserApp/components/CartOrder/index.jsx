@@ -9,13 +9,18 @@ import novat from "assets/image/icons/novat.gif";
 import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { incQuantity, decQuantity } from "redux/cartOrderSlice";
-import { validatePrice } from "func.js";
+import { validatePrice, computeDistant } from "func.js";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { useHistory } from "react-router";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { NavDropdown } from "react-bootstrap";
+import socket from "socket-io.js";
+import L from "leaflet";
+import shopIcon from "assets/image/icons/shop-icon.png";
+import { DistanceMatrixService } from "@react-google-maps/api";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -31,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CartOrder({ merchantId }) {
+export default function CartOrder({ merchant }) {
+  const { _id: merchantId } = merchant;
   const classes = useStyles();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.loginUserApp);
@@ -43,6 +49,47 @@ export default function CartOrder({ merchantId }) {
   );
 
   const history = useHistory();
+
+  const getStrDayOfWeek = () => {
+    const now = new Date();
+    const dayOfWeek = now.toString().split(" ")[0];
+    return dayOfWeek.toLowerCase();
+  };
+
+  const statusOrder = () => {
+    const { lat: userLat, lng: userLng } = userProfile.location;
+    const {
+      openTime,
+      location: { lat: merchantLat, lng: merchantLng },
+    } = merchant;
+    const distance = computeDistant(userLat, userLng, merchantLat, merchantLng);
+    const diffTime = distance * 7;
+    const openTimeToDay = openTime[getStrDayOfWeek()];
+    const [timeOpen, timeClose] = openTimeToDay.time.split("-");
+    const [hourOpen, minuteOpen] = timeOpen.split(":");
+    const [hourClose, minuteClose] = timeClose.split(":");
+    const now = new Date();
+    const timeExpect = new Date();
+    timeExpect.setMinutes(now.getMinutes() + diffTime);
+    console.log(openTimeToDay, timeExpect);
+    if (
+      hourOpen <= now.getHours() <= hourClose &&
+      minuteOpen <= now.getMinutes() <= minuteClose &&
+      (hourOpen >= timeExpect.getHours() ||
+        timeExpect.getHours() >= hourClose) &&
+      (minuteOpen > timeExpect.getMinutes() ||
+        timeExpect.getMinutes() > minuteClose)
+    )
+      return 1;
+    else if (
+      (hourOpen >= timeExpect.getHours() ||
+        timeExpect.getHours() >= hourClose) &&
+      (minuteOpen > timeExpect.getMinutes() ||
+        timeExpect.getMinutes() > minuteClose)
+    )
+      return 2;
+    return 3;
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -69,7 +116,13 @@ export default function CartOrder({ merchantId }) {
       alert("Bạn chưa thêm món ăn vào giỏ!");
       return;
     }
-
+    const status = statusOrder();
+    console.log(status);
+    // if (status === 1) {
+    //   alert("Quán sắp đóng cửa, vui lòng đặt hàng vào ngày mai");
+    // } else if (status === 2) {
+    //   alert("Quán đã đóng cửa, vui lòng đặt hàng vào ngày mai");
+    // } else handleOpen();
     handleOpen();
   };
 
@@ -188,7 +241,7 @@ export default function CartOrder({ merchantId }) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <CheckOut />
+            <CheckOut user={userProfile} items={listItem} merchant={merchant} />
           </div>
         </Fade>
       </Modal>
@@ -196,16 +249,113 @@ export default function CartOrder({ merchantId }) {
   );
 }
 
-function CheckOut() {
+function CheckOut({ user, items, merchant }) {
+  const [applyVoucher, setApplyVoucher] = useState({});
+  const [voucher, setVoucher] = useState("");
+  const [distance, setDistance] = useState(0);
+  const {
+    name: userName,
+    location: { address: userAddress, lat: userLat, lng: userLng },
+    phone: userPhone,
+  } = user;
+  const {
+    name: merchantName,
+    location: { address: merchantAddress, lat: merchantLat, lng: merchantLng },
+  } = merchant;
+
+  const totalPrice = items.reduce(
+    (value, item) => value + item.price * item.quantity,
+    0
+  );
+  const feeShip = distance <= 3 ? 13000 : distance * 4500;
+
+  const handleApplyVoucher = () => {
+    if (voucher === "VUICUOITUAN" && totalPrice >= 60000)
+      setApplyVoucher({
+        name: voucher,
+        condition: 60000,
+        discount: 10000,
+      });
+  };
+
+  const getTimeExpect = () => {
+    const diffTime = distance * 5 + 10;
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + diffTime);
+
+    return `${("0" + now.getHours()).slice(-2)}:${(
+      "0" + now.getMinutes()
+    ).slice(-2)} - ${("0" + now.getDate()).slice(-2)}/${(
+      "0" + now.getDay()
+    ).slice(-2)}`;
+  };
+
+  const handleOrder = () => {
+    const order = {
+      userInfo: {
+        name: user.name,
+        phone: user.phone,
+        avt: user.avt,
+        distance: distance,
+        note: "asdasd",
+      },
+      userOrderId: user._id,
+      merchantId: merchant._id,
+      status: "processing",
+      detail: {
+        foods: items.map((item) => ({
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          total: item.price * item.quantity,
+        })),
+        fee: feeShip,
+        discount: applyVoucher.discount || 0,
+        total: totalPrice,
+      },
+    };
+    socket.emit("startOrder", order);
+  };
+
+  var myIcon = new L.icon({
+    iconUrl: shopIcon,
+    iconSize: [28, 45],
+    iconAnchor: [22, 34],
+    popupAnchor: [-3, -46],
+    shadowSize: [68, 45],
+    shadowAnchor: [22, 44],
+  });
   return (
     <div className="checkout">
       <div className="checkout--header">Xác nhận đơn hàng</div>
       <div className="checkout--detail-order">
         <div className="checkout--detail-order--profile">
           <div className="checkout--detail-order--map">
+            <DistanceMatrixService
+              options={{
+                destinations: [
+                  {
+                    lat: parseFloat(merchantLat),
+                    lng: parseFloat(merchantLng),
+                  },
+                ],
+                origins: [
+                  { lng: parseFloat(userLng), lat: parseFloat(userLat) },
+                ],
+                travelMode: "DRIVING",
+              }}
+              callback={(response) => {
+                setDistance(
+                  response["rows"][0].elements[0].distance.text.split(" ")[0]
+                );
+              }}
+            />
             <MapContainer
-              center={[20.828790101307185, 106.71664668177716]}
-              zoom={15}
+              center={[
+                (parseFloat(merchantLat) + parseFloat(userLat)) / 2,
+                (parseFloat(merchantLng) + parseFloat(userLng)) / 2,
+              ]}
+              zoom={14}
               scrollWheelZoom={false}
               style={{ height: "300px", width: "100%" }}
             >
@@ -213,7 +363,10 @@ function CheckOut() {
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker position={[20.828790101307185, 106.71664668177716]}>
+              <Marker position={[userLat, userLng]}>
+                <Popup>Location</Popup>
+              </Marker>
+              <Marker icon={myIcon} position={[merchantLat, merchantLng]}>
                 <Popup>Location</Popup>
               </Marker>
             </MapContainer>
@@ -222,21 +375,23 @@ function CheckOut() {
             <div className="checkout--detail-order--merchant address">
               <RiCheckboxBlankCircleFill className="icon inactive" />
               <div>
-                <p>Trà Sữa Hot Cha</p>
-                <p>69 Trung Lực, Quận Hải An, Hải Phòng</p>
+                <p>{merchantName}</p>
+                <p>{merchantAddress}</p>
               </div>
             </div>
             <div className="checkout--detail-order--user address">
               <RiCheckboxBlankCircleFill className="icon active" />
               <div>
-                <p>Trà Sữa Hot Cha</p>
-                <p>69 Trung Lực, Quận Hải An, Hải Phòng</p>
+                <p>
+                  {userName} - {userPhone}
+                </p>
+                <p>{userAddress}</p>
               </div>
             </div>
             <span className="checkout--predict">
               <AiOutlineClockCircle className="icon" />
-              Dự kiến: 09:30 - 11/05 -
-              <span style={{ color: "red" }}>2.2km</span>
+              Dự kiến: {getTimeExpect()} -
+              <span style={{ color: "red" }}> {distance}km</span>
             </span>
             <div className="checkout--change">
               <p>Thay đổi thông tin nhận hàng</p>
@@ -248,66 +403,65 @@ function CheckOut() {
           <div className="checkout--order--top">
             <h1>Chi tiết đơn hàng</h1>
             <div className="checkout--foods">
-              <div className="checkout--food">
-                <div>
-                  <span className="qty">3</span>
-                  <span className="food-name">Trà sữa chân trâu</span>
+              {items.map((item, index) => (
+                <div className="checkout--food" key={index}>
+                  <div>
+                    <span className="qty">{item.quantity}</span>
+                    <span className="food-name">{item.name}</span>
+                  </div>
+                  <p>{validatePrice(item.price * item.quantity)} đ</p>
                 </div>
-                <p>96,200đ</p>
-              </div>
-              <div className="checkout--food">
-                <div>
-                  <span className="qty">3</span>
-                  <span className="food-name">Trà sữa chân trâu</span>
-                </div>
-                <p>96,200</p>
-              </div>
-              <div className="checkout--food">
-                <div>
-                  <span className="qty">3</span>
-                  <span className="food-name">Trà sữa chân trâu</span>
-                </div>
-                <p>96,200đ</p>
-              </div>
-              <div className="checkout--food">
-                <div>
-                  <span className="qty">3</span>
-                  <span className="food-name">Trà sữa chân trâu</span>
-                </div>
-                <p>96,200đ</p>
-              </div>
-              <div className="checkout--food">
-                <div>
-                  <span className="qty">3</span>
-                  <span className="food-name">Trà sữa chân trâu</span>
-                </div>
-                <p>96,200đ</p>
-              </div>
+              ))}
             </div>
           </div>
           <div className="checkout--order--bot">
             <div className="checkout-sum">
               <p>
-                Tổng cộng <span style={{ fontWeight: "bold" }}>8</span> phần
+                Tổng cộng{" "}
+                <span style={{ fontWeight: "bold" }}>
+                  {items.reduce((value, item) => value + item.quantity, 0)}
+                </span>{" "}
+                phần
               </p>
-              <p>176,343đ</p>
+              <p>{validatePrice(totalPrice)} đ</p>
             </div>
             <div className="checkout-feeship">
               <p>
-                Phí vận chuyển: <span style={{ color: "red" }}> 2.2 km</span>
+                Phí vận chuyển:{" "}
+                <span style={{ color: "red" }}>
+                  {distance}
+                  km
+                </span>
               </p>
-              <p>176,343</p>
+              <p>{validatePrice(feeShip)} đ</p>
             </div>
-            <div className="checkout-discount">
-              <p>Mã khuyễn mãi:</p>
-              <p>-176,343đ</p>
-            </div>
+            {Object.keys(applyVoucher).length !== 0 ? (
+              <div className="checkout-discount">
+                <p>Mã khuyễn mãi:</p>
+                <p>-{validatePrice(applyVoucher.discount)} đ</p>
+              </div>
+            ) : (
+              ""
+            )}
             <div className="checkout-voucher">
               <div>Mã khuyến mãi</div>
               <div>
-                <input type="text" placeholder="Nhập mã" />
-                <TiTimesOutline className="icon checkout--pointer" />
-                <button>Áp dụng</button>
+                <input
+                  type="text"
+                  onChange={(e) => setVoucher(e.target.value)}
+                  placeholder="Nhập mã"
+                />
+                {Object.keys(applyVoucher).length !== 0 ? (
+                  <TiTimesOutline
+                    className="icon checkout--pointer"
+                    onClick={() => {
+                      setApplyVoucher({});
+                    }}
+                  />
+                ) : (
+                  ""
+                )}
+                <button onClick={() => handleApplyVoucher()}>Áp dụng</button>
               </div>
               <div className="checkout--pointer">
                 Xem mã của bạn
@@ -316,7 +470,12 @@ function CheckOut() {
             </div>
             <div className="checkout-total">
               <p>Tổng cộng</p>
-              <p>191.555đ</p>
+              <p>
+                {validatePrice(
+                  totalPrice + feeShip - (applyVoucher.discount || 0)
+                )}{" "}
+                đ
+              </p>
             </div>
 
             <div className="checkout-payment">
@@ -332,13 +491,13 @@ function CheckOut() {
 
             <div className="novat">
               <img src={novat} alt="novat" width="28px" />
-              <span class="txt-gray">Không xuất hoá đơn VAT</span>
+              <span className="txt-gray">Không xuất hoá đơn VAT</span>
             </div>
           </div>
         </div>
       </div>
       <div className="checkout--confirm">
-        <button>Đặt hàng</button>
+        <button onClick={() => handleOrder()}>Đặt hàng</button>
       </div>
     </div>
   );

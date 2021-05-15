@@ -12,7 +12,7 @@ import { useHistory, useLocation, useRouteMatch } from "react-router";
 export default function FoodMenu() {
   const match = useRouteMatch();
   const history = useHistory();
-  const merchantId = sessionStorage.merchantId;
+  const merchantId = localStorage.merchantId;
 
   const [category, setCategory] = useState([]);
   const [menu, setMenu] = useState([]);

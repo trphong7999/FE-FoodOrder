@@ -8,13 +8,13 @@ import { IoLocationOutline } from "react-icons/io5";
 import { validatePrice, computeDistant, getLocationUser } from "func.js";
 import { useDispatch, useSelector } from "react-redux";
 import { addCartOrder } from "redux/cartOrderSlice";
+import { DistanceMatrixService } from "@react-google-maps/api";
 
 export default function Brand({ merchant }) {
+  const [distance, setDistance] = useState(0);
   const dispatch = useDispatch();
   const listCartOrder = useSelector((state) => state.cartOrder);
-
-  const userLat = sessionStorage.getItem("lat") || 20.8351;
-  const userLng = sessionStorage.getItem("lng") || 106.7071;
+  const user = useSelector((state) => state.loginUserApp.profile);
 
   // ------------------------ HANDLE TIME OPEN - CLOSE ------------------
 
@@ -96,13 +96,39 @@ export default function Brand({ merchant }) {
             {merchant.typeFood === 0 ? "Đồ ăn" : "Đồ uống"}
           </span>
           <div className="brand-info__distant">
+            <DistanceMatrixService
+              options={{
+                destinations: [
+                  {
+                    lat: parseFloat(merchant.location.lat || 0),
+                    lng: parseFloat(merchant.location.lng || 0),
+                  },
+                ],
+                origins: [
+                  {
+                    lng: parseFloat(
+                      user.info.location.lng ||
+                        localStorage.getItem("lng") ||
+                        106.692183
+                    ),
+                    lat: parseFloat(
+                      user.info.location.lat ||
+                        localStorage.getItem("lat") ||
+                        20.8366544
+                    ),
+                  },
+                ],
+                travelMode: "DRIVING",
+              }}
+              callback={(response) => {
+                if (response["rows"][0].elements[0].distance)
+                  setDistance(
+                    response["rows"][0].elements[0].distance.text.split(" ")[0]
+                  );
+              }}
+            />
             <IoLocationOutline className="brand-info__distant-icon" />
-            {computeDistant(
-              userLat,
-              userLng,
-              merchant.location.lat,
-              merchant.location.lng
-            ).toFixed(1)}
+            {distance}
             km
           </div>
           <div className="brand-info__time">

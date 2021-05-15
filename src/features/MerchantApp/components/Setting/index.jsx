@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Setting() {
-  const merchantId = sessionStorage.getItem("merchantId");
+  const merchantId = localStorage.getItem("merchantId");
   const [numberShow, setNumberShow] = useState(0);
   const [profile, setProfile] = useState({});
 
