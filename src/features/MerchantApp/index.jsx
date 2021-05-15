@@ -19,6 +19,7 @@ import OrderHistoryDetail from "./components/OrderHistoryDetail";
 import FoodMenu from "./components/FoodMenu";
 import merchantApi from "api/merchantApi";
 import FoodMenuEdit from "./components/FoodMenuEdit";
+import Setting from "./components/Setting";
 
 function MerchantApp() {
   const match = useRouteMatch();
@@ -75,6 +76,8 @@ function MerchantApp() {
         />
         <Route path={`${match.url}/thuc-don`} exact component={FoodMenu} />
         <Route path={`${match.url}/thuc-don/:id`} component={FoodMenuEdit} />
+
+        <Route path={`${match.url}/cai-dat`} exact component={Setting} />
       </Switch>
     </div>
   );

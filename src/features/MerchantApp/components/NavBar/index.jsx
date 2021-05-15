@@ -1,26 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./style.scss";
 import { TiThMenu } from "react-icons/ti";
 import { IoWallet } from "react-icons/io5";
 import { HiClipboardList, HiDocumentReport } from "react-icons/hi";
 import { MdClear } from "react-icons/md";
-import {
-  Link,
-  useHistory,
-  useLocation,
-  useRouteMatch,
-  NavLink,
-} from "react-router-dom";
+import { Link, useHistory, NavLink } from "react-router-dom";
+import merchantApi from "api/merchantApi";
 
 export default function NavBar() {
   const [openMenu, setOpenMenu] = useState(false);
-  const match = useRouteMatch();
+  const [name, setName] = useState("");
   const history = useHistory();
-  const location = useLocation();
+  const merchantId = sessionStorage.merchantId;
 
   const createNewPlace = (place) => {
     history.push(place);
   };
+
+  useEffect(() => {
+    const getNameMerchant = async () => {
+      try {
+        const res = await merchantApi.get(merchantId);
+        if (res) {
+          setName(res.name);
+        }
+      } catch (error) {
+        console.log("Failed get profile merchant:", error);
+      }
+    };
+    getNameMerchant();
+  }, []);
 
   return (
     <div className="navbar-merchant">
@@ -64,7 +73,7 @@ export default function NavBar() {
         >
           <div className="menu-wrap">
             <div className="menu-name">
-              <span>Hải Sản Hội An</span>
+              <span>{name}</span>
               <MdClear
                 id="close-menu-merchant-menu"
                 className="menu-name__icon"
@@ -111,10 +120,13 @@ export default function NavBar() {
                     Quản lý nhân viên
                   </Link>
                 </li>
-                <li>
-                  <Link to="" className="menu-content__list-item">
-                    Cài đặt
-                  </Link>
+                <li
+                  className="menu-content__list-item"
+                  onClick={() => {
+                    createNewPlace(`/merchant/cai-dat`);
+                  }}
+                >
+                  Cài đặt
                 </li>
               </ul>
             </div>

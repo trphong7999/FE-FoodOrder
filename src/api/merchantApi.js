@@ -18,6 +18,18 @@ const merchantApi = {
     const url = `/merchants/${id}`;
     return axiosClient.get(url);
   },
+  changeCategory: (params) => {
+    const url = `/merchants/changecategory`;
+    return axiosClient.post(url, params);
+  },
+  addCategory: (params) => {
+    const url = `/merchants/addcategory`;
+    return axiosClient.post(url, params);
+  },
+  removeCategory: (params) => {
+    const url = `/merchants/removecategory`;
+    return axiosClient.post(url, params);
+  },
   //------------------------------------------------
 };
 

@@ -9,10 +9,11 @@ import axios from "axios";
 import merchantApi from "api/merchantApi";
 import { useHistory, useLocation, useRouteMatch } from "react-router";
 
-export default function FoodMenu({ categories }) {
+export default function FoodMenu() {
   const match = useRouteMatch();
   const history = useHistory();
   const merchantId = sessionStorage.merchantId;
+
   const [category, setCategory] = useState([]);
   const [menu, setMenu] = useState([]);
   const [showAction, setShowAction] = useState(false);
@@ -148,7 +149,7 @@ export default function FoodMenu({ categories }) {
                 <div
                   className="item-img"
                   style={{
-                    backgroundImage: `url(${item.avt === "" ? mi1 : item.avt})`,
+                    backgroundImage: `url(${item.img === "" ? mi1 : item.img})`,
                   }}
                 ></div>
                 <div className="item-content">
