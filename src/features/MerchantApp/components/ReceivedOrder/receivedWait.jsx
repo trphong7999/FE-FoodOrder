@@ -3,7 +3,7 @@ import "./styleContent.scss";
 import { AiFillPushpin } from "react-icons/ai";
 import { IoWallet, IoNotificationsCircleSharp } from "react-icons/io5";
 import { Link, useRouteMatch } from "react-router-dom";
-import { validatePrice } from "func";
+import { datetimeFromTimestamp, sumQuantity, validatePrice } from "func";
 
 export default function ReceivedWait({ listWait }) {
   const match = useRouteMatch();
@@ -15,24 +15,29 @@ export default function ReceivedWait({ listWait }) {
             <div className="list-item__top">
               <div className="list-item__top-number">
                 <span>{index + 1}</span>
-                <span>#{item.id}</span>
+                <span>#{item._id}</span>
               </div>
               <AiFillPushpin className="list-item__top-icon" />
             </div>
 
             <div className="list-item__wait-time">
-              Giao hàng lúc {item.time.startOrder} (trong - {item.time.limit}{" "}
+              Giao hàng lúc{" "}
+              {datetimeFromTimestamp(parseInt(item.timeOrder) + 15 * 60000)}{" "}
+              (trong -{"15"}
               phút)
             </div>
 
             <div className="list-item__wait-cus list-item__dashed-boder">
-              {item.customer.name}
+              {item.userOrderId.info.name}
             </div>
 
             <div className="list-item__status-driver list-item__dashed-boder list-item--p1">
               <div className="status-driver__text">
                 Trạng thái:
-                <span className="status-driver-2">Tài xế đang đến</span>
+                <span className="status-driver-2" style={{ color: "#53a653" }}>
+                  {" "}
+                  Tài xế <b>{item.deliverId.name}</b> đang đến
+                </span>
               </div>
               <div className="status-driver__action">
                 <IoNotificationsCircleSharp className="status-driver__action-icon" />
@@ -40,10 +45,16 @@ export default function ReceivedWait({ listWait }) {
               </div>
             </div>
             <div className="list-item__bot">
-              <span>{item.totalNumberOfDishes} món</span>
+              <span>{item.detail.foods.reduce(sumQuantity, 0)} món</span>
               <div className="list-item__bot-total">
                 <span className="list-item__bot-cash">Cash</span>
-                <span>{validatePrice(item.finalAmount)} đ</span>
+                <span>
+                  {validatePrice(
+                    item.detail.total -
+                      item.detail.total * (item.merchantId.deduct / 100)
+                  )}{" "}
+                  đ
+                </span>
               </div>
             </div>
           </div>

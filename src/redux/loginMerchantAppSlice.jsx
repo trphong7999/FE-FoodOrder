@@ -14,11 +14,12 @@ const merchantSlice = createSlice({
       localStorage.setItem("email", email);
       localStorage.setItem("token", token.token);
       localStorage.setItem("merchantId", merchantId);
+      localStorage.setItem("type", "merchant");
     },
     logoutMerchant: (state) => {
       state.email = null;
       localStorage.removeItem("email");
-      localStorage.removeItem("auth_token");
+      localStorage.removeItem("token");
       localStorage.removeItem("merchantId");
     },
   },

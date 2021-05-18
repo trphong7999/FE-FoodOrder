@@ -6,34 +6,37 @@ import "./style.scss";
 import logo from "assets/image/merchantlogo.png";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginMerchant } from "redux/loginMerchantAppSlice";
-import merchantApi from "api/merchantApi";
+import { loginPartner, getProfile } from "redux/loginPartnerAppSlice";
+import partnerApi from "api/partnerApi";
 import socket from "socket-io.js";
 
-function LoginMerchant() {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
 
   const Login = async (event) => {
     event.preventDefault();
-    let res = await merchantApi.login({ email: email, password });
-    if (typeof res === "object") {
-      const action = loginMerchant({
+    let res = await partnerApi.login({ email: email, password });
+    if (typeof res === "object" && res.status !== 400) {
+      const action = loginPartner({
         email: email,
         token: res,
-        merchantId: res.id,
+        partnerId: res.id,
       });
       dispatch(action);
-      socket.emit("storeClientInfo", { id: res.id, type: "merchant" });
+      const profile = await partnerApi.getProfile();
+      const actionGetProfile = getProfile(profile);
+      dispatch(actionGetProfile);
+      socket.emit("storeClientInfo", { id: res.id, type: "partner" });
     }
   };
 
   return (
     <div className="grid">
-      <div className="login-merchant">
+      <div className="login-partner">
         <div className="login-logo">
-          <img src={logo} alt="merchant-logo" />
+          <img src={logo} alt="partner-logo" />
         </div>
         <span className="login__title">Đăng nhập</span>
         <div className="login__with-phone">
@@ -94,4 +97,4 @@ function LoginMerchant() {
   );
 }
 
-export default LoginMerchant;
+export default Login;

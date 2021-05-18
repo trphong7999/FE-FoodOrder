@@ -35,8 +35,12 @@ export default function FormLoginValidation({ clickSwitchForm }) {
     e.preventDefault();
 
     let res = await userApi.login({ username: userName, password });
-    if (typeof res === "string") {
-      const action = login({ username: userName, token: res });
+    if (typeof res === "object" && res.status !== 400) {
+      const action = login({
+        username: userName,
+        token: res.token,
+        id: res.id,
+      });
       dispatch(action);
       console.log("profile");
       const profile = await userApi.getProfile();

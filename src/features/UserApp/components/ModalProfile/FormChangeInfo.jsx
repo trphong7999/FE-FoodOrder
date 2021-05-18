@@ -7,6 +7,8 @@ import Address2Geocode from "components/Address2Geocode";
 import userApi from "api/userApi";
 import { useDispatch } from "react-redux";
 import { getProfile } from "redux/loginUserAppSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ChangeView({ center, zoom }) {
   const map = useMap();
@@ -52,10 +54,15 @@ export default function ModalFormChangeInfo({ account, changeShowModalInfo }) {
   );
   const [address, setAddress] = useState(location.address || "");
   const { lat, lng } = geo;
-  console.log(address);
+
+  const changeFail = () =>
+    toast.error(
+      "🤔Cập nhật thông tin thất bại, vui lòng kiểm tra lại thông tin!"
+    );
+
   const ChangeInfo = async () => {
     if (!ten || !gioitinh || !mail || !address || !geo) {
-      alert("Vui lòng điền đầy đủ thông tin");
+      changeFail();
       return;
     }
 
@@ -69,10 +76,10 @@ export default function ModalFormChangeInfo({ account, changeShowModalInfo }) {
         lng: geo.lng,
       },
     };
+
     const res = await userApi.changeProfile(newProfile);
     const actionGetProfile = getProfile(res);
     dispatch(actionGetProfile);
-    alert("Cập nhật thành công!");
   };
 
   return (
@@ -162,6 +169,7 @@ export default function ModalFormChangeInfo({ account, changeShowModalInfo }) {
               Lưu thay đổi
             </button>
           </div>
+          <ToastContainer />
         </div>
       </div>
     </div>

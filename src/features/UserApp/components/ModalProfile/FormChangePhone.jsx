@@ -5,6 +5,8 @@ import { MdClear } from "react-icons/md";
 import userApi from "api/userApi";
 import { useDispatch } from "react-redux";
 import { getProfile } from "redux/loginUserAppSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ModalFormChangePhone({ changeShowModalPhone }) {
   const [phone, setPhone] = useState("");
@@ -14,9 +16,13 @@ export default function ModalFormChangePhone({ changeShowModalPhone }) {
   };
   const dispatch = useDispatch();
 
+  const changeFail = (
+    message = "Cập nhật thông tin thất bại, vui lòng kiểm tra lại thông tin!"
+  ) => toast.error("🤔" + message);
+
   const changePhone = async () => {
     if (phone.length !== 10 || phone[0] !== "0") {
-      alert("Số điện thoại không hợp lệ");
+      changeFail();
       return;
     }
 
@@ -25,11 +31,11 @@ export default function ModalFormChangePhone({ changeShowModalPhone }) {
       pass: pass,
     };
     const res = await userApi.changePhone(newPhone);
-    if (typeof res !== "undefined" && res.status !== 400) {
+    if (typeof res !== "undefined" && res.info) {
       const actionGetProfile = getProfile(res);
+      console.log(res);
       dispatch(actionGetProfile);
-      alert("Cập nhật thành công!");
-    } else alert("Password sai");
+    } else changeFail("Mật khẩu hiện tại không đúng!");
   };
   return (
     <div className="modal">

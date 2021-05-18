@@ -5,32 +5,37 @@ import { BsChevronLeft } from "react-icons/bs";
 import { RiFileCopyLine } from "react-icons/ri";
 import ava1 from "assets/image/avartar/ava1.jpg";
 import { useHistory, useLocation } from "react-router-dom";
-import { validatePrice, sumQuantity, sumTotal } from "func";
-import axios from "axios";
+import {
+  validatePrice,
+  sumQuantity,
+  sumTotal,
+  datetimeFromTimestamp,
+} from "func";
+import socket from "socket-io";
+import taixe1 from "assets/image/avartar/taixe1.jpg";
 
 function ReceivedConfirmDetail() {
   const history = useHistory();
   const location = useLocation();
   const orderDetail = location.state.orderDetail;
-  const quantityOrdered = orderDetail.customer.quantityOrdered;
-  const totalNumberOfDishes = orderDetail.listFood.reduce(sumQuantity, 0);
-  const totalAmountOfDishes = orderDetail.listFood.reduce(sumTotal, 0);
-  const commissionMoney = totalAmountOfDishes * 0.1;
-  const finalAmount = totalAmountOfDishes - commissionMoney;
+  const quantityOrdered = orderDetail.userOrderId.quantityOrderedSuccess;
+  // const totalNumberOfDishes = orderDetail.listFood.reduce(sumQuantity, 0);
+  // const totalAmountOfDishes = orderDetail.listFood.reduce(sumTotal, 0);
+  // const commissionMoney = totalAmountOfDishes * 0.1;
+  // const finalAmount = totalAmountOfDishes - commissionMoney;
 
-  const orderPrepare = {
-    ...orderDetail,
-    totalNumberOfDishes: totalNumberOfDishes,
-    totalAmountOfDishes: totalAmountOfDishes,
-    discountMoney: 0,
-    commissionMoney: commissionMoney,
-    finalAmount: finalAmount,
-    infoPartner: { name: null, phone: null, status: 0, avatar: "" },
-  };
+  // const orderPrepare = {
+  //   ...orderDetail,
+  //   totalNumberOfDishes: totalNumberOfDishes,
+  //   totalAmountOfDishes: totalAmountOfDishes,
+  //   discountMoney: 0,
+  //   commissionMoney: commissionMoney,
+  //   finalAmount: finalAmount,
+  //   infoPartner: { name: null, phone: null, status: 0, avatar: "" },
+  // };
 
   const addReceivedPrepare = async () => {
-    await axios.post(`http://localhost:5000/receivedPrepare`, orderPrepare);
-    await axios.delete(`http://localhost:5000/receivedOrder/${orderDetail.id}`);
+    socket.emit("approveOrder", orderDetail._id);
     history.goBack();
   };
 
@@ -59,11 +64,11 @@ function ReceivedConfirmDetail() {
           style={{ backgroundImage: `url(${ava1})` }}
         ></div>
         <div className="partner-info">
-          <span>{orderDetail.customer.name}</span>
+          <span>{orderDetail.userOrderId.info.name}</span>
           <span>
             {quantityOrdered < 1
               ? "Lần đầu đặt"
-              : `Đã đặt: ${quantityOrdered} đơn`}
+              : `Đã đặt thành công: ${quantityOrdered} đơn`}
           </span>
         </div>
         <div className="partner-action">
@@ -71,9 +76,29 @@ function ReceivedConfirmDetail() {
         </div>
       </div>
 
+      {orderDetail.deliverId ? (
+        <div className="detail-partner">
+          <div
+            className="partner-avatar"
+            style={{ backgroundImage: `url(${orderDetail.deliverId.avt})` }}
+          >
+            <img src={taixe1} alt="" />
+          </div>
+          <div className="partner-info">
+            <span>{orderDetail.deliverId.name}</span>
+            <span>{orderDetail.deliverId.phone}</span>
+          </div>
+          <div className="partner-action">
+            <FaPhoneAlt className="icon" />
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+
       <div className="detail-dishes">
         <div className="detail-dishes__list">
-          {orderDetail.listFood.map((food, index) => (
+          {orderDetail.detail.foods.map((food, index) => (
             <div className="detail-dishes__item" key={index}>
               <div className="item-quantity">{food.quantity} x</div>
               <div className="item-name">{food.name}</div>
@@ -85,19 +110,28 @@ function ReceivedConfirmDetail() {
         <div className="detail-dishes__count">
           <div className="count-cost">
             <span>Tổng tiền món (giá gốc)</span>
-            <span>{validatePrice(totalAmountOfDishes)} đ</span>
+            <span>{validatePrice(orderDetail.detail.total)} đ</span>
           </div>
-          <div className="count-discount">
+          {/* <div className="count-discount">
             <span>Giảm giá</span>
-            <span>0</span>
-          </div>
+            <span>{validatePrice(orderDetail.detail.discount)}</span>
+          </div> */}
           <div className="count-commission">
             <span>Tiền hoa hồng (10%)</span>
-            <span>{validatePrice(commissionMoney)}</span>
+            <span>
+              {validatePrice(orderDetail.detail.total * (10 / 100))} đ
+            </span>
           </div>
           <div className="count-total">
-            <span>Tổng tiền ({totalNumberOfDishes} món)</span>
-            <span>{validatePrice(finalAmount)} đ</span>
+            <span>
+              Tổng tiền ({orderDetail.detail.foods.reduce(sumQuantity, 0)} món)
+            </span>
+            <span>
+              {validatePrice(
+                orderDetail.detail.total - orderDetail.detail.total * (10 / 100)
+              )}{" "}
+              đ
+            </span>
           </div>
         </div>
       </div>
@@ -111,11 +145,13 @@ function ReceivedConfirmDetail() {
         </div>
         <div className="detail-bot__time">
           <span>Thời gian đặt đơn</span>
-          <span>Hôm nay {orderDetail.time.startOrder}</span>
+          <span>
+            Hôm nay {datetimeFromTimestamp(parseInt(orderDetail.timeOrder))}
+          </span>
         </div>
         <div className="detail-bot__space">
           <span>Khoảng cách</span>
-          <span>{orderDetail.space} km</span>
+          <span>{orderDetail.distance} km</span>
         </div>
       </div>
 

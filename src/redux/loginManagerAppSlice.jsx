@@ -1,6 +1,6 @@
 const { createSlice } = require("@reduxjs/toolkit");
 
-const userSlice = createSlice({
+const managerSlice = createSlice({
   name: "user",
   initialState: {
     username: localStorage.getItem("username") || null,
@@ -12,6 +12,7 @@ const userSlice = createSlice({
       state.username = username;
       localStorage.setItem("username", username);
       localStorage.setItem("token", token);
+      localStorage.setItem("type", "manager");
     },
     logout: (state) => {
       state.username = null;
@@ -21,6 +22,6 @@ const userSlice = createSlice({
   },
 });
 
-const { reducer, actions } = userSlice;
+const { reducer, actions } = managerSlice;
 export const { login, logout } = actions;
 export default reducer;

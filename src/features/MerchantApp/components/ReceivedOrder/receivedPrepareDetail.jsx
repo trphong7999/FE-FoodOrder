@@ -7,20 +7,19 @@ import ava1 from "assets/image/avartar/ava1.jpg";
 import taixe1 from "assets/image/avartar/taixe1.jpg";
 import deliveryMan from "assets/image/icons/delivery-man.png";
 import { useHistory, useLocation } from "react-router-dom";
-import { validatePrice } from "func";
-import axios from "axios";
+import { sumQuantity, validatePrice } from "func";
+import socket from "socket-io.js";
+import { Rating } from "@material-ui/lab";
+import ReactSwipeButton from "react-swipe-button";
 
 function ReceivedPrepareDetail() {
   const history = useHistory();
   const location = useLocation();
   const prepareDetail = location.state.prepareDetail;
-  const quantityOrdered = prepareDetail.customer.quantityOrdered;
+  const quantityOrdered = prepareDetail.userOrderId.quantityOrderedSuccess;
 
-  const addReceivedWait = async () => {
-    await axios.post(`http://localhost:5000/receivedWait`, prepareDetail);
-    await axios.delete(
-      `http://localhost:5000/receivedPrepare/${prepareDetail.id}`
-    );
+  const addReceivedWait = () => {
+    socket.emit("prepareDone", prepareDetail._id);
     history.goBack();
   };
 
@@ -51,7 +50,7 @@ function ReceivedPrepareDetail() {
           style={{ backgroundImage: `url(${ava1})` }}
         ></div>
         <div className="partner-info">
-          <span>{prepareDetail.customer.name}</span>
+          <span>{prepareDetail.userOrderId.info.name}</span>
           <span>
             {quantityOrdered < 1
               ? "Lần đầu đặt"
@@ -63,25 +62,36 @@ function ReceivedPrepareDetail() {
         </div>
       </div>
 
-      <div className="detail-partner">
-        <div
-          className="partner-avatar"
-          style={{ backgroundImage: `url(${deliveryMan})` }}
-        >
-          <img src={taixe1} alt="" />
+      {prepareDetail.deliverId ? (
+        <div className="detail-partner">
+          <div
+            className="partner-avatar"
+            style={{ backgroundImage: `url(${deliveryMan})` }}
+          >
+            <img src={taixe1} alt="" />
+          </div>
+          <div className="partner-info">
+            <span>{prepareDetail.deliverId.name}</span>
+            <span>{prepareDetail.deliverId.phone}</span>
+          </div>
+          <Rating
+            name="half-rating-read"
+            defaultValue={2.5}
+            precision={0.5}
+            readOnly
+            style={{ fontSize: "2.2rem", marginLeft: "2rem" }}
+          />
+          <div className="partner-action">
+            <FaPhoneAlt className="icon" />
+          </div>
         </div>
-        <div className="partner-info">
-          <span>{prepareDetail.infoPartner.name}</span>
-          <span>{prepareDetail.infoPartner.phone}</span>
-        </div>
-        <div className="partner-action">
-          <FaPhoneAlt className="icon" />
-        </div>
-      </div>
+      ) : (
+        ""
+      )}
 
       <div className="detail-dishes">
         <div className="detail-dishes__list">
-          {prepareDetail.listFood.map((food, index) => (
+          {prepareDetail.detail.foods.map((food, index) => (
             <div className="detail-dishes__item" key={index}>
               <div className="item-quantity">{food.quantity} x</div>
               <div className="item-name">{food.name}</div>
@@ -93,19 +103,33 @@ function ReceivedPrepareDetail() {
         <div className="detail-dishes__count">
           <div className="count-cost">
             <span>Tổng tiền món (giá gốc)</span>
-            <span>{validatePrice(prepareDetail.totalAmountOfDishes)} đ</span>
+            <span>{validatePrice(prepareDetail.detail.total)} đ</span>
           </div>
           <div className="count-discount">
             <span>Giảm giá</span>
-            <span>{validatePrice(prepareDetail.discountMoney)}</span>
+            <span>{validatePrice(prepareDetail.detail.discount)}</span>
           </div>
           <div className="count-commission">
             <span>Tiền hoa hồng(10%)</span>
-            <span>{validatePrice(prepareDetail.commissionMoney)}</span>
+            <span>
+              {validatePrice(
+                (prepareDetail.detail.total * prepareDetail.merchantId.deduct) /
+                  100
+              )}
+            </span>
           </div>
           <div className="count-total">
-            <span>Tổng tiền ({prepareDetail.totalNumberOfDishes} món)</span>
-            <span>{validatePrice(prepareDetail.finalAmount)}</span>
+            <span>
+              Tổng tiền ({prepareDetail.detail.foods.reduce(sumQuantity, 0)}{" "}
+              món)
+            </span>
+            <span>
+              {validatePrice(
+                prepareDetail.detail.total -
+                  prepareDetail.detail.total *
+                    (prepareDetail.merchantId.deduct / 100)
+              )}
+            </span>
           </div>
         </div>
       </div>
@@ -114,16 +138,16 @@ function ReceivedPrepareDetail() {
         <div className="detail-bot__id">
           <span>Mã Đơn Hàng</span>
           <span>
-            {prepareDetail.id} <RiFileCopyLine />
+            {prepareDetail._id} <RiFileCopyLine />
           </span>
         </div>
         <div className="detail-bot__time">
           <span>Thời gian đặt đơn</span>
-          <span>Hôm nay {prepareDetail.time.startOrder}</span>
+          <span>Hôm nay {prepareDetail.startOrder}</span>
         </div>
         <div className="detail-bot__space">
           <span>Khoảng cách</span>
-          <span>{prepareDetail.space} km</span>
+          <span>{prepareDetail.distance} km</span>
         </div>
       </div>
 
@@ -133,8 +157,12 @@ function ReceivedPrepareDetail() {
           onClick={() => {
             addReceivedWait();
           }}
+          disabled={!prepareDetail.deliverId}
+          // style={{ background: !prepareDetail.deliverId ? "#888" : "" }}
         >
-          Báo cho tài xế đã xong
+          {prepareDetail.deliverId
+            ? "Báo cho tài xế đã xong"
+            : "Đang tìm tài xế khác"}
         </button>
       </div>
     </div>

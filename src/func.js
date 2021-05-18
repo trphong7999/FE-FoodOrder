@@ -46,7 +46,15 @@ const getLocationUser = () => {
   return lat;
 };
 
+const datetimeFromTimestamp = (timestamp) => {
+  const datetime = new Date(timestamp);
+  return `${("0" + datetime.getHours()).slice(-2)}:${(
+    "0" + datetime.getMinutes()
+  ).slice(-2)}`;
+};
+
 export {
+  datetimeFromTimestamp,
   validatePrice,
   getLocationUser,
   sumQuantity,

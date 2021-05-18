@@ -84,3 +84,11 @@ $small-width: 376px;
   background-repeat: repeat-x;
   background-position: bottom;
 }
+.Toastify__toast {
+  min-height: 10rem;
+  font-size: 1.4rem;
+  top: 5.2rem;
+}
+.Toastify__toast-container {
+  width: 40rem;
+}

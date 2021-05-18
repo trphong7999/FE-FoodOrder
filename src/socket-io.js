@@ -1,6 +1,10 @@
 import io from "socket.io-client";
 
-const data = localStorage.merchantId;
-const socket = io(`localhost:4000?data=${data}`, { transport: ["websocket"] });
+const id =
+  localStorage.merchantId || localStorage.partnerId || localStorage.userId;
+const type = localStorage.type;
+const socket = io(`localhost:4000?id=${id}&type=${type}`, {
+  transport: ["websocket"],
+});
 
 export default socket;

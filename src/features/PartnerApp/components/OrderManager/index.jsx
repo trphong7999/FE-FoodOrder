@@ -1,8 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FiPower } from "react-icons/fi";
 import { AiFillShop, AiOutlineInfoCircle } from "react-icons/ai";
 import { GoPrimitiveDot } from "react-icons/go";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+  Circle,
+} from "react-leaflet";
 import Modal from "@material-ui/core/Modal";
 import Fade from "@material-ui/core/Fade";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -16,8 +23,13 @@ import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import "./style.scss";
-import { validatePrice } from "func";
+import { validatePrice, computeDistant, datetimeFromTimestamp } from "func";
 import { useHistory, useRouteMatch } from "react-router";
+import orderApi from "api/orderApi";
+import shopIcon from "assets/image/icons/shop-icon.png";
+import mylocationIcon from "assets/image/icons/mylocation.png";
+import socket from "socket-io.js";
+import { useSelector } from "react-redux";
 
 let DefaultIcon = L.icon({
   iconUrl: icon,
@@ -29,6 +41,24 @@ function ChangeView({ center, zoom }) {
   const map = useMap();
   map.setView(center, zoom);
   return null;
+}
+
+//custom hook
+function useInterval(callback, delay) {
+  const savedCallback = useRef();
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  });
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+
+    let id = setInterval(tick, delay);
+    return () => clearInterval(id);
+  }, [delay]);
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -131,7 +161,7 @@ export default function OrderManager() {
         )}
       </div>
 
-      <Modal
+      {/* <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modalCurrentOrder}
@@ -149,10 +179,10 @@ export default function OrderManager() {
               handleClose={handleClose}
               callBackStatusCheckIn={handleChangeStatusCheckIn}
             /> */}
-            <CurrentOrder />
-          </div>
-        </Fade>
-      </Modal>
+      {/* <CurrentOrder /> */}
+      {/* </div> } */}
+      {/* </Fade> */}
+      {/* </Modal> */}
     </div>
   );
 }
@@ -162,20 +192,86 @@ function MapPick() {
     lat: "20.828790101307185",
     lng: "106.71664668177716",
   });
+  const classes = useStyles();
+  const partner = useSelector((state) => state.partner.profile);
+  console.log(partner);
+  const [pickingOrder, setpickingOrder] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  let pickingOrderInDistance = pickingOrder.filter((order) => {
+    return (
+      parseFloat(
+        computeDistant(
+          order.merchantId.location.lat,
+          order.merchantId.location.lng,
+          geo.lat,
+          geo.lng
+        )
+      ) > parseFloat(partner.setting.radiusWorking / 1000 || 2)
+    );
+  });
+
+  const success = (pos) => {
+    let { latitude, longitude } = pos.coords;
+    if (latitude !== geo.lat || longitude !== geo.lng) {
+      console.log("diff");
+      console.log(latitude, geo.lat, longitude, geo.lng);
+      setGeo({ lat: latitude, lng: longitude });
+    }
+  };
+
+  useInterval(() => {
+    navigator.geolocation.getCurrentPosition(
+      success,
+      (e) => console.log("fail", e),
+      { timeout: 10000 }
+    );
+  }, 2000);
+
+  useEffect(() => {
+    const fetchPickingOrder = async () => {
+      const pickingOrder = await orderApi.getOrderByStatus("finding");
+      console.log(pickingOrder);
+      setpickingOrder(pickingOrder);
+    };
+    fetchPickingOrder();
+  }, []);
+
+  var myIcon = new L.icon({
+    iconUrl: shopIcon,
+    iconSize: [28, 42],
+    iconAnchor: [22, 34],
+    popupAnchor: [-3, -46],
+    shadowSize: [68, 45],
+    shadowAnchor: [22, 44],
+  });
+
+  let DefaultIcon = L.icon({
+    iconUrl: mylocationIcon,
+    iconSize: [32, 32],
+    iconAnchor: [15, 14],
+    popupAnchor: [-3, -46],
+    shadowSize: [50, 45],
+    shadowAnchor: [22, 44],
+  });
+  L.Marker.prototype.options.icon = DefaultIcon;
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <MapContainer
       center={[geo.lat, geo.lng]}
-      zoom={18}
+      zoom={15}
       scrollWheelZoom={false}
       style={{ height: `calc(100vh - 40px)`, width: "100%" }}
-      whenReady={(map) => {
-        map.target.on("click", function (e) {
-          const { lat, lng } = e.latlng;
-          setGeo({ lat: lat, lng: lng });
-        });
-      }}
     >
-      <ChangeView center={[geo.lat, geo.lng]} zoom={18} />
+      <ChangeView center={[geo.lat, geo.lng]} zoom={15} />
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -183,6 +279,39 @@ function MapPick() {
       <Marker position={[geo.lat, geo.lng]}>
         <Popup>Location</Popup>
       </Marker>
+      <Circle
+        center={[geo.lat, geo.lng]}
+        radius={partner.setting.radiusWorking || 2000}
+      />
+      {pickingOrderInDistance.map((order) => (
+        <Marker
+          icon={myIcon}
+          position={[
+            order.merchantId.location.lat,
+            order.merchantId.location.lng,
+          ]}
+          eventHandlers={{
+            click: (e) => {
+              handleOpen();
+            },
+          }}
+        >
+          <Modal
+            open={open}
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            className={classes.modalCurrentOrder}
+            onClose={handleClose}
+            closeAfterTransition
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 300,
+            }}
+          >
+            <CurrentOrder handleClose={handleClose} order={order} />
+          </Modal>
+        </Marker>
+      ))}
     </MapContainer>
   );
 }
@@ -363,7 +492,12 @@ function TimePickers() {
   );
 }
 
-function CurrentOrder() {
+function CurrentOrder({ handleClose, order }) {
+  const chooseOrder = (order_id) => {
+    socket.emit("chooseOrder", order_id);
+    handleClose();
+  };
+
   return (
     <div className="current-order">
       <div className="current-order__content">
@@ -373,13 +507,16 @@ function CurrentOrder() {
             <span>Delivery</span>
           </div>
           <div className="content-head__text">
-            <div className="text-distance">2.2km</div>
+            <div className="text-distance">{order.distance} km</div>
             <div className="text-cost">
-              19K
+              {order.fee}
               <AiOutlineInfoCircle className="cost-icon" />
             </div>
             <div className="text-time">
-              Giao <span>14:10</span>
+              Giao{" "}
+              <span>
+                {datetimeFromTimestamp(parseInt(order.timeOrder) + 15 * 60000)}
+              </span>
             </div>
           </div>
         </div>
@@ -388,36 +525,43 @@ function CurrentOrder() {
           <div className="cus-title">
             <div className="cus-title__name">
               <GoPrimitiveDot className="name-icon" />
-              <div className="name-text">
-                Lấy: RoyalTea - Trà sữa HongKhong - Lạch Tray
-              </div>
+              <div className="name-text">Lấy: {order.merchantId.name}</div>
             </div>
             <div className="cus-title__price">
-              Trả: <span>412,000đ</span>
+              Trả: <span>{(order.detail.total * 90) / 100}đ</span>
             </div>
           </div>
-          <div className="cus-address">
-            178 Lạch Tray, Đằng Giang, Ngô Quyền, Hải Phòng, Việt Nam
-          </div>
+          <div className="cus-address">{order.merchantId.location.address}</div>
         </div>
 
         <div className="content-cus cotent-cus__color-red">
           <div className="cus-title">
             <div className="cus-title__name">
               <GoPrimitiveDot className="name-icon" />
-              <div className="name-text">Giao: Thy Nguyễn</div>
+              <div className="name-text">
+                Giao: {order.userOrderId.info.name}
+              </div>
             </div>
             <div className="cus-title__price">
-              Thu: <span>431,000đ</span>
+              Thu:{" "}
+              <span>
+                {order.detail.total + order.detail.fee - order.detail.discount}{" "}
+                đ
+              </span>
             </div>
           </div>
           <div className="cus-address">
-            49 Đường Số 2, Trần Hưng Đạo, Hồng Bàng, Hải Phòng
+            {order.userOrderId.info.location.address}
           </div>
         </div>
 
         <div className="content-action">
-          <button className="content-action__button">Lấy đơn hàng này</button>
+          <button
+            className="content-action__button"
+            onClick={() => chooseOrder(order._id)}
+          >
+            Lấy đơn hàng này
+          </button>
         </div>
       </div>
     </div>

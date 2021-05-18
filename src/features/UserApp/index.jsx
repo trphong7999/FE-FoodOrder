@@ -3,12 +3,24 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 import AccountPage from "./pages/AccountPage";
 import MainPage from "./pages/Main";
 import MerchantPage from "./pages/MerchantPage";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import userApi from "api/userApi";
+import { logout } from "redux/loginUserAppSlice";
 
 function UserApp(props) {
   const match = useRouteMatch();
   const user = useSelector((state) => state.loginUserApp);
-  console.log(user);
+  const dispatch = useDispatch();
+  // Check login is the manager
+  userApi.checkAuth().then((res) => {
+    try {
+      if (res.status === 400) {
+        dispatch(logout());
+      }
+    } catch {
+      return;
+    }
+  });
 
   return (
     <Switch>

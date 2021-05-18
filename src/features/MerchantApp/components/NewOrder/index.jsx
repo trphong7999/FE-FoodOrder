@@ -3,7 +3,8 @@ import { IoWallet } from "react-icons/io5";
 import "./style.scss";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import axios from "axios";
-import { validatePrice } from "func";
+import { validatePrice, datetimeFromTimestamp } from "func";
+import socket from "socket-io.js";
 
 function NewOrder({ newListOrder }) {
   const match = useRouteMatch();
@@ -11,6 +12,7 @@ function NewOrder({ newListOrder }) {
   const [serialOrder, setSerialOrder] = useState(0);
 
   const detailOrder = newListOrder[serialOrder];
+  const userInfo = detailOrder.userOrderId.info;
   const id = detailOrder.id;
 
   const handleChangeOrderDetail = (index) => {
@@ -30,8 +32,7 @@ function NewOrder({ newListOrder }) {
   };
 
   const handleConfirmAdd = () => {
-    addReceivedOrder(detailOrder);
-    removeListNewOrderItem(id);
+    socket.emit("acceptOrder", detailOrder._id);
     history.push(`merchant/da-nhan`);
   };
   // ------------------------------------------------------------
@@ -42,13 +43,6 @@ function NewOrder({ newListOrder }) {
     };
     history.push(location);
     history.replace(location);
-  };
-
-  const datetimeFromTimestamp = (timestamp) => {
-    const datetime = new Date(timestamp);
-    return `${("0" + datetime.getHours()).slice(-2)}:${(
-      "0" + datetime.getMinutes()
-    ).slice(-2)}`;
   };
 
   return (
@@ -75,7 +69,7 @@ function NewOrder({ newListOrder }) {
 
       <div className="content-body">
         <div className="content-title">
-          <span className="title-name">{detailOrder.userInfo.name}</span>
+          <span className="title-name">{userInfo.name}</span>
           <span className="title-quantity">
             Đã đặt: 0{/* {detailOrder.customer.quantityOrdered} */}
           </span>
@@ -85,10 +79,14 @@ function NewOrder({ newListOrder }) {
           <div className="time-left">
             <span className="time-left__limit">
               Lấy trong <span>{15}</span> phút (
-              {datetimeFromTimestamp(parseInt(detailOrder.timeOrder))})
+              {datetimeFromTimestamp(
+                parseInt(detailOrder.timeOrder) +
+                  (detailOrder.distance * 5 + 10) * 60000
+              )}
+              )
             </span>
             <span className="time-left__space">
-              cách: {detailOrder.userInfo.distance} km
+              cách: {detailOrder.distance} km
             </span>
           </div>
           <div className="time-right">
@@ -99,7 +97,7 @@ function NewOrder({ newListOrder }) {
         <div className="content-order">
           <div className="content-note">
             <span className="note-title">Ghi chú khách hàng: </span>
-            <span className="note-content">{detailOrder.userInfo.note}</span>
+            <span className="note-content">{detailOrder.note}</span>
           </div>
 
           {detailOrder.detail.foods.map((food, index) => (

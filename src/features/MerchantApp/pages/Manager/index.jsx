@@ -7,6 +7,7 @@ import { logoutMerchant } from "redux/loginMerchantAppSlice";
 import TabMenu from "features/MerchantApp/components/TabMenu";
 import NavBar from "features/MerchantApp/components/NavBar";
 import socket from "socket-io.js";
+import orderApi from "api/orderApi";
 
 function MainPageMerchant() {
   const dispatch = useDispatch();
@@ -23,14 +24,17 @@ function MainPageMerchant() {
       return;
     }
   });
-
   socket.on("newOrder", (data) => {
     setNewListOrder([...newListOrder, data]);
   });
-  socket.on("ordersMerchant", (data) => {
-    setNewListOrder(data);
-  });
 
+  useEffect(() => {
+    const fetchNewOrder = async () => {
+      const newOrder = await orderApi.getOrderByStatus("new");
+      setNewListOrder(newOrder);
+    };
+    fetchNewOrder();
+  }, []);
   return (
     <div className="grid">
       <NavBar />
@@ -38,7 +42,10 @@ function MainPageMerchant() {
 
       <div className="main-merchant">
         {newListOrder.length > 0 ? (
-          <NewOrder newListOrder={newListOrder} />
+          <NewOrder
+            newListOrder={newListOrder}
+            setNewListOrder={setNewListOrder}
+          />
         ) : (
           ""
         )}

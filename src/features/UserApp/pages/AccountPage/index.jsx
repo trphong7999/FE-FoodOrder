@@ -21,11 +21,16 @@ import ModalFormChangePhone from "features/UserApp/components/ModalProfile/FormC
 import { Link, useRouteMatch } from "react-router-dom";
 import RightColAccount from "features/UserApp/components/RightColAccount";
 import { useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { changeSuccess } from "redux/loginUserAppSlice";
+import { useDispatch } from "react-redux";
 
 export default function AccountPage() {
   const user = useSelector((state) => state.loginUserApp);
   const [account, setAccount] = useState(user.profile.info);
   console.log(account);
+  const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState({
     passForm: false,
@@ -60,6 +65,7 @@ export default function AccountPage() {
   return (
     <div className="account-page">
       <Navbar />
+      <ToastContainer />
 
       <div className="account-page__container">
         <div className="grid wide">

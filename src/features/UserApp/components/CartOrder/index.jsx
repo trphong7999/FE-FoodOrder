@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { GrLocation } from "react-icons/gr";
 import { AiOutlineClockCircle } from "react-icons/ai";
-import { IoIosArrowForward } from "react-icons/io";
+import { IoIosArrowForward, IoIosLogIn } from "react-icons/io";
 import { TiTimesOutline } from "react-icons/ti";
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
 import novat from "assets/image/icons/novat.gif";
@@ -16,7 +16,8 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { useHistory } from "react-router";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { NavDropdown } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import socket from "socket-io.js";
 import L from "leaflet";
 import shopIcon from "assets/image/icons/shop-icon.png";
@@ -41,12 +42,22 @@ export default function CartOrder({ merchant }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.loginUserApp);
+  console.log(user);
   const [open, setOpen] = React.useState(false);
   const listCartOrder = useSelector((state) => state.cartOrder);
   const userProfile = useSelector((state) => state.loginUserApp.profile.info);
   const listItem = listCartOrder.filter(
     (item) => item.merchantId === merchantId
   );
+  const loginWarning = () =>
+    toast.warn("😮 Bạn cần đăng nhập để tiếp tục đặt hàng!");
+
+  const infoWarning = () =>
+    toast.error(
+      <div onClick={() => history.push("/user/tai-khoan")}>
+        🔎 Vui lòng bổ sung thông tin, ấn vào đây để bổ sung!
+      </div>
+    );
 
   const history = useHistory();
 
@@ -106,11 +117,11 @@ export default function CartOrder({ merchant }) {
       location: { address, lat, lng },
     } = userProfile;
 
-    if (!name || !phone || !address || !lat || !lng) {
-      alert("Vui lòng bổ sung thông tin");
-      history.push("/user/tai-khoan");
-    } else if (user.username === null) {
-      alert("Bạn cần đăng nhập để tiếp tục đặt hàng!");
+    if (user.username === null) {
+      loginWarning();
+      return;
+    } else if (!name || !phone || !address || !lat || !lng) {
+      infoWarning();
       return;
     } else if (listCartOrder.length < 1) {
       alert("Bạn chưa thêm món ăn vào giỏ!");
@@ -241,18 +252,35 @@ export default function CartOrder({ merchant }) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <CheckOut user={userProfile} items={listItem} merchant={merchant} />
+            <CheckOut
+              userId={user.profile._id}
+              user={userProfile}
+              items={listItem}
+              merchant={merchant}
+              handleClose={handleClose}
+            />
           </div>
         </Fade>
       </Modal>
+      <ToastContainer />
     </div>
   );
 }
 
-function CheckOut({ user, items, merchant }) {
+function CheckOut({ userId, user, items, merchant, handleClose }) {
   const [applyVoucher, setApplyVoucher] = useState({});
   const [voucher, setVoucher] = useState("");
   const [distance, setDistance] = useState(0);
+  const orderSuccess = () =>
+    toast.success(
+      <div>
+        😍 Đặt hàng thành công, vui lòng theo dõi đơn hàng trong mục{" "}
+        <span style={{ fontWeight: "bold", textDecoration: "underline" }}>
+          <i>Đang đến</i>
+        </span>
+      </div>
+    );
+
   const {
     name: userName,
     location: { address: userAddress, lat: userLat, lng: userLng },
@@ -282,7 +310,7 @@ function CheckOut({ user, items, merchant }) {
     const diffTime = distance * 5 + 10;
     const now = new Date();
     now.setMinutes(now.getMinutes() + diffTime);
-
+    console.log(distance, diffTime, now);
     return `${("0" + now.getHours()).slice(-2)}:${(
       "0" + now.getMinutes()
     ).slice(-2)} - ${("0" + now.getDate()).slice(-2)}/${(
@@ -291,17 +319,10 @@ function CheckOut({ user, items, merchant }) {
   };
 
   const handleOrder = () => {
+    console.log(distance);
     const order = {
-      userInfo: {
-        name: user.name,
-        phone: user.phone,
-        avt: user.avt,
-        distance: distance,
-        note: "asdasd",
-      },
-      userOrderId: user._id,
+      userOrderId: userId,
       merchantId: merchant._id,
-      status: "processing",
       detail: {
         foods: items.map((item) => ({
           name: item.name,
@@ -313,8 +334,12 @@ function CheckOut({ user, items, merchant }) {
         discount: applyVoucher.discount || 0,
         total: totalPrice,
       },
+      distance: distance,
+      note: "Đây là note",
     };
     socket.emit("startOrder", order);
+    handleClose();
+    orderSuccess();
   };
 
   var myIcon = new L.icon({
@@ -345,8 +370,11 @@ function CheckOut({ user, items, merchant }) {
                 travelMode: "DRIVING",
               }}
               callback={(response) => {
+                console.log(response);
                 setDistance(
-                  response["rows"][0].elements[0].distance.text.split(" ")[0]
+                  (
+                    response["rows"][0].elements[0].distance.value / 1000
+                  ).toFixed(1)
                 );
               }}
             />

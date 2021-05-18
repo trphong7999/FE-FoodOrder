@@ -6,20 +6,56 @@ import ReceivedPrepare from "./receivedPrepare";
 import ReceivedWait from "./receivedWait";
 import "./style.scss";
 import axios from "axios";
+import socket from "socket-io.js";
+import orderApi from "api/orderApi";
 
 function ReceivedOrder() {
   const [listConfirm, setListConfirm] = useState([
-    { id: 0, title: "Xác nhận bởi cửa hàng", active: true },
+    { id: 0, title: "Xác nhận bởi cửa hàng", active: false },
     { id: 1, title: "Đang chuẩn bị", active: false },
     { id: 2, title: "Chờ đến lấy", active: false },
   ]);
-  const [countTabList, setCountTabList] = useState(1);
+  const [countTabList, setCountTabList] = useState(
+    sessionStorage.stateOrder || 1
+  );
   const [listReceived, setListReceived] = useState([]);
   const [listPrepare, setListPrepare] = useState([]);
   const [listWait, setListWait] = useState([]);
 
+  socket.on("findDonePartner", ({ orderId, partner }) => {
+    const updatePartner = (list, setList) => {
+      let currentList = [...list];
+      let order = currentList.find((or) => or._id == orderId);
+      if (order) {
+        order.deliverId = partner;
+        order.sort((a, b) => {
+          let pa, pb;
+          pa = !a.deliverId ? 0 : 1;
+          pb = !a.deliverId ? 0 : 1;
+          if (pa !== pb) return pb - pa;
+          return a.timeOrder - b.timeOrder;
+        });
+        setList(order);
+      }
+    };
+    updatePartner(listReceived, setListReceived);
+    updatePartner(listPrepare, setListPrepare);
+  });
+
+  useEffect(() => {
+    let newList = listConfirm;
+    if (sessionStorage.stateOrder) {
+      newList.map((i, index) => {
+        i.active = index == sessionStorage.stateOrder ? true : false;
+        return i;
+      });
+    } else newList[0].active = true;
+    setListConfirm(newList);
+  }, []);
+
   const handleActiveReceivedTabList = (index) => {
     const newListTab = listConfirm;
+    sessionStorage.setItem("stateOrder", index);
     listConfirm.map((item, i) => {
       if (i === index) {
         item.active = true;
@@ -29,35 +65,35 @@ function ReceivedOrder() {
       return item;
     });
     setListConfirm(newListTab);
-    setCountTabList(index + 1);
+    setCountTabList(index);
   };
 
   useEffect(() => {
     const getReceivedList = async () => {
-      const result = await axios(`http://localhost:5000/receivedOrder`);
-      if (result) {
-        setListReceived(result.data);
-      }
+      const ordersFinding = await orderApi.getOrderByStatus("finding");
+      ordersFinding.sort((a, b) => a.timeOrder - b.timeOrder);
+
+      const ordersWaitConfirm = await orderApi.getOrderByStatus("waitConfirm");
+      ordersWaitConfirm.sort((a, b) => a.timeOrder - b.timeOrder);
+
+      setListReceived([...ordersWaitConfirm, ...ordersFinding]);
     };
+
     getReceivedList();
   }, []);
 
   useEffect(() => {
     const getPrepareList = async () => {
-      const result = await axios(`http://localhost:5000/receivedPrepare`);
-      if (result) {
-        setListPrepare(result.data);
-      }
+      const ordersFinding = await orderApi.getOrderByStatus("picking");
+      setListPrepare(ordersFinding);
     };
     getPrepareList();
   }, []);
 
   useEffect(() => {
     const getWaitList = async () => {
-      const result = await axios(`http://localhost:5000/receivedWait`);
-      if (result) {
-        setListWait(result.data);
-      }
+      const ordersWaitPick = await orderApi.getOrderByStatus("waitPick");
+      setListWait(ordersWaitPick);
     };
     getWaitList();
   }, []);
@@ -89,9 +125,12 @@ function ReceivedOrder() {
         </div>
 
         {/* ----------RECEIVED CONFIRM--------------- */}
-        {countTabList === 1 ? (
-          <ReceivedConfirm listReceived={listReceived} />
-        ) : countTabList === 2 ? (
+        {countTabList == 0 ? (
+          <ReceivedConfirm
+            listReceived={listReceived}
+            setListReceived={setListReceived}
+          />
+        ) : countTabList == 1 ? (
           <ReceivedPrepare listPrepare={listPrepare} />
         ) : (
           <ReceivedWait listWait={listWait} />

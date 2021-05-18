@@ -126,6 +126,14 @@
   background-color: #ebebeb;
   display: flex;
   flex-direction: column;
+  .Toastify__toast {
+    min-height: 10rem;
+    font-size: 1.4rem;
+    top: 5.2rem;
+  }
+  .Toastify__toast-container {
+    width: 40rem;
+  }
   .checkout--header {
     height: 4rem;
     font-size: 2rem;
