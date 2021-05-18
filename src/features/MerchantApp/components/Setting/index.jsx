@@ -117,7 +117,7 @@ function Categories({ cat }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
-  const { register, handleSubmit, errors, setValue } = useForm({});
+  const { register, handleSubmit, errors } = useForm({});
 
   const submitFormEdit = async (data) => {
     if (actionEdit === "update") {

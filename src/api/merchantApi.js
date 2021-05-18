@@ -30,6 +30,18 @@ const merchantApi = {
     const url = `/merchants/removecategory`;
     return axiosClient.post(url, params);
   },
+  foodAdd: (params) => {
+    const url = `/merchants/foodadd`;
+    return axiosClient.post(url, params);
+  },
+  foodRemove: (params) => {
+    const url = `/merchants/foodremove`;
+    return axiosClient.post(url, params);
+  },
+  foodEdit: (params) => {
+    const url = `/merchants/foodedit`;
+    return axiosClient.post(url, params);
+  },
   //------------------------------------------------
 };
 
