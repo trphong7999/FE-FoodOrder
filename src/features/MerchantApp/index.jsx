@@ -46,40 +46,32 @@ function MerchantApp() {
   // }, []);
 
   return (
-    <div className="merchant-app" style={{ color: "var(--text-color)" }}>
-      <Switch>
-        <Route
-          exact
-          path={`${match.url}`}
-          component={() => (merchant.email ? <Manager /> : <Login />)}
-          // component={Manager}
-        />
-        <Route
-          path={`${match.url}/moi-tu-choi/:id`}
-          component={ReasonRefusal}
-        />
-        <Route path={`${match.url}/da-nhan`} exact component={ReceivedOrder} />
-        <Route
-          path={`${match.url}/da-nhan/xac-nhan/:id`}
-          component={ReceivedConfirm}
-        />
-        <Route
-          path={`${match.url}/da-nhan/chuan-bi/:id`}
-          component={ReceivedPrepareDetail}
-        />
-        <Route path={`${match.url}/da-huy`} exact component={CancelOrder} />
-        <Route path={`${match.url}/da-huy/:id`} component={CancelOrderDetail} />
-        <Route path={`${match.url}/lich-su`} exact component={OrderHistory} />
-        <Route
-          path={`${match.url}/lich-su/:id`}
-          component={OrderHistoryDetail}
-        />
-        <Route path={`${match.url}/thuc-don`} exact component={FoodMenu} />
-        <Route path={`${match.url}/thuc-don/:id`} component={FoodMenuEdit} />
+    <Switch>
+      <Route
+        exact
+        path={`${match.url}`}
+        component={() => (merchant.email ? <Manager /> : <Login />)}
+        // component={Manager}
+      />
+      <Route path={`${match.url}/moi-tu-choi/:id`} component={ReasonRefusal} />
+      <Route path={`${match.url}/da-nhan`} exact component={ReceivedOrder} />
+      <Route
+        path={`${match.url}/da-nhan/xac-nhan/:id`}
+        component={ReceivedConfirm}
+      />
+      <Route
+        path={`${match.url}/da-nhan/chuan-bi/:id`}
+        component={ReceivedPrepareDetail}
+      />
+      <Route path={`${match.url}/da-huy`} exact component={CancelOrder} />
+      <Route path={`${match.url}/da-huy/:id`} component={CancelOrderDetail} />
+      <Route path={`${match.url}/lich-su`} exact component={OrderHistory} />
+      <Route path={`${match.url}/lich-su/:id`} component={OrderHistoryDetail} />
+      <Route path={`${match.url}/thuc-don`} exact component={FoodMenu} />
+      <Route path={`${match.url}/thuc-don/:id`} component={FoodMenuEdit} />
 
-        <Route path={`${match.url}/cai-dat`} exact component={Setting} />
-      </Switch>
-    </div>
+      <Route path={`${match.url}/cai-dat`} exact component={Setting} />
+    </Switch>
   );
 }
 

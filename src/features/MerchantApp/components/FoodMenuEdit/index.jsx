@@ -4,17 +4,33 @@ import { BsChevronLeft } from "react-icons/bs";
 import loading from "assets/image/icons/loading.png";
 import "./style.scss";
 import { useForm } from "react-hook-form";
-import { validatePrice } from "func";
+import merchantApi from "api/merchantApi";
 
 export default function FoodMenuEdit() {
   const history = useHistory();
   const location = useLocation();
-  const infoFood = location.state.foodDetail;
+  const infoFood = location.state.foodData;
   const category = location.state.catList;
   const { register, handleSubmit, errors } = useForm();
+  const [status, setStatus] = useState(infoFood.status);
 
-  const submitFormEdit = (data) => {
-    console.log(data);
+  const getNameCatOfFood = () => {
+    return category.find((cat) => cat.foods.includes(infoFood));
+  };
+
+  const catOfFood = getNameCatOfFood();
+
+  const submitFormEdit = async (newData) => {
+    const data = { ...newData, _id: infoFood._id, status: status };
+    let newDetail = { ...data, catIdCurrent: catOfFood._id };
+    await merchantApi.foodEdit(newDetail);
+
+    alert("Chỉnh sửa món ăn thành công");
+    history.goBack();
+  };
+
+  const handleChangeStatus = (e) => {
+    setStatus(!status);
   };
 
   return (
@@ -35,7 +51,7 @@ export default function FoodMenuEdit() {
         className="edit-img"
         style={{
           backgroundImage: `url(${
-            infoFood.avt === "" ? loading : infoFood.avt
+            infoFood.img === "" ? loading : infoFood.img
           })`,
         }}
       ></div>
@@ -46,9 +62,9 @@ export default function FoodMenuEdit() {
             <label htmlFor="nameFood">Tên Món</label>
             <input
               type="text"
-              name="nameFood"
+              name="name"
               defaultValue={infoFood.name}
-              {...register("nameFood")}
+              {...register("name")}
             />
           </div>
 
@@ -56,17 +72,17 @@ export default function FoodMenuEdit() {
             <label htmlFor="priceFood">Giá</label>
             <input
               type="text"
-              name="priceFood"
+              name="price"
               defaultValue={infoFood.price}
-              {...register("priceFood")}
+              {...register("price")}
             />
           </div>
 
           <div className="edit-form__group">
             <label htmlFor="catFood">Nhóm</label>
-            <select name="catFood" {...register("catFood")}>
+            <select name="catFood" {...register("catIdNew")}>
               {category.map((val, idx) => (
-                <option key={val.name} value={val.name}>
+                <option key={idx} value={val._id}>
                   {val.name}
                 </option>
               ))}
@@ -79,9 +95,10 @@ export default function FoodMenuEdit() {
             <label className="switch">
               <input
                 type="checkbox"
-                name="statusFood"
-                checked={infoFood.status}
-                {...register("statusFood")}
+                name="status"
+                {...register("status")}
+                checked={status}
+                onClick={handleChangeStatus}
               />
               <span className="slider round"></span>
             </label>
