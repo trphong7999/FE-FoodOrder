@@ -10,7 +10,6 @@ import { useHistory, useLocation } from "react-router-dom";
 import { sumQuantity, validatePrice } from "func";
 import socket from "socket-io.js";
 import { Rating } from "@material-ui/lab";
-import ReactSwipeButton from "react-swipe-button";
 
 function ReceivedPrepareDetail() {
   const history = useHistory();
