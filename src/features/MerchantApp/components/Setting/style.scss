@@ -1,16 +1,20 @@
 .setting {
   .setting-content {
     background-color: var(--bg-color);
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    padding: 1rem;
+    height: 100vh;
 
     .setting-content__item {
       background-color: white;
-      padding: 1rem;
-      margin: 1rem;
+      padding: 2rem 1rem;
+      margin-bottom: 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-weight: 500;
+      border-radius: 6px;
+      font-size: 1.6rem;
 
       .icon {
         font-size: 2rem;
@@ -35,19 +39,19 @@
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
-    font-size: 1.6rem;
-    padding: 1rem;
+    font-size: 1.8rem;
+    padding: 1.5rem;
     position: relative;
 
     .icon {
-      font-size: 2rem;
+      font-size: 2.5rem;
       position: absolute;
       left: 1rem;
     }
   }
   .child-content__main {
     .child-content__main-cat {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       padding: 1rem;
 
       .main-cat__item {
@@ -77,15 +81,71 @@
         right: 0;
         left: 0;
         padding: 1rem;
+        margin-bottom: 1rem;
 
         button {
           width: 100%;
           background-color: var(--merchant-color);
           color: white;
           border: none;
-          padding: 1rem;
-          font-size: 1.5rem;
+          padding: 1.2rem;
+          font-size: 1.6rem;
           border-radius: 4px;
+        }
+      }
+    }
+
+    .child-content__main-address {
+      .form-address {
+        .form-address__group {
+          background-color: white;
+          font-size: 1.6rem;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 0.5rem;
+          margin-right: 1rem;
+
+          .group-label {
+            margin: 0.5rem;
+          }
+
+          input[type="text"] {
+            padding: 1rem 0.5rem;
+            margin: 0.5rem;
+            color: #acaeaf;
+            width: 100%;
+            text-align: right;
+            font-size: 1.6rem;
+            border-radius: 6px;
+            border: 1px solid #ebebeb;
+          }
+
+          select {
+            padding: 1rem 0.5rem 1rem 0;
+            margin: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #ebebeb;
+            width: 100%;
+            background-color: white;
+            font-size: 1.6rem;
+            color: #acaeaf;
+            text-transform: capitalize;
+          }
+        }
+
+        .form-address__btn {
+          margin: 2rem 1rem;
+          text-align: center;
+
+          button {
+            width: 100%;
+            padding: 1.5rem;
+            border-radius: 6px;
+            background-color: var(--merchant-color);
+            border: none;
+            font-size: 1.6rem;
+            color: white;
+          }
         }
       }
     }
@@ -94,18 +154,23 @@
 
 .main-cat__form {
   text-align: center;
+  font-size: 1.6rem;
 
   .form-label {
-    font-size: 1.4rem;
-    margin-right: 1rem;
+    font-size: 1.6rem;
   }
   .form-input {
-    padding: 0.5rem;
-
+    width: 100%;
+    padding: 1rem 0;
+    margin-top: 1rem;
+    font-size: 1.6rem;
     text-align: left;
     border: none;
     border-bottom: 1px solid #ccc;
+
     &:focus {
+      outline: none;
+      border-bottom: 1px solid #3dcbe4;
     }
   }
   .form-action {
@@ -116,5 +181,6 @@
     color: white;
     border-radius: 4px;
     border: none;
+    font-size: 1.6rem;
   }
 }

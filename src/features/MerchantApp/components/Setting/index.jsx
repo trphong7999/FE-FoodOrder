@@ -1,13 +1,18 @@
-import merchantApi from "api/merchantApi";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
+import { useForm } from "react-hook-form";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import React, { useState, useEffect } from "react";
-import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import NavBar from "../NavBar";
+import merchantApi from "api/merchantApi";
+import areas from "assets/data/districtName";
+
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+
 import "./style.scss";
-import { useForm } from "react-hook-form";
+import Address2Geocode from "../PlaceAutoAddressMer";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -20,6 +25,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "6px",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(0, 2, 2),
+    width: "90vw",
+    outline: "none",
   },
 }));
 
@@ -30,6 +37,14 @@ export default function Setting() {
 
   const handleChangeShow = (num) => {
     setNumberShow(num);
+  };
+
+  const handleCallBackData = (newData) => {
+    if (numberShow === 1) {
+      setProfile({ ...profile, category: newData });
+    } else {
+      setProfile({ ...profile, location: newData });
+    }
   };
 
   useEffect(() => {
@@ -60,15 +75,30 @@ export default function Setting() {
             <span>Danh mục</span>
             <FaAngleRight className="icon" />
           </div>
-          <div className="setting-content__item">
+          <div
+            className="setting-content__item"
+            onClick={() => {
+              handleChangeShow(2);
+            }}
+          >
             <span>Địa chỉ</span>
             <FaAngleRight className="icon" />
           </div>
-          <div className="setting-content__item">
+          <div
+            className="setting-content__item"
+            onClick={() => {
+              handleChangeShow(3);
+            }}
+          >
             <span>Thời gian mở cửa</span>
             <FaAngleRight className="icon" />
           </div>
-          <div className="setting-content__item">
+          <div
+            className="setting-content__item"
+            onClick={() => {
+              handleChangeShow(4);
+            }}
+          >
             <span>Trạng thái</span>
             <FaAngleRight className="icon" />
           </div>
@@ -77,8 +107,33 @@ export default function Setting() {
 
       {numberShow === 1 ? (
         <ChildContent
+          numberShow={1}
           data={profile.category || []}
           changeShow={handleChangeShow}
+          title={"danh mục"}
+          callBackData={handleCallBackData}
+        />
+      ) : numberShow === 2 ? (
+        <ChildContent
+          numberShow={2}
+          data={profile.location || []}
+          changeShow={handleChangeShow}
+          title={"địa chỉ"}
+          callBackData={handleCallBackData}
+        />
+      ) : numberShow === 3 ? (
+        <ChildContent
+          numberShow={3}
+          data={profile.openTime || []}
+          changeShow={handleChangeShow}
+          title={"thời gian mở cửa"}
+        />
+      ) : numberShow === 4 ? (
+        <ChildContent
+          numberShow={4}
+          data={profile.status || []}
+          changeShow={handleChangeShow}
+          title={"trạng thái"}
         />
       ) : (
         ""
@@ -87,9 +142,13 @@ export default function Setting() {
   );
 }
 
-function ChildContent({ data, changeShow }) {
+function ChildContent({ data, changeShow, title, numberShow, callBackData }) {
   const sendNumCallBackShow = (num) => {
     changeShow(num);
+  };
+
+  const getNewDataFromChild = (data) => {
+    callBackData(data);
   };
   return (
     <div className="child-content">
@@ -100,16 +159,22 @@ function ChildContent({ data, changeShow }) {
             sendNumCallBackShow(0);
           }}
         />
-        <span>danh mục</span>
+        <span>{title}</span>
       </div>
       <div className="child-content__main">
-        <Categories cat={data} />
+        {numberShow === 1 ? (
+          <Categories cat={data} recover={getNewDataFromChild} />
+        ) : numberShow === 2 ? (
+          <Address address={data} recover={getNewDataFromChild} />
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
 }
 
-function Categories({ cat }) {
+function Categories({ cat, recover }) {
   const [currentCatList, setCurrentCatList] = useState(cat);
   const [currentCat, setCurrentCat] = useState({});
   const [actionEdit, setActionEdit] = useState("");
@@ -120,6 +185,7 @@ function Categories({ cat }) {
   const { register, handleSubmit, errors } = useForm({});
 
   const submitFormEdit = async (data) => {
+    let res;
     if (actionEdit === "update") {
       let catChange = { ...currentCat, name: data.changeCatName };
       let catListClone = currentCatList;
@@ -128,29 +194,28 @@ function Categories({ cat }) {
         cat._id === catChange._id ? catChange : cat
       );
 
-      const res = await merchantApi.changeCategory(newCatList);
-
-      setCurrentCatList(res.category);
-      handleClose();
+      res = await merchantApi.changeCategory(newCatList);
       alert("Thay đổi tên danh mục thành công");
-    }
-
-    if (actionEdit === "remove") {
+    } else if (actionEdit === "remove") {
       let catId = currentCat._id;
-      console.log("remove cat", catId);
-
-      const res = await merchantApi.removeCategory({ catId: catId });
-
-      setCurrentCatList(res.category);
-      handleClose();
+      res = await merchantApi.removeCategory({ catId: catId });
       alert("Xóa danh mục thành công");
+    } else {
+      res = await merchantApi.addCategory({ name: data.addCatName });
+      alert("Thêm danh mục thành công");
     }
+
+    handleClose();
+    setCurrentCatList(res.category);
+    recover(res.category);
   };
 
   const submitFormAdd = async (data) => {
     const res = await merchantApi.addCategory({ name: data.addCatName });
-    console.log(res.category);
     setCurrentCatList(res.category);
+    recover(res.category);
+    alert("Thêm danh mục thành công");
+    handleClose();
   };
 
   const handleOpen = (i) => {
@@ -202,62 +267,156 @@ function Categories({ cat }) {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            {typeForm === 0 ? (
-              <form
-                onSubmit={handleSubmit(submitFormEdit)}
-                className="main-cat__form"
-              >
-                <h2>Thay đổi tên danh mục</h2>
-                <label className="form-label">{currentCat.name}</label>
-                <input
-                  type="text"
-                  {...register("changeCatName")}
-                  className="form-input"
-                  placeholder="Nhập tên thay đổi ..."
-                />
+            <form
+              onSubmit={handleSubmit(submitFormEdit)}
+              className="main-cat__form"
+            >
+              {typeForm === 0 ? (
                 <div>
+                  <h3>Thay đổi tên danh mục</h3>
+                  <label className="form-label">{currentCat.name}</label>
                   <input
-                    type="submit"
-                    value="Cập nhật"
-                    className="form-action"
-                    onClick={() => {
-                      setActionEdit("update");
-                    }}
+                    type="text"
+                    {...register("changeCatName")}
+                    className="form-input"
+                    placeholder="Nhập tên thay đổi ..."
                   />
-                  <input
-                    type="submit"
-                    value="Xóa"
-                    className="form-action"
-                    onClick={() => {
-                      setActionEdit("remove");
-                    }}
-                  />
+                  <div>
+                    <input
+                      type="submit"
+                      value="Cập nhật"
+                      className="form-action"
+                      onClick={() => {
+                        setActionEdit("update");
+                      }}
+                    />
+                    <input
+                      type="submit"
+                      value="Xóa"
+                      className="form-action"
+                      onClick={() => {
+                        setActionEdit("remove");
+                      }}
+                    />
+                  </div>
                 </div>
-              </form>
-            ) : (
-              <form
-                onSubmit={handleSubmit(submitFormAdd)}
-                className="main-cat__form"
-              >
-                <h2>Thêm tên danh mục</h2>
-                <input
-                  type="text"
-                  {...register("addCatName")}
-                  className="form-input"
-                  placeholder="Nhập tên mới ..."
-                />
+              ) : (
                 <div>
+                  <h3>Thêm tên danh mục</h3>
                   <input
-                    type="submit"
-                    value="Xác nhận"
-                    className="form-action"
+                    type="text"
+                    {...register("addCatName")}
+                    className="form-input"
+                    placeholder="Nhập tên mới ..."
                   />
+                  <div>
+                    <input
+                      type="submit"
+                      value="Xác nhận"
+                      className="form-action"
+                    />
+                  </div>
                 </div>
-              </form>
-            )}
+              )}
+            </form>
           </div>
         </Fade>
       </Modal>
+    </div>
+  );
+}
+
+function ChangeView({ center, zoom }) {
+  const map = useMap();
+  map.setView(center, zoom);
+  return null;
+}
+
+function Address({ address, recover }) {
+  const { register, handleSubmit, errors } = useForm();
+  const [addressCurrent, setAddressCurrent] = useState(address.address);
+
+  const geoMerchant =
+    address.lat && address.lng
+      ? {
+          lat: address.lat,
+          lng: address.lng,
+        }
+      : false;
+  const [geo, setGeo] = useState(geoMerchant);
+
+  const submitLocation = async (data) => {
+    let newData = {
+      address: addressCurrent,
+      district: parseInt(data.district),
+      lat: String(geo.lat),
+      lng: String(geo.lng),
+    };
+    const res = await merchantApi.addressEdit(newData);
+    if (res) {
+      alert("Thay đổi thông tin địa chỉ thành công");
+    } else {
+      alert("Thay đổi thông tin địa chỉ không thành công");
+    }
+    recover(res.location);
+  };
+
+  return (
+    <div className="child-content__main-address">
+      <form className="form-address" onSubmit={handleSubmit(submitLocation)}>
+        <div className="form-address__group">
+          <div className="group-label">Khu vực</div>
+          <div>
+            <select name="district" {...register("district")}>
+              {areas.map((area, idx) =>
+                address.district === area.key ? (
+                  <option key={idx} value={area.value} selected={true}>
+                    {area.value}
+                  </option>
+                ) : (
+                  <option key={idx} value={area.key}>
+                    {area.value}
+                  </option>
+                )
+              )}
+            </select>
+          </div>
+        </div>
+        <div className="form-address__group">
+          <div className="group-label">Địa chỉ</div>
+          <Address2Geocode
+            location={addressCurrent}
+            setLocation={setAddressCurrent}
+            geo={geo}
+            setGeo={setGeo}
+          />
+        </div>
+        <MapContainer
+          center={[geo.lat, geo.lng]}
+          zoom={15}
+          scrollWheelZoom={false}
+          style={{ height: "400px", width: "100%" }}
+          whenReady={(map) => {
+            map.target.on("click", function (e) {
+              const { lat, lng } = e.latlng;
+              setGeo({ lat: lat, lng: lng });
+            });
+          }}
+        >
+          <ChangeView center={[geo.lat, geo.lng]} zoom={15} />
+          <TileLayer
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <Marker position={[geo.lat, geo.lng]}>
+            <Popup>Location</Popup>
+          </Marker>
+        </MapContainer>
+
+        <div className="form-address__btn">
+          <button>Cập nhật</button>
+        </div>
+      </form>
     </div>
   );
 }

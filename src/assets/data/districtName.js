@@ -17,34 +17,38 @@ const area = [
   },
   {
     key: 5,
-    value: "An Dương",
+    value: "Quận Lê Chân",
   },
   {
     key: 6,
-    value: "An Lão",
+    value: "An Dương",
   },
   {
     key: 7,
-    value: "Bạch Long Vĩ",
+    value: "An Lão",
   },
   {
     key: 8,
-    value: "Cát Hải",
+    value: "Bạch Long Vĩ",
   },
   {
     key: 9,
-    value: "Kiến Thụy",
+    value: "Cát Hải",
   },
   {
     key: 10,
-    value: "Tiên Lãng",
+    value: "Kiến Thụy",
   },
   {
     key: 11,
-    value: "Vĩnh Bảo",
+    value: "Tiên Lãng",
   },
   {
     key: 12,
+    value: "Vĩnh Bảo",
+  },
+  {
+    key: 13,
     value: "Thủy Nguyên",
   },
 ];

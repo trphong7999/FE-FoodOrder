@@ -194,10 +194,8 @@ function MapPick() {
   });
   const classes = useStyles();
   const partner = useSelector((state) => state.partner.profile);
-  console.log(partner);
   const [pickingOrder, setpickingOrder] = useState([]);
   const [open, setOpen] = useState(false);
-
   let pickingOrderInDistance = pickingOrder.filter((order) => {
     return (
       parseFloat(
@@ -207,15 +205,12 @@ function MapPick() {
           geo.lat,
           geo.lng
         )
-      ) > parseFloat(partner.setting.radiusWorking / 1000 || 2)
+      ) < parseFloat(partner.setting.radiusWorking / 1000 || 2)
     );
   });
-
   const success = (pos) => {
     let { latitude, longitude } = pos.coords;
     if (latitude !== geo.lat || longitude !== geo.lng) {
-      console.log("diff");
-      console.log(latitude, geo.lat, longitude, geo.lng);
       setGeo({ lat: latitude, lng: longitude });
     }
   };
@@ -231,7 +226,6 @@ function MapPick() {
   useEffect(() => {
     const fetchPickingOrder = async () => {
       const pickingOrder = await orderApi.getOrderByStatus("finding");
-      console.log(pickingOrder);
       setpickingOrder(pickingOrder);
     };
     fetchPickingOrder();
@@ -467,9 +461,7 @@ function TimePickers() {
   const [time, setTime] = useState("23:59");
   const handleChangeTime = (e) => {
     setTime(e.target.value);
-    console.log(time);
   };
-  console.log(time);
   return (
     <form className={classes.container} noValidate>
       <TextField

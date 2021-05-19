@@ -42,6 +42,10 @@ const merchantApi = {
     const url = `/merchants/foodedit`;
     return axiosClient.post(url, params);
   },
+  addressEdit: (params) => {
+    const url = `/merchants/addressedit`;
+    return axiosClient.post(url, params);
+  },
   //------------------------------------------------
 };
 
