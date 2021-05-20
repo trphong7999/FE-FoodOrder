@@ -46,6 +46,14 @@ const merchantApi = {
     const url = `/merchants/addressedit`;
     return axiosClient.post(url, params);
   },
+  getOpenTime: () => {
+    const url = `/merchants/getopentime`;
+    return axiosClient.post(url);
+  },
+  updateOpenTime: (params) => {
+    const url = `/merchants/updateopentime`;
+    return axiosClient.post(url, params);
+  },
   //------------------------------------------------
 };
 

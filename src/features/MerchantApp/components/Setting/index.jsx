@@ -5,14 +5,16 @@ import { useForm } from "react-hook-form";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
+import ImageUploader from "react-images-upload";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+
 import NavBar from "../NavBar";
 import merchantApi from "api/merchantApi";
 import areas from "assets/data/districtName";
-
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import Address2Geocode from "../PlaceAutoAddressMer";
+import TogglePickTime from "../TogglePickTime";
 
 import "./style.scss";
-import Address2Geocode from "../PlaceAutoAddressMer";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -166,6 +168,8 @@ function ChildContent({ data, changeShow, title, numberShow, callBackData }) {
           <Categories cat={data} recover={getNewDataFromChild} />
         ) : numberShow === 2 ? (
           <Address address={data} recover={getNewDataFromChild} />
+        ) : numberShow === 3 ? (
+          <OpenTime />
         ) : (
           ""
         )}
@@ -250,7 +254,7 @@ function Categories({ cat, recover }) {
       ))}
 
       <div className="main-cat__add">
-        <button onClick={handleOpenFormAdd}>Thêm mới</button>
+        <button onClick={handleOpenFormAdd}>Thêm mới danh mục</button>
       </div>
 
       <Modal
@@ -414,9 +418,53 @@ function Address({ address, recover }) {
         </MapContainer>
 
         <div className="form-address__btn">
-          <button>Cập nhật</button>
+          <button className="button-address">
+            {`Cập nhật địa chỉ & khu vực`}{" "}
+          </button>
         </div>
       </form>
+    </div>
+  );
+}
+
+function OpenTime() {
+  const [openTime, setOpenTime] = useState([]);
+
+  const handleUpdateOpenTime = async () => {
+    const newRes = await merchantApi.updateOpenTime(openTime);
+    delete newRes["_id"];
+    setOpenTime(newRes);
+  };
+
+  useEffect(() => {
+    const getOpenTime = async () => {
+      const res = await merchantApi.getOpenTime();
+      delete res["_id"];
+      setOpenTime(res);
+    };
+    getOpenTime();
+  }, []);
+
+  return (
+    <div className="child-content__main-time">
+      <div className="main-time__field-wrap ">
+        <div className="field-wrap__list" style={{ flexBasis: "70%" }}>
+          {openTime &&
+            Object.keys(openTime).map((item, id) => (
+              <TogglePickTime
+                item={item}
+                openTime={openTime}
+                setOpenTime={setOpenTime}
+                key={id}
+              />
+            ))}
+        </div>
+      </div>
+      <div className="main-time__button">
+        <button className="button-time" onClick={handleUpdateOpenTime}>
+          Cập nhật thời gian mở cửa
+        </button>
+      </div>
     </div>
   );
 }
