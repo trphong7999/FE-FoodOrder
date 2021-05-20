@@ -54,6 +54,14 @@ const merchantApi = {
     const url = `/merchants/updateopentime`;
     return axiosClient.post(url, params);
   },
+  getStatus: () => {
+    const url = `/merchants/getstatus`;
+    return axiosClient.post(url);
+  },
+  updateStatus: (params) => {
+    const url = `/merchants/updatestatus`;
+    return axiosClient.post(url, params);
+  },
   //------------------------------------------------
 };
 

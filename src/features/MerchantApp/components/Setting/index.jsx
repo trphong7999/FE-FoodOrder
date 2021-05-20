@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import { useForm } from "react-hook-form";
+import { Switch } from "@material-ui/core";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
@@ -170,6 +171,8 @@ function ChildContent({ data, changeShow, title, numberShow, callBackData }) {
           <Address address={data} recover={getNewDataFromChild} />
         ) : numberShow === 3 ? (
           <OpenTime />
+        ) : numberShow === 4 ? (
+          <Status />
         ) : (
           ""
         )}
@@ -464,6 +467,56 @@ function OpenTime() {
         <button className="button-time" onClick={handleUpdateOpenTime}>
           Cập nhật thời gian mở cửa
         </button>
+      </div>
+    </div>
+  );
+}
+
+function Status() {
+  const [statusMer, setStatusMer] = useState(false);
+
+  const handleToggleSwitchStatus = () => {
+    setStatusMer(!statusMer);
+  };
+
+  const handleChangeStatus = async () => {
+    let newStatus = statusMer ? "open" : "close";
+    const res = await merchantApi.updateStatus({ status: newStatus });
+    if (res === "close") setStatusMer(false);
+    else setStatusMer(true);
+    alert(`Bạn đã ${statusMer ? "mở" : "đóng"} cửa hàng`);
+    console.log();
+  };
+
+  useEffect(() => {
+    let getStatusMer = async () => {
+      const res = await merchantApi.getStatus();
+      if (res === "close") setStatusMer(false);
+      else setStatusMer(true);
+    };
+    getStatusMer();
+  }, []);
+
+  return (
+    <div className="child-content__main-status">
+      <div className="note">
+        <span>Chú ý</span> : gạt thanh bên dưới để mở/đóng cửa hàng
+      </div>
+      <div className="title">Trạng thái cửa hàng:</div>
+      <div className="main">
+        <span style={{ color: `${statusMer ? "green" : "red"}` }}>
+          {statusMer ? "Mở cửa" : "Đóng cửa"}
+        </span>
+        <Switch
+          checked={statusMer}
+          onChange={handleToggleSwitchStatus}
+          color="primary"
+          name="statusMer"
+          inputProps={{ "aria-label": "primary checkbox" }}
+        />
+      </div>
+      <div className="main-status__btn">
+        <button onClick={handleChangeStatus}>Xác nhận</button>
       </div>
     </div>
   );
