@@ -22,6 +22,7 @@ import socket from "socket-io.js";
 import L from "leaflet";
 import shopIcon from "assets/image/icons/shop-icon.png";
 import { DistanceMatrixService } from "@react-google-maps/api";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -42,7 +43,6 @@ export default function CartOrder({ merchant }) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.loginUserApp);
-  console.log(user);
   const [open, setOpen] = React.useState(false);
   const listCartOrder = useSelector((state) => state.cartOrder);
   const userProfile = useSelector((state) => state.loginUserApp.profile.info);
@@ -54,8 +54,21 @@ export default function CartOrder({ merchant }) {
 
   const infoWarning = () =>
     toast.error(
-      <div onClick={() => history.push("/user/tai-khoan")}>
-        🔎 Vui lòng bổ sung thông tin, ấn vào đây để bổ sung!
+      <Link to="/user/tai-khoan">
+        <div>🔎 Vui lòng bổ sung thông tin, ấn vào đây để bổ sung!</div>
+      </Link>
+    );
+
+  const cartWarning = () =>
+    toast.error(<div>🥰 Giỏ hàng đang trống, hãy lựa chọn đồ bạn nhé</div>);
+
+  const orderProcessingWarning = () =>
+    toast.error(
+      <div onClick={() => history.push("/user/dang-den")}>
+        🏍 Hãy hoàn thành đơn hàng trước khi đặt đơn hàng mới, theo dõi trong mục{" "}
+        <span style={{ fontWeight: "bold", textDecoration: "underline" }}>
+          <i>Đang đến</i>
+        </span>
       </div>
     );
 
@@ -124,18 +137,23 @@ export default function CartOrder({ merchant }) {
       infoWarning();
       return;
     } else if (listCartOrder.length < 1) {
-      alert("Bạn chưa thêm món ăn vào giỏ!");
+      cartWarning();
       return;
     }
-    const status = statusOrder();
-    console.log(status);
-    // if (status === 1) {
-    //   alert("Quán sắp đóng cửa, vui lòng đặt hàng vào ngày mai");
-    // } else if (status === 2) {
-    //   alert("Quán đã đóng cửa, vui lòng đặt hàng vào ngày mai");
-    // } else handleOpen();
-    handleOpen();
+    socket.emit("haveOrderProcessing", user.profile._id);
   };
+
+  socket.on("canOrder", (data) => {
+    if (!data) {
+      const status = statusOrder();
+      // if (status === 1) {
+      //   alert("Quán sắp đóng cửa, vui lòng đặt hàng vào ngày mai");
+      // } else if (status === 2) {
+      //   alert("Quán đã đóng cửa, vui lòng đặt hàng vào ngày mai");
+      // } else handleOpen();
+      handleOpen();
+    } else orderProcessingWarning();
+  });
 
   useEffect(() => {
     const cartList = document.getElementById("cart2");
@@ -273,12 +291,14 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
   const [distance, setDistance] = useState(0);
   const orderSuccess = () =>
     toast.success(
-      <div>
-        😍 Đặt hàng thành công, vui lòng theo dõi đơn hàng trong mục{" "}
-        <span style={{ fontWeight: "bold", textDecoration: "underline" }}>
-          <i>Đang đến</i>
-        </span>
-      </div>
+      <Link to="/user/dang-den">
+        <div>
+          😍 Đặt hàng thành công, vui lòng theo dõi đơn hàng trong mục{" "}
+          <span style={{ fontWeight: "bold", textDecoration: "underline" }}>
+            <i>Đang đến</i>
+          </span>
+        </div>
+      </Link>
     );
 
   const {

@@ -22,7 +22,7 @@ const partnerSlice = createSlice({
       const token = action.payload.token;
       const partnerId = action.payload.partnerId;
       state.email = email;
-      console.log(token.token, typeof token.token);
+      localStorage.clear();
       localStorage.setItem("email", email);
       localStorage.setItem("token", token.token);
       localStorage.setItem("partnerId", partnerId);

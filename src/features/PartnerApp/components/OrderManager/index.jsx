@@ -194,8 +194,15 @@ function MapPick() {
   });
   const classes = useStyles();
   const partner = useSelector((state) => state.partner.profile);
-  const [pickingOrder, setpickingOrder] = useState([]);
+  const [pickingOrder, setPickingOrder] = useState([]);
   const [open, setOpen] = useState(false);
+
+  socket.on("newOrderFinding", (newPickingOrder) => {
+    console.log("newOrderFinding");
+    console.log(pickingOrder, newPickingOrder);
+    setPickingOrder([...pickingOrder, newPickingOrder]);
+  });
+
   let pickingOrderInDistance = pickingOrder.filter((order) => {
     return (
       parseFloat(
@@ -205,7 +212,7 @@ function MapPick() {
           geo.lat,
           geo.lng
         )
-      ) < parseFloat(partner.setting.radiusWorking / 1000 || 2)
+      ) > parseFloat(partner.setting.radiusWorking / 1000 || 2)
     );
   });
   const success = (pos) => {
@@ -226,7 +233,7 @@ function MapPick() {
   useEffect(() => {
     const fetchPickingOrder = async () => {
       const pickingOrder = await orderApi.getOrderByStatus("finding");
-      setpickingOrder(pickingOrder);
+      setPickingOrder(pickingOrder);
     };
     fetchPickingOrder();
   }, []);
@@ -258,14 +265,28 @@ function MapPick() {
     setOpen(false);
   };
 
+  const removeOrderPicked = (order_id) => {
+    const newList = pickingOrder;
+    const index = newList
+      .map(function (e) {
+        return e._id;
+      })
+      .indexOf(order_id);
+    if (index > -1) {
+      newList.splice(index, 1);
+    }
+    console.log(order_id, index);
+    setPickingOrder(newList);
+  };
+
   return (
     <MapContainer
       center={[geo.lat, geo.lng]}
-      zoom={15}
+      zoom={14}
       scrollWheelZoom={false}
       style={{ height: `calc(100vh - 40px)`, width: "100%" }}
     >
-      <ChangeView center={[geo.lat, geo.lng]} zoom={15} />
+      <ChangeView center={[geo.lat, geo.lng]} zoom={14} />
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -302,7 +323,11 @@ function MapPick() {
               timeout: 300,
             }}
           >
-            <CurrentOrder handleClose={handleClose} order={order} />
+            <CurrentOrder
+              handleClose={handleClose}
+              order={order}
+              removeOrderPicked={removeOrderPicked}
+            />
           </Modal>
         </Marker>
       ))}
@@ -484,9 +509,10 @@ function TimePickers() {
   );
 }
 
-function CurrentOrder({ handleClose, order }) {
+function CurrentOrder({ handleClose, order, removeOrderPicked }) {
   const chooseOrder = (order_id) => {
     socket.emit("chooseOrder", order_id);
+    removeOrderPicked(order_id);
     handleClose();
   };
 

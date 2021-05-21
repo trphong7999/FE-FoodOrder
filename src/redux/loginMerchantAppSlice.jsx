@@ -11,6 +11,7 @@ const merchantSlice = createSlice({
       const token = action.payload.token;
       const merchantId = action.payload.merchantId;
       state.email = email;
+      localStorage.clear();
       localStorage.setItem("email", email);
       localStorage.setItem("token", token.token);
       localStorage.setItem("merchantId", merchantId);

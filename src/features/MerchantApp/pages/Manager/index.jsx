@@ -25,6 +25,7 @@ function MainPageMerchant() {
     }
   });
   socket.on("newOrder", (data) => {
+    console.log("new order");
     setNewListOrder([...newListOrder, data]);
   });
 

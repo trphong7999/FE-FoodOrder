@@ -28,6 +28,12 @@ const loginUserAppSlice = createSlice({
       const id = action.payload.id;
 
       state.username = username;
+      localStorage.removeItem("username");
+      localStorage.removeItem("token");
+      localStorage.removeItem("profile");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("type");
+
       localStorage.setItem("username", username);
       localStorage.setItem("userId", id);
       localStorage.setItem("token", token);

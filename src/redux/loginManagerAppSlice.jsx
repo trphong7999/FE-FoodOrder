@@ -10,6 +10,7 @@ const managerSlice = createSlice({
       const username = action.payload.username;
       const token = action.payload.token;
       state.username = username;
+      localStorage.clear();
       localStorage.setItem("username", username);
       localStorage.setItem("token", token);
       localStorage.setItem("type", "manager");

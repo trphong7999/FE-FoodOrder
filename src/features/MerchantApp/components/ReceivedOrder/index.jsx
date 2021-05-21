@@ -23,19 +23,20 @@ function ReceivedOrder() {
   const [listWait, setListWait] = useState([]);
 
   socket.on("findDonePartner", ({ orderId, partner }) => {
+    console.log("findDonePartner");
     const updatePartner = (list, setList) => {
       let currentList = [...list];
       let order = currentList.find((or) => or._id == orderId);
       if (order) {
         order.deliverId = partner;
-        order.sort((a, b) => {
+        currentList.sort((a, b) => {
           let pa, pb;
           pa = !a.deliverId ? 0 : 1;
           pb = !a.deliverId ? 0 : 1;
           if (pa !== pb) return pb - pa;
           return a.timeOrder - b.timeOrder;
         });
-        setList(order);
+        setList(currentList);
       }
     };
     updatePartner(listReceived, setListReceived);

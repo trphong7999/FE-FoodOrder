@@ -30,6 +30,11 @@ export default function NavAccount({ avt }) {
           </Link>
         </li>
         <li className="action__list--item">
+          <Link to="/user/dang-den" className="action__list--link">
+            Theo dõi đơn đang đến
+          </Link>
+        </li>
+        <li className="action__list--item">
           <Link to="/user/tai-khoan" className="action__list--link">
             Lịch sử đơn hàng
           </Link>
