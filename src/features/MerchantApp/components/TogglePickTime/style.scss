@@ -6,6 +6,7 @@
 
   .label-title {
     flex-basis: 20%;
+    font-weight: 500;
   }
 
   .label-space {
@@ -21,5 +22,6 @@
     display: flex;
     justify-content: space-around;
     text-align: center;
+    font-weight: 500;
   }
 }
