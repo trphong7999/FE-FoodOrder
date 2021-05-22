@@ -15,20 +15,28 @@ import shopIcon from "assets/image/icons/shop-icon.png";
 import homeIcon from "assets/image/icons/home.jfif";
 import { FcInspection } from "react-icons/fc";
 import { FcSurvey, FcSms } from "react-icons/fc";
+import { IoSend } from "react-icons/io5";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { makeStyles } from "@material-ui/core";
+import loading from "assets/image/avartar/avatar-default.png";
+import { datetimeFromTimestamp, validatePrice } from "func.js";
 
 export default function DeliveryPage() {
   const [haveOrder, setHaveOrder] = useState(false);
   const [geoPartner, setGeoPartner] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const dispatch = useDispatch();
+
+  const changeOpen = () => {
+    setOpen(!open);
+  };
+
   const user = useSelector((state) => state.loginUserApp);
   useEffect(() => {
     socket.emit("haveOrderProcessing", user.profile._id);
   }, []);
-  console.log(haveOrder);
+
   socket.on("canOrder", (data) => {
     setHaveOrder(data);
   });
@@ -58,8 +66,9 @@ export default function DeliveryPage() {
   return (
     <div className="tracking-page">
       <Navbar />
-      <FcInspection className="icon-detail" onClick={() => setOpen(!open)} />
-      <OrderInfo />
+      <FcInspection className="icon-detail" onClick={changeOpen} />
+      {open ? <OrderInfo order={haveOrder} /> : ""}
+
       <ToastContainer />
       {haveOrder ? (
         <MapContainer
@@ -73,7 +82,12 @@ export default function DeliveryPage() {
           ]}
           zoom={13.5}
           scrollWheelZoom={false}
-          style={{ height: "70vh", width: "100%", zIndex: "0" }}
+          style={{
+            height: "70vh",
+            width: "100%",
+            zIndex: "0",
+            borderTop: "1px solid #ebebeb",
+          }}
         >
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -88,6 +102,7 @@ export default function DeliveryPage() {
           >
             <Popup>Nhà của tôi</Popup>
           </Marker>
+
           <Marker
             icon={merchantIcon}
             position={[
@@ -97,6 +112,7 @@ export default function DeliveryPage() {
           >
             <Popup>Cửa hàng</Popup>
           </Marker>
+
           {geoPartner ? (
             <Marker
               icon={merchantIcon}
@@ -116,13 +132,125 @@ export default function DeliveryPage() {
   );
 }
 
-function OrderInfo(order) {
+function OrderInfo({ order }) {
+  const [numShow, setNumShow] = useState(true);
+
   return (
     <div class="tracking-info">
-      <div class="main-info"></div>
       <div class="nav-info">
-        <FcSurvey class="icon-nav" />
-        <FcSms class="icon-nav" />
+        <div
+          className={`nav-info__item ${
+            numShow ? "nav-info__item--active" : ""
+          }`}
+          onClick={() => setNumShow(true)}
+        >
+          <FcSurvey class="icon-nav" />
+        </div>
+        <div
+          className={`nav-info__item ${
+            numShow ? "" : "nav-info__item--active"
+          }`}
+          onClick={() => setNumShow(false)}
+        >
+          <FcSms class="icon-nav" />
+        </div>
+      </div>
+      <div class="main-info">
+        {numShow ? <DetailOrder order={order} /> : <Chat />}
+      </div>
+    </div>
+  );
+}
+
+function DetailOrder({ order }) {
+  console.log("this is", order);
+  return (
+    <div className="main-info__item">
+      {order ? (
+        <div className="detail">
+          <div className="detail-item">
+            <span className="id">#{order._id}</span>{" "}
+          </div>
+          <div className="detail-item">
+            Hôm nay{" "}
+            {datetimeFromTimestamp(parseInt(order.timeOrder) + 15 * 60000)}
+          </div>
+          <div className="detail-item">
+            <span>Cửa hàng</span>
+            <span className="name-shop">{order.merchantId.name}</span>
+          </div>
+          <div className="detail-item">
+            <span>Trạng thái</span>
+            <span className="status">{order.status}</span>
+          </div>
+          <ul className="detail-list">
+            <div className="detail-list__title">
+              <span>
+                {order.detail.foods.reduce(
+                  (arr, curr) => arr + curr.quantity,
+                  0
+                )}{" "}
+                món
+              </span>
+              <span>{validatePrice(order.detail.total)} đ</span>
+            </div>
+            {order.detail.foods.map((dish, index) => (
+              <li className="detail-list__item">
+                <span>{dish.name}</span> <span>x {dish.quantity}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        ""
+      )}
+    </div>
+  );
+}
+
+function Chat() {
+  const [chats, setChats] = useState([
+    {
+      type: true,
+      content:
+        "Xin chào bạn! mình tên là Phùng Hoàng Đại, mình là người ship đơn hàng của bạn",
+    },
+    { type: false, content: "Cảm ơn bạn" },
+    { type: true, content: "nịt pẹ bạn" },
+    { type: false, content: "kec" },
+  ]);
+  return (
+    <div className="main-info__item">
+      <div className="item-chat">
+        <div className="item-chat__partner">
+          <img src={loading} alt="avt-partner" />
+          <span>Phùng Hoàng Đại</span>
+        </div>
+
+        <div className="item-chat__content">
+          {chats.map((chat, index) =>
+            chat.type ? (
+              <div key={index} className="content-parter">
+                <div className="content">{chat.content}</div>
+              </div>
+            ) : (
+              <div key={index} className="content-user">
+                <div className="content">{chat.content}</div>
+              </div>
+            )
+          )}
+        </div>
+
+        <div className="item-chat__input">
+          <input
+            type="text"
+            className="input-text"
+            placeholder="Type a massage..."
+          />
+          <span className="input-send">
+            <IoSend className="input-send__icon" />
+          </span>
+        </div>
       </div>
     </div>
   );

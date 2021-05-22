@@ -8,26 +8,194 @@
   }
 }
 .tracking-info {
-  height: 30rem;
-  width: 25rem;
+  width: 30rem;
   position: absolute;
   right: 6.8rem;
   top: 10rem;
   z-index: 1000;
-  background-color: khaki;
-  display: flex;
+  background-color: white;
+  box-shadow: 0px 4px 12px 2px rgb(0 0 0 / 40%);
+
   .main-info {
-    flex-basis: 80%;
+    height: 30rem;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+
+    .main-info__item {
+      height: 100%;
+      .item-chat {
+        position: relative;
+        height: 100%;
+
+        .item-chat__partner {
+          display: flex;
+          align-items: center;
+          padding: 0.5rem;
+          box-shadow: var(--box-shadow);
+          img {
+            width: 30px;
+            border-radius: 50%;
+          }
+          span {
+            font-weight: 500;
+            font-size: 1.4rem;
+            margin-left: 1rem;
+          }
+        }
+        .item-chat__content {
+          position: absolute;
+          right: 0;
+          left: 0;
+          top: 44px;
+          bottom: 35px;
+          overflow-y: scroll;
+          font-size: 1.4rem;
+          padding: 0.5rem;
+
+          .content-parter,
+          .content-user {
+            margin-bottom: 0.8rem;
+
+            .content {
+              max-width: 80%;
+              padding: 1rem;
+              border-radius: 16px;
+            }
+          }
+
+          .content-parter {
+            .content {
+              border-top-left-radius: 0px;
+              background-color: #f2f6f9;
+            }
+          }
+          .content-user {
+            display: flex;
+            justify-content: flex-end;
+
+            .content {
+              color: white;
+              border-top-right-radius: 0px;
+              background-color: var(--primary-color);
+            }
+          }
+        }
+
+        .item-chat__input {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          left: 0;
+          background-color: #f8fbfd;
+          display: flex;
+
+          .input-text {
+            background-color: #f8fbfd;
+            flex-basis: 85%;
+            padding: 1rem 0.5rem;
+            border: none;
+            display: inline-block;
+            &:focus {
+              outline: none;
+            }
+          }
+          .input-send {
+            flex-basis: 15%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .input-send__icon {
+              font-size: 1.8rem;
+              color: var(--primary-color);
+
+              font-weight: bold;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+
+      .detail {
+        padding: 1rem;
+        font-size: 1.5rem;
+        color: #232239;
+
+        .detail-item {
+          display: flex;
+          font-weight: 500;
+          justify-content: space-between;
+          margin-bottom: 1rem;
+
+          .id {
+            font-weight: bold;
+          }
+          .name-shop {
+            color: #c2cbde;
+          }
+          .status {
+            color: #58bc8a;
+          }
+        }
+
+        .detail-list {
+          padding: 0;
+          list-style: none;
+          .detail-list__title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            span {
+              &:first-child {
+                font-weight: 500;
+              }
+              &:last-child {
+                color: var(--primary-color);
+                font-weight: bold;
+              }
+            }
+          }
+
+          .detail-list__item {
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            span {
+              &:first-child {
+                text-transform: capitalize;
+                color: #939297;
+              }
+            }
+          }
+        }
+      }
+    }
   }
+
   .nav-info {
-    flex-basis: 20%;
+    border-left: 1px solid #ebebeb;
     display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    border-left: 1px solid #ccc;
-    align-items: center;
-    .icon-nav {
-      font-size: 3rem;
+    .nav-info__item {
+      padding: 0.5rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:first-child {
+        border-bottom: 1px solid #ebebeb;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+
+      .icon-nav {
+        font-size: 3rem;
+      }
+    }
+
+    .nav-info__item--active {
+      background-color: rgb(248, 231, 231);
     }
   }
 }

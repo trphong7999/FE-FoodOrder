@@ -5,14 +5,13 @@ import {
   FaPortrait,
   FaHeartbeat,
   FaPowerOff,
-  FaLock,
-  FaUserLock,
   FaAngleLeft,
 } from "react-icons/fa";
 import { BiSupport } from "react-icons/bi";
-import { IoSettings, IoLocation } from "react-icons/io5";
+import { IoSettings } from "react-icons/io5";
 import avtDefault from "assets/image/avartar/slide1.jpg";
 import "./style.scss";
+import Setting from "../Setting";
 
 export default function Profile() {
   const [showSetting, setShowSetting] = useState({
@@ -160,46 +159,6 @@ export default function Profile() {
       ) : (
         ""
       )}
-    </div>
-  );
-}
-
-function Setting({ callBackCloseSetting }) {
-  const sendDataCallBackClose = (data) => {
-    callBackCloseSetting(data);
-  };
-  return (
-    <div className="setting">
-      <div className="setting-head">
-        <FaAngleLeft
-          className="setting-head__icon"
-          onClick={() => sendDataCallBackClose("setting")}
-        />
-        <span>Cài đặt</span>
-      </div>
-      <div className="setting-content">
-        <ul className="setting-content__list">
-          <li>
-            <div className="setting-list__item">
-              <FaLock className="list__item-icon" />
-              <span>Đổi mật khẩu</span>
-            </div>
-          </li>
-
-          <li>
-            <div className="setting-list__item">
-              <FaUserLock className="list__item-icon" />
-              <span>Thay đổi thông tin</span>
-            </div>
-          </li>
-          <li>
-            <div className="setting-list__item">
-              <IoLocation className="list__item-icon" />
-              <span>Cập nhật vị trí</span>
-            </div>
-          </li>
-        </ul>
-      </div>
     </div>
   );
 }
