@@ -48,7 +48,6 @@
           left: 0;
           top: 44px;
           bottom: 35px;
-          overflow-y: scroll;
           font-size: 1.4rem;
           padding: 0.5rem;
 
@@ -57,7 +56,7 @@
             margin-bottom: 0.8rem;
 
             .content {
-              max-width: 80%;
+              max-width: 70%;
               padding: 1rem;
               border-radius: 16px;
             }
@@ -131,10 +130,12 @@
             font-weight: bold;
           }
           .name-shop {
-            color: #c2cbde;
+            color: #4444448f;
+            font-weight: bold;
           }
           .status {
             color: #58bc8a;
+            font-weight: bold;
           }
         }
 

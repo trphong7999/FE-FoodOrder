@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./styleDetail.scss";
 import { FaPhoneAlt } from "react-icons/fa";
 import { BsChevronLeft } from "react-icons/bs";
@@ -13,12 +13,16 @@ import {
 } from "func";
 import socket from "socket-io";
 import taixe1 from "assets/image/avartar/taixe1.jpg";
+import TimeInput from "react-time-input";
 
 function ReceivedConfirmDetail() {
   const history = useHistory();
   const location = useLocation();
   const orderDetail = location.state.orderDetail;
   const quantityOrdered = orderDetail.userOrderId.quantityOrderedSuccess;
+  const [timePartnerGetFood, setTimePartnerGetFood] = useState(
+    orderDetail.timeOrder + 10 * 60000
+  );
   // const totalNumberOfDishes = orderDetail.listFood.reduce(sumQuantity, 0);
   // const totalAmountOfDishes = orderDetail.listFood.reduce(sumTotal, 0);
   // const commissionMoney = totalAmountOfDishes * 0.1;
@@ -34,8 +38,17 @@ function ReceivedConfirmDetail() {
   //   infoPartner: { name: null, phone: null, status: 0, avatar: "" },
   // };
 
+  const onTimeChangeHandle = (val) => {
+    let hour = new Date().setHours(val.split(":")[0]);
+    let time = new Date(hour).setMinutes(val.split(":")[0]);
+    setTimePartnerGetFood(time);
+  };
+
   const addReceivedPrepare = async () => {
-    socket.emit("approveOrder", orderDetail._id);
+    socket.emit("approveOrder", {
+      order_id: orderDetail._id,
+      timePartnerGetFood: timePartnerGetFood,
+    });
     history.goBack();
   };
 
@@ -87,6 +100,20 @@ function ReceivedConfirmDetail() {
           <div className="partner-info">
             <span>{orderDetail.deliverId.name}</span>
             <span>{orderDetail.deliverId.phone}</span>
+          </div>
+          <div style={{ marginLeft: "8rem" }}>
+            <span>Dự kiến giao cho Shipper </span>
+            <TimeInput
+              initTime={
+                `0${new Date(Date.now() + 10 * 60000).getHours()}`.slice(-2) +
+                ":" +
+                `0${new Date(Date.now() + 10 * 60000).getMinutes()}`.slice(-2)
+              }
+              useRef="TimeInputWrapper"
+              className="form-control"
+              mountFocus="true"
+              onTimeChange={(e) => onTimeChangeHandle(e)}
+            />
           </div>
           <div className="partner-action">
             <FaPhoneAlt className="icon" />

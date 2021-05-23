@@ -20,6 +20,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { makeStyles } from "@material-ui/core";
 import loading from "assets/image/avartar/avatar-default.png";
 import { datetimeFromTimestamp, validatePrice } from "func.js";
+import ScrollToBottom from "react-scroll-to-bottom";
 
 export default function DeliveryPage() {
   const [haveOrder, setHaveOrder] = useState(false);
@@ -67,7 +68,7 @@ export default function DeliveryPage() {
     <div className="tracking-page">
       <Navbar />
       <FcInspection className="icon-detail" onClick={changeOpen} />
-      {open ? <OrderInfo order={haveOrder} /> : ""}
+      {open ? <OrderInfo order={haveOrder} setHaveOrder={setHaveOrder} /> : ""}
 
       <ToastContainer />
       {haveOrder ? (
@@ -132,7 +133,7 @@ export default function DeliveryPage() {
   );
 }
 
-function OrderInfo({ order }) {
+function OrderInfo({ order, setHaveOrder }) {
   const [numShow, setNumShow] = useState(true);
 
   return (
@@ -156,7 +157,11 @@ function OrderInfo({ order }) {
         </div>
       </div>
       <div class="main-info">
-        {numShow ? <DetailOrder order={order} /> : <Chat />}
+        {numShow ? (
+          <DetailOrder order={order} />
+        ) : (
+          <Chat order={order} setOrder={setHaveOrder} />
+        )}
       </div>
     </div>
   );
@@ -172,8 +177,14 @@ function DetailOrder({ order }) {
             <span className="id">#{order._id}</span>{" "}
           </div>
           <div className="detail-item">
-            Hôm nay{" "}
+            Thời gian đặt hàng{" "}
             {datetimeFromTimestamp(parseInt(order.timeOrder) + 15 * 60000)}
+          </div>
+          <div className="detail-item">
+            Thời gian dự kiến{" "}
+            {datetimeFromTimestamp(
+              parseInt(order.timeDeliverDone) + 15 * 60000
+            )}
           </div>
           <div className="detail-item">
             <span>Cửa hàng</span>
@@ -181,24 +192,46 @@ function DetailOrder({ order }) {
           </div>
           <div className="detail-item">
             <span>Trạng thái</span>
-            <span className="status">{order.status}</span>
+            <span className="status">
+              {order.status === "new"
+                ? "Chờ quán chấp nhận"
+                : order.status === "finding"
+                ? "Đang tìm tài xế"
+                : order.status === "waitConfirm"
+                ? "Chờ quán xác nhận"
+                : order.status === "picking" || order.status === "waitPick"
+                ? "Shipper đang lấy đồ ăn"
+                : order.status === "delivering"
+                ? "Shipper đang giao đồ tới bạn"
+                : order.status === "complete"
+                ? "Giao hàng thành công"
+                : "Đơn hàng đã bị hủy"}
+            </span>
           </div>
           <ul className="detail-list">
             <div className="detail-list__title">
-              <span>
+              <span style={{ color: "#939297" }}>
                 {order.detail.foods.reduce(
                   (arr, curr) => arr + curr.quantity,
                   0
                 )}{" "}
                 món
               </span>
-              <span>{validatePrice(order.detail.total)} đ</span>
             </div>
             {order.detail.foods.map((dish, index) => (
               <li className="detail-list__item">
                 <span>{dish.name}</span> <span>x {dish.quantity}</span>
               </li>
             ))}
+            <div className="detail-list__title">
+              <span>Tổng tiền</span>
+              <span>
+                {validatePrice(
+                  order.detail.total + order.detail.fee - order.detail.discount
+                )}{" "}
+                đ
+              </span>
+            </div>
           </ul>
         </div>
       ) : (
@@ -208,46 +241,71 @@ function DetailOrder({ order }) {
   );
 }
 
-function Chat() {
-  const [chats, setChats] = useState([
-    {
-      type: true,
-      content:
-        "Xin chào bạn! mình tên là Phùng Hoàng Đại, mình là người ship đơn hàng của bạn",
-    },
-    { type: false, content: "Cảm ơn bạn" },
-    { type: true, content: "nịt pẹ bạn" },
-    { type: false, content: "kec" },
-  ]);
+function Chat({ order, setOrder }) {
+  const [chatMessage, setChatMessage] = useState("");
+  const { chat, deliverId } = order;
+  const handleActionChat = () => {
+    if (chatMessage) {
+      socket.emit("chatAction", {
+        order_id: order._id,
+        type: 1,
+        message: chatMessage,
+      });
+      setOrder({
+        ...order,
+        chat: [...order.chat, { type: 1, content: chatMessage }],
+      });
+      setChatMessage("");
+    }
+  };
+  socket.on("chatAction", (message) => {
+    if (message.type === 0)
+      setOrder({ ...order, chat: [...order.chat, message] });
+  });
   return (
     <div className="main-info__item">
       <div className="item-chat">
         <div className="item-chat__partner">
-          <img src={loading} alt="avt-partner" />
-          <span>Phùng Hoàng Đại</span>
+          <img src={deliverId.avt} alt="avt-partner" />
+          <span>{deliverId.name}</span>
         </div>
-
-        <div className="item-chat__content">
-          {chats.map((chat, index) =>
-            chat.type ? (
-              <div key={index} className="content-parter">
-                <div className="content">{chat.content}</div>
-              </div>
-            ) : (
-              <div key={index} className="content-user">
-                <div className="content">{chat.content}</div>
-              </div>
-            )
-          )}
-        </div>
+        <ScrollToBottom className="item-chat__content">
+          <div>
+            {chat.length > 0
+              ? chat.map((chat, index) =>
+                  chat.type == 0 ? (
+                    <div key={index} className="content-parter">
+                      <img
+                        src={order.deliverId.avt}
+                        alt="partnerAvt"
+                        width="32"
+                      />
+                      <div className="content">{chat.content}</div>
+                    </div>
+                  ) : (
+                    <div key={index} className="content-user">
+                      <div className="content">{chat.content}</div>
+                      <img
+                        src={order.userOrderId.info.avt}
+                        alt="userAvt"
+                        width="32"
+                      />
+                    </div>
+                  )
+                )
+              : ""}
+          </div>
+        </ScrollToBottom>
 
         <div className="item-chat__input">
           <input
             type="text"
             className="input-text"
-            placeholder="Type a massage..."
+            placeholder="Type a message..."
+            value={chatMessage}
+            onChange={(e) => setChatMessage(e.target.value)}
           />
-          <span className="input-send">
+          <span className="input-send" onClick={() => handleActionChat()}>
             <IoSend className="input-send__icon" />
           </span>
         </div>

@@ -9,7 +9,12 @@ export default function Card({ merchant, index }) {
 
   return (
     <div className="col l-2-4 m-4 c-6">
-      <Link to={`${match.url}/quan-an/${_id}`} className="dish-link">
+      <a
+        href={`${match.url}/quan-an/${_id}`}
+        className="dish-link"
+        target="_blank"
+        rel="noreferrer"
+      >
         <div className="dish-item">
           <img src={avt} alt="ImageDish" className="dish-img" />
           <div className="dish-info">
@@ -27,7 +32,7 @@ export default function Card({ merchant, index }) {
             </div>
           </div>
         </div>
-      </Link>
+      </a>
     </div>
   );
 }

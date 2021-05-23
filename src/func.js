@@ -47,13 +47,22 @@ const getLocationUser = () => {
 };
 
 const datetimeFromTimestamp = (timestamp) => {
-  const datetime = new Date(timestamp);
+  const datetime = new Date(parseInt(timestamp));
   return `${("0" + datetime.getHours()).slice(-2)}:${(
     "0" + datetime.getMinutes()
   ).slice(-2)}`;
 };
 
+const formatDatetimeToString = (now) => {
+  return `${("0" + now.getHours()).slice(-2)}:${("0" + now.getMinutes()).slice(
+    -2
+  )} - ${("0" + now.getDate()).slice(-2)}/${(
+    "0" + parseInt(now.getMonth() + 1)
+  ).slice(-2)}`;
+};
+
 export {
+  formatDatetimeToString,
   datetimeFromTimestamp,
   validatePrice,
   getLocationUser,

@@ -424,3 +424,11 @@
     }
   }
 }
+.mode {
+  position: fixed;
+  right: 3px;
+  top: 5rem;
+  z-index: 99999;
+  font-weight: bold;
+  font-size: 2rem;
+}
