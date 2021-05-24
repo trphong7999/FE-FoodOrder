@@ -4,11 +4,14 @@ import { useSelector } from "react-redux";
 import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom";
 import MakingDetail from "./components/MakingDetail";
 import Manager from "./pages/Manager";
+
 import { useDispatch } from "react-redux";
 import { logoutPartner } from "redux/loginPartnerAppSlice";
 import partnerApi from "api/partnerApi";
 
-function ParterApp(props) {
+import Chat from "./components/Chat";
+
+function PartnerApp(props) {
   const match = useRouteMatch();
   const partner = useSelector((state) => state.partner);
   const dispatch = useDispatch();
@@ -30,12 +33,14 @@ function ParterApp(props) {
           component={() => (partner.email ? <Manager /> : <Login />)}
         />
         <Route
-          path={`${match.url}/making-detail/:id`}
+          exact
+          path={`${match.url}/detail-order/`}
           component={MakingDetail}
         />
+        <Route exact path={`${match.url}/detail-order/chat`} component={Chat} />
       </Switch>
     </div>
   );
 }
 
-export default ParterApp;
+export default PartnerApp;

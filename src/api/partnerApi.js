@@ -1,14 +1,15 @@
 import axiosClient from "./axiosClient";
 
 const partnerApi = {
-  getAll: () => {
-    const url = "/partners";
-    return axiosClient.get(url);
-  },
   checkAuth: () => {
     const url = `/partners/auth`;
     return axiosClient.post(url);
   },
+  getAll: () => {
+    const url = "/partners";
+    return axiosClient.get(url);
+  },
+
   get: (id) => {
     const url = `/partners/${id}`;
     return axiosClient.get(url);

@@ -9,7 +9,7 @@ import novat from "assets/image/icons/novat.gif";
 import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { incQuantity, decQuantity } from "redux/cartOrderSlice";
-import { validatePrice, computeDistant } from "func.js";
+import { validatePrice, computeDistant, formatDatetimeToString } from "func.js";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -143,17 +143,22 @@ export default function CartOrder({ merchant }) {
     socket.emit("haveOrderProcessing", user.profile._id);
   };
 
-  socket.on("canOrder", (data) => {
-    if (!data) {
-      const status = statusOrder();
-      // if (status === 1) {
-      //   alert("Quán sắp đóng cửa, vui lòng đặt hàng vào ngày mai");
-      // } else if (status === 2) {
-      //   alert("Quán đã đóng cửa, vui lòng đặt hàng vào ngày mai");
-      // } else handleOpen();
-      handleOpen();
-    } else orderProcessingWarning();
-  });
+  useEffect(() => {
+    const myFunc = (data) => {
+      console.log("call");
+      if (!data) {
+        const status = statusOrder();
+        // if (status === 1) {
+        //   alert("Quán sắp đóng cửa, vui lòng đặt hàng vào ngày mai");
+        // } else if (status === 2) {
+        //   alert("Quán đã đóng cửa, vui lòng đặt hàng vào ngày mai");
+        // } else handleOpen();
+        handleOpen();
+      } else orderProcessingWarning();
+    };
+    socket.on("canOrder", myFunc);
+    return () => socket.off("canOrder", myFunc);
+  }, []);
 
   useEffect(() => {
     const cartList = document.getElementById("cart2");
@@ -253,7 +258,7 @@ export default function CartOrder({ merchant }) {
         </div>
       </div>
 
-      <div className="order__button" onClick={handleContinues}>
+      <div className="order__button" onClick={() => handleContinues()}>
         Tiếp tục
       </div>
       <Modal
@@ -331,11 +336,7 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
     const now = new Date();
     now.setMinutes(now.getMinutes() + diffTime);
     console.log(distance, diffTime, now);
-    return `${("0" + now.getHours()).slice(-2)}:${(
-      "0" + now.getMinutes()
-    ).slice(-2)} - ${("0" + now.getDate()).slice(-2)}/${(
-      "0" + now.getDay()
-    ).slice(-2)}`;
+    return formatDatetimeToString(now);
   };
 
   const handleOrder = () => {
@@ -356,6 +357,7 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
       },
       distance: distance,
       note: "Đây là note",
+      timeDeliverDone: Date.now() + (distance * 5 + 10) * 60000,
     };
     socket.emit("startOrder", order);
     handleClose();

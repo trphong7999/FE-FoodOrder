@@ -9,6 +9,7 @@ import { validatePrice, computeDistant, getLocationUser } from "func.js";
 import { useDispatch, useSelector } from "react-redux";
 import { addCartOrder } from "redux/cartOrderSlice";
 import { DistanceMatrixService } from "@react-google-maps/api";
+import { toast } from "react-toastify";
 
 export default function Brand({ merchant }) {
   const [distance, setDistance] = useState(0);
@@ -16,6 +17,12 @@ export default function Brand({ merchant }) {
   const listCartOrder = useSelector((state) => state.cartOrder);
   const user = useSelector((state) => state.loginUserApp.profile);
 
+  const cartWarning = () =>
+    toast.error(
+      <div>
+        <span style={{ fontSize: "2.5rem" }}>🤚</span>Bạn đã có món này trong rỏ
+      </div>
+    );
   // ------------------------ HANDLE TIME OPEN - CLOSE ------------------
 
   const getStrDayOfWeek = () => {
@@ -48,7 +55,7 @@ export default function Brand({ merchant }) {
       const action = addCartOrder(dish);
       dispatch(action);
     } else {
-      alert("Bạn đã có món ăn này trong giỏ!");
+      cartWarning();
       return;
     }
   };

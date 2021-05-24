@@ -74,7 +74,7 @@ export default function ReceivedConfirm({ listReceived, setListReceived }) {
                     className="status-driver-1"
                     style={{ color: "#53a653", fontWeight: "bold" }}
                   >
-                    Tài xế <b>{order.deliverId.name}</b> đang đến
+                    Tài xế <b>{order.deliverId.name}</b> đã nhận đơn
                   </span>
                 ) : (
                   <span className="status-driver-1">Đang chỉ định tài xế</span>

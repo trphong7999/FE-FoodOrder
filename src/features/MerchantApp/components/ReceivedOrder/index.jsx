@@ -16,7 +16,7 @@ function ReceivedOrder() {
     { id: 2, title: "Chờ đến lấy", active: false },
   ]);
   const [countTabList, setCountTabList] = useState(
-    sessionStorage.stateOrder || 1
+    sessionStorage.stateOrder || 0
   );
   const [listReceived, setListReceived] = useState([]);
   const [listPrepare, setListPrepare] = useState([]);

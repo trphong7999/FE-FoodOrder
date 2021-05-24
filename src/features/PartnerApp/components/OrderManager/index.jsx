@@ -9,6 +9,7 @@ import {
   Popup,
   useMap,
   Circle,
+  Tooltip,
 } from "react-leaflet";
 import Modal from "@material-ui/core/Modal";
 import Fade from "@material-ui/core/Fade";
@@ -23,10 +24,16 @@ import L from "leaflet";
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import "./style.scss";
-import { validatePrice, computeDistant, datetimeFromTimestamp } from "func";
+import {
+  validatePrice,
+  computeDistant,
+  datetimeFromTimestamp,
+  formatDatetimeToString,
+} from "func";
 import { useHistory, useRouteMatch } from "react-router";
 import orderApi from "api/orderApi";
 import shopIcon from "assets/image/icons/shop-icon.png";
+import usericon from "assets/image/icons/user-icon.png";
 import mylocationIcon from "assets/image/icons/mylocation.png";
 import socket from "socket-io.js";
 import { useSelector } from "react-redux";
@@ -95,12 +102,34 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OrderManager() {
-  const histroy = useHistory();
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(parseInt(sessionStorage.tab) || 0);
   const [open, setOpen] = useState(false);
   const [setSelectorTime, setSetSelectorTime] = useState();
+  const [orderDone, setOrderDone] = useState([]);
+  const [orderProcessing, setOrderProcessing] = useState([]);
   const [statusCheckIn, setStatusCheckIn] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const classes = useStyles();
+  const partner = useSelector((state) => state.partner.profile);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const orders = await orderApi.getOrderByPartner(partner._id);
+      if (orders.length > 0) {
+        setOrderDone(
+          orders.filter(
+            (od) => od.status === "complete" || od.status === "cancel"
+          )
+        );
+        setOrderProcessing(
+          orders.filter(
+            (od) => od.status !== "complete" && od.status !== "cancel"
+          )
+        );
+      }
+    };
+    fetchData();
+  }, [refresh]);
 
   const handleChangeTab = (tab) => {
     setTab(tab);
@@ -126,7 +155,10 @@ export default function OrderManager() {
             className={`tab-list__item ${
               tab === 0 ? "tab-list__item--active" : ""
             }`}
-            onClick={() => handleChangeTab(0)}
+            onClick={() => {
+              handleChangeTab(0);
+              sessionStorage.tab = 0;
+            }}
           >
             FREE-PICK
           </li>
@@ -158,11 +190,11 @@ export default function OrderManager() {
 
       <div className="order-manager__content">
         {tab === 0 ? (
-          <MapPick />
+          <MapPick partner={partner} setRefresh={setRefresh} />
         ) : tab === 1 ? (
-          <MakingFood data={1} />
+          <MakingFood data={1} orderProcessing={orderProcessing} />
         ) : (
-          <FinishedDelivery data={2} />
+          <FinishedDelivery data={2} orderDone={orderDone} />
         )}
       </div>
 
@@ -192,19 +224,18 @@ export default function OrderManager() {
   );
 }
 
-function MapPick() {
+function MapPick({ partner, setRefresh }) {
   const [geo, setGeo] = useState({
     lat: "20.828790101307185",
     lng: "106.71664668177716",
   });
   const classes = useStyles();
-  const partner = useSelector((state) => state.partner.profile);
+  const [orderDelivering, setOrderDelivering] = useState(null);
+
   const [pickingOrder, setPickingOrder] = useState([]);
   const [open, setOpen] = useState(false);
 
   socket.on("newOrderFinding", (newPickingOrder) => {
-    console.log("newOrderFinding");
-    console.log(pickingOrder, newPickingOrder);
     setPickingOrder([...pickingOrder, newPickingOrder]);
   });
 
@@ -217,7 +248,7 @@ function MapPick() {
           geo.lat,
           geo.lng
         )
-      ) > parseFloat(partner.setting.radiusWorking / 1000 || 2)
+      ) < parseFloat(partner.setting.radiusWorking / 1000 || 2)
     );
   });
   const success = (pos) => {
@@ -236,6 +267,13 @@ function MapPick() {
   }, 2000);
 
   useEffect(() => {
+    socket.emit("orderDelivering", partner._id);
+    socket.on("orderDelivering", (od) => {
+      setOrderDelivering(od);
+    });
+  }, []);
+
+  useEffect(() => {
     const fetchPickingOrder = async () => {
       const pickingOrder = await orderApi.getOrderByStatus("finding");
       setPickingOrder(pickingOrder);
@@ -243,9 +281,18 @@ function MapPick() {
     fetchPickingOrder();
   }, []);
 
-  var myIcon = new L.icon({
+  let myIcon = new L.icon({
     iconUrl: shopIcon,
     iconSize: [28, 42],
+    iconAnchor: [22, 34],
+    popupAnchor: [-3, -46],
+    shadowSize: [68, 45],
+    shadowAnchor: [22, 44],
+  });
+
+  let userIcon = new L.icon({
+    iconUrl: usericon,
+    iconSize: [30, 32],
     iconAnchor: [22, 34],
     popupAnchor: [-3, -46],
     shadowSize: [68, 45],
@@ -280,101 +327,155 @@ function MapPick() {
     if (index > -1) {
       newList.splice(index, 1);
     }
-    console.log(order_id, index);
     setPickingOrder(newList);
   };
 
+  console.log(orderDelivering);
+
   return (
-    <MapContainer
-      center={[geo.lat, geo.lng]}
-      zoom={14}
-      scrollWheelZoom={false}
-      style={{ height: `calc(100vh - 40px)`, width: "100%" }}
-    >
-      <ChangeView center={[geo.lat, geo.lng]} zoom={14} />
-      <TileLayer
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={[geo.lat, geo.lng]}>
-        <Popup>Location</Popup>
-      </Marker>
-      <Circle
+    <div>
+      <span className="mode">
+        MODE: {orderDelivering ? "GIAO HÀNG" : "CHỌN ĐƠN HÀNG"}
+      </span>
+      <MapContainer
         center={[geo.lat, geo.lng]}
-        radius={partner.setting.radiusWorking || 2000}
-      />
-      {pickingOrderInDistance.map((order) => (
-        <Marker
-          icon={myIcon}
-          position={[
-            order.merchantId.location.lat,
-            order.merchantId.location.lng,
-          ]}
-          eventHandlers={{
-            click: (e) => {
-              handleOpen();
-            },
-          }}
-        >
-          <Modal
-            open={open}
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-            className={classes.modalCurrentOrder}
-            onClose={handleClose}
-            closeAfterTransition
-            BackdropComponent={Backdrop}
-            BackdropProps={{
-              timeout: 300,
-            }}
-          >
-            <CurrentOrder
-              handleClose={handleClose}
-              order={order}
-              removeOrderPicked={removeOrderPicked}
-            />
-          </Modal>
+        zoom={14}
+        scrollWheelZoom={false}
+        style={{ height: `calc(100vh - 40px)`, width: "100%" }}
+      >
+        <ChangeView center={[geo.lat, geo.lng]} zoom={14} />
+        <TileLayer
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={[geo.lat, geo.lng]}>
+          <Popup>Location</Popup>
         </Marker>
-      ))}
-    </MapContainer>
+
+        {orderDelivering ? (
+          <React.Fragment>
+            <Marker
+              icon={myIcon}
+              position={[
+                orderDelivering.merchantId.location.lat,
+                orderDelivering.merchantId.location.lng,
+              ]}
+              open={true}
+            >
+              <Popup autoClose={false} closeOnClick={false} open={true}>
+                {orderDelivering.merchantId.name}
+              </Popup>
+            </Marker>
+            <Marker
+              icon={userIcon}
+              position={[
+                orderDelivering.userOrderId.info.location.lat,
+                orderDelivering.userOrderId.info.location.lng,
+              ]}
+            >
+              <Popup autoClose={false} closeOnClick={false} open={true}>
+                {orderDelivering.userOrderId.info.name}
+              </Popup>
+            </Marker>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <Circle
+              center={[geo.lat, geo.lng]}
+              radius={partner.setting.radiusWorking || 2000}
+            />
+            {pickingOrderInDistance.map((order, idx) => (
+              <Marker
+                icon={myIcon}
+                position={[
+                  order.merchantId.location.lat,
+                  order.merchantId.location.lng,
+                ]}
+                eventHandlers={{
+                  click: (e) => {
+                    handleOpen();
+                  },
+                }}
+                key={idx}
+              >
+                <Modal
+                  open={open}
+                  aria-labelledby="simple-modal-title"
+                  aria-describedby="simple-modal-description"
+                  className={classes.modalCurrentOrder}
+                  onClose={handleClose}
+                  closeAfterTransition
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                    timeout: 300,
+                  }}
+                >
+                  <CurrentOrder
+                    handleClose={handleClose}
+                    order={order}
+                    removeOrderPicked={removeOrderPicked}
+                    setRefresh={setRefresh}
+                    setOrderDelivering={setOrderDelivering}
+                  />
+                </Modal>
+              </Marker>
+            ))}
+          </React.Fragment>
+        )}
+      </MapContainer>
+    </div>
   );
 }
 
-function MakingFood() {
-  return <Detail />;
+function MakingFood({ orderProcessing }) {
+  return (
+    <div>
+      {orderProcessing
+        ? orderProcessing.map((od) => <Detail orderDetail={od} />)
+        : ""}
+    </div>
+  );
 }
 
 function FinishedDelivery() {
   return (
     <div className="finish-delivery-list">
-      <Detail />
-      <Detail />
+      {/* <Detail />
+      <Detail /> */}
     </div>
   );
 }
 
-function Detail({ data }) {
+function Detail({ orderDetail }) {
   const history = useHistory();
   const match = useRouteMatch();
   const handleChangeUrlToDetail = (id) => {
-    history.push(`${match.url}/making-detail/${id}`);
+    sessionStorage.tab = 1;
+    const location = {
+      pathname: `${match.url}/detail-order`,
+      state: { orderDetail },
+    };
+    history.push(location);
+    history.replace(location);
   };
 
   return (
     <div
       className="making-food"
-      onClick={() => handleChangeUrlToDetail("06345-63454234")}
+      onClick={() => handleChangeUrlToDetail(orderDetail._id)}
     >
       <div className="making-food__head">
-        <div className="head-serial">29</div>
-        <div className="head-code">06345-63454234</div>
+        <div className="head-serial">ID</div>
+        <div className="head-code">{orderDetail._id}</div>
         <div
           className={`head-status ${
-            data === 0 ? "head-status--delivery" : "head-status--finished"
+            orderDetail.status !== "complete"
+              ? "head-status--delivery"
+              : "head-status--finished"
           }`}
         >
           <AiFillShop className="head-status__icon" />
-          {data === 0 ? "Delivery" : "Finised"}
+          {orderDetail.status !== "complete" ? "Delivery" : "Finished"}
         </div>
       </div>
 
@@ -385,17 +486,30 @@ function Detail({ data }) {
             Lấy
           </div>
           {"-"}
-          <div className="shop-title__name">Ăn vặt thời đại</div>
+          <div className="shop-title__name">{orderDetail.merchantId.name}</div>
           <div className="shop-title__amount">
             <span>Trả: </span>
-            <span>{validatePrice(25000)}đ</span>
+            <span>
+              {validatePrice(
+                orderDetail.detail.total -
+                  (orderDetail.merchantId.deduct * orderDetail.detail.total) /
+                    100
+              )}
+              đ
+            </span>
           </div>
         </div>
-        <div className="shop-address">20 Nguyễn Văn Hới, Cát Bi, Hải An</div>
+        <div className="shop-address">
+          {orderDetail.merchantId.location.address}
+        </div>
         <div className="shop-take">
           <div className="shop-take__time">
             <span>Lấy:</span>
-            <span>09:31</span>
+            <span>
+              {datetimeFromTimestamp(
+                parseInt(orderDetail.timeOrder) + 15 * 60000
+              )}
+            </span>
           </div>
         </div>
       </div>
@@ -407,27 +521,50 @@ function Detail({ data }) {
             Giao
           </div>
           {"-"}
-          <div className="shop-title__name">wind7689</div>
+          <div className="shop-title__name">
+            {orderDetail.userOrderId.info.name}
+          </div>
           <div className="shop-title__amount">
             <span>Thu: </span>
-            <span>{validatePrice(25000)}đ</span>
+            <span>
+              {validatePrice(
+                orderDetail.detail.total +
+                  orderDetail.detail.fee -
+                  orderDetail.detail.discount
+              )}
+              đ
+            </span>
           </div>
         </div>
-        <div className="shop-address">193 Văn Cao, Đằng Giang, Ngô Quyền</div>
+        <div className="shop-address">
+          {orderDetail.userOrderId.info.location.address}{" "}
+        </div>
         <div className="shop-take">
           <div className="shop-take__time">
-            <span>Lấy:</span>
-            <span>09:40</span>
+            <span>Giao:</span>
+            <span>
+              {datetimeFromTimestamp(
+                parseInt(orderDetail.timeOrder) +
+                  (orderDetail.distance * 5 + 10) * 60000
+              )}
+            </span>
           </div>
-          <div className="shop-take__distance">3.1km</div>
+          <div className="shop-take__distance">{orderDetail.distance} km</div>
         </div>
       </div>
 
       <div className="making-food__confirm">
         <div className="confirm-text">
-          {data === 0 ? "Đã nhận đơn hàng" : "Đã giao đơn hàng"}
+          {orderDetail.status !== "complete"
+            ? "Đã nhận đơn hàng"
+            : "Đã giao đơn hàng"}
         </div>
-        <div className="confirm-time">Lúc 09:22 06/06/2021</div>
+        <div className="confirm-time">
+          Lúc{" "}
+          {formatDatetimeToString(
+            new Date(parseInt(orderDetail.timePartnerReceive))
+          )}
+        </div>
       </div>
     </div>
   );
@@ -514,12 +651,21 @@ function TimePickers() {
   );
 }
 
-function CurrentOrder({ handleClose, order, removeOrderPicked }) {
+function CurrentOrder({
+  handleClose,
+  order,
+  removeOrderPicked,
+  setRefresh,
+  setOrderDelivering,
+}) {
   const chooseOrder = (order_id) => {
     socket.emit("chooseOrder", order_id);
+    setOrderDelivering(order);
     removeOrderPicked(order_id);
+    setRefresh(true);
     handleClose();
   };
+  console.log("asd", order.timeDeliverDone);
 
   return (
     <div className="current-order">
@@ -536,10 +682,7 @@ function CurrentOrder({ handleClose, order, removeOrderPicked }) {
               <AiOutlineInfoCircle className="cost-icon" />
             </div>
             <div className="text-time">
-              Giao{" "}
-              <span>
-                {datetimeFromTimestamp(parseInt(order.timeOrder) + 15 * 60000)}
-              </span>
+              Giao <span>{datetimeFromTimestamp(order.timeDeliverDone)}</span>
             </div>
           </div>
         </div>

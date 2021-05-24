@@ -14,12 +14,8 @@ import partnerApi from "api/partnerApi";
 
 export default function Manager() {
   const [footTabList, setFootTabList] = useState(1);
-
-  const handleChangeFootTabList = (num) => {
-    setFootTabList(num);
-  };
-
   const dispatch = useDispatch();
+
   partnerApi.checkAuth().then((res) => {
     try {
       if (res.status === 400) {
@@ -29,6 +25,11 @@ export default function Manager() {
       return;
     }
   });
+
+  const handleChangeFootTabList = (num) => {
+    setFootTabList(num);
+  };
+
   return (
     <div className="grid">
       <div className="main-page__partner">
