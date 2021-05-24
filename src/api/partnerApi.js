@@ -5,7 +5,10 @@ const partnerApi = {
     const url = "/partners";
     return axiosClient.get(url);
   },
-
+  checkAuth: () => {
+    const url = `/partners/auth`;
+    return axiosClient.post(url);
+  },
   get: (id) => {
     const url = `/partners/${id}`;
     return axiosClient.get(url);
@@ -17,6 +20,18 @@ const partnerApi = {
   getProfile: () => {
     const url = `/partners/profile`;
     return axiosClient.get(url);
+  },
+  updateSetting: (params) => {
+    const url = `/partners/updatesetting`;
+    return axiosClient.post(url, params);
+  },
+  changePass: (params) => {
+    const url = `/partners/changepass`;
+    return axiosClient.post(url, params);
+  },
+  changeInfo: (params) => {
+    const url = `/partners/changeinfo`;
+    return axiosClient.post(url, params);
   },
 };
 

@@ -34,7 +34,6 @@ const partnerSlice = createSlice({
     },
     getProfile: (state, action) => {
       state.profile = action.payload;
-      console.log(action.payload);
       localStorage.setItem("profile", JSON.stringify(action.payload));
     },
   },

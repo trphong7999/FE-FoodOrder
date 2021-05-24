@@ -8,6 +8,9 @@ import OrderManager from "features/PartnerApp/components/OrderManager";
 import InCome from "features/PartnerApp/components/InCome";
 import Profile from "features/PartnerApp/components/Profile";
 import Wallet from "features/PartnerApp/components/Wallet";
+import { useDispatch } from "react-redux";
+import { logoutPartner } from "redux/loginPartnerAppSlice";
+import partnerApi from "api/partnerApi";
 
 export default function Manager() {
   const [footTabList, setFootTabList] = useState(1);
@@ -15,6 +18,17 @@ export default function Manager() {
   const handleChangeFootTabList = (num) => {
     setFootTabList(num);
   };
+
+  const dispatch = useDispatch();
+  partnerApi.checkAuth().then((res) => {
+    try {
+      if (res.status === 400) {
+        dispatch(logoutPartner());
+      }
+    } catch {
+      return;
+    }
+  });
   return (
     <div className="grid">
       <div className="main-page__partner">

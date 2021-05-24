@@ -30,6 +30,9 @@ import shopIcon from "assets/image/icons/shop-icon.png";
 import mylocationIcon from "assets/image/icons/mylocation.png";
 import socket from "socket-io.js";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logoutPartner } from "redux/loginPartnerAppSlice";
+import partnerApi from "api/partnerApi";
 
 let DefaultIcon = L.icon({
   iconUrl: icon,
@@ -92,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function OrderManager() {
+  const histroy = useHistory();
   const [tab, setTab] = useState(0);
   const [open, setOpen] = useState(false);
   const [setSelectorTime, setSetSelectorTime] = useState();
@@ -113,6 +117,7 @@ export default function OrderManager() {
   const handleChangeStatusCheckIn = () => {
     setStatusCheckIn(!statusCheckIn);
   };
+
   return (
     <div className="order-manager">
       <div className="order-manager__tab">
