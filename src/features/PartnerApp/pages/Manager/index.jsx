@@ -8,9 +8,9 @@ import OrderManager from "features/PartnerApp/components/OrderManager";
 import InCome from "features/PartnerApp/components/InCome";
 import Profile from "features/PartnerApp/components/Profile";
 import Wallet from "features/PartnerApp/components/Wallet";
-import partnerApi from "api/partnerApi";
 import { useDispatch } from "react-redux";
 import { logoutPartner } from "redux/loginPartnerAppSlice";
+import partnerApi from "api/partnerApi";
 
 export default function Manager() {
   const [footTabList, setFootTabList] = useState(1);
@@ -29,6 +29,7 @@ export default function Manager() {
   const handleChangeFootTabList = (num) => {
     setFootTabList(num);
   };
+
   return (
     <div className="grid">
       <div className="main-page__partner">

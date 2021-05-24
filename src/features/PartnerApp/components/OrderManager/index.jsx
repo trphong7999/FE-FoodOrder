@@ -37,6 +37,9 @@ import usericon from "assets/image/icons/user-icon.png";
 import mylocationIcon from "assets/image/icons/mylocation.png";
 import socket from "socket-io.js";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logoutPartner } from "redux/loginPartnerAppSlice";
+import partnerApi from "api/partnerApi";
 
 let DefaultIcon = L.icon({
   iconUrl: icon,
@@ -161,6 +164,7 @@ export default function OrderManager() {
   const handleChangeStatusCheckIn = () => {
     setStatusCheckIn(!statusCheckIn);
   };
+
   return (
     <div className="order-manager">
       <div className="order-manager__tab">

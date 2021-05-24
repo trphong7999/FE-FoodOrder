@@ -12,8 +12,15 @@ import { IoSettings } from "react-icons/io5";
 import avtDefault from "assets/image/avartar/slide1.jpg";
 import "./style.scss";
 import Setting from "../Setting";
+import { useDispatch } from "react-redux";
+import { logoutPartner } from "redux/loginPartnerAppSlice";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
+import Login from "features/PartnerApp/pages/Login";
 
 export default function Profile() {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [showSetting, setShowSetting] = useState({
     bonusProgram: false,
     takeCare: false,
@@ -22,6 +29,14 @@ export default function Profile() {
     quit: false,
     term: false,
   });
+
+  const profile = JSON.parse(localStorage.profile);
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    dispatch(logoutPartner());
+    history.push("/partner/login");
+  };
 
   const handleOpenFunction = (string) => {
     let newSetting = showSetting;
@@ -50,11 +65,6 @@ export default function Profile() {
       default:
         return;
     }
-    // if (string === "setting") {
-    //   setShowSetting(!showSetting);
-    // } else {
-    //   return;
-    // }
   };
   return (
     <div className="profile">
@@ -63,8 +73,8 @@ export default function Profile() {
           <img src={avtDefault} alt="avatar" />
         </div>
         <div className="profile-head__info">
-          <div>Phùng Hoàng Đại</div>
-          <div>ID: 1254356466</div>
+          <div>{profile.name}</div>
+          <div>ID: {profile._id}</div>
         </div>
       </div>
 
@@ -141,7 +151,7 @@ export default function Profile() {
 
       <div className="profile-logout">
         <FaPowerOff />
-        <span>Đăng xuất</span>
+        <span onClick={(e) => handleLogout(e)}>Đăng xuất</span>
       </div>
 
       {showSetting.setting ? (

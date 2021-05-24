@@ -8,19 +8,77 @@
     z-index: 10000;
     background-color: white;
     font-size: 1.5rem;
-    .child-head {
+
+    .item-head {
       font-size: 1.6rem;
-      padding: 1rem;
+      padding: 1.4rem;
       display: flex;
       justify-content: center;
       align-items: center;
       background-color: #252733;
       color: white;
       position: relative;
-      .child-head__icon {
+      .item-head__icon {
         position: absolute;
         left: 1rem;
         font-size: 2rem;
+      }
+    }
+
+    .item-content {
+      padding: 1rem;
+      .item-cotent__form {
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          font-size: 1.6rem;
+          font-weight: 500;
+          padding: 1rem 0;
+          margin-bottom: 1rem;
+
+          label {
+            margin-bottom: 0.5rem;
+          }
+
+          input {
+            font-size: 1.6rem;
+            padding: 1rem 0;
+            border: none;
+            border-bottom: 1px solid #252733;
+
+            &:focus {
+              outline: none;
+            }
+          }
+          input:focus::-webkit-input-placeholder {
+            color: transparent;
+          }
+
+          select {
+            font-size: 1.6rem;
+            padding: 1rem 0;
+            border: none;
+            border-bottom: 1px solid #252733;
+          }
+        }
+        .form-action {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 1rem;
+          border-top: 1px solid #ebebeb;
+
+          button {
+            background-color: #252733;
+            font-size: 1.6rem;
+            padding: 1.2rem;
+            width: 100%;
+            color: white;
+            border: none;
+            border-radius: 6px;
+          }
+        }
       }
     }
   }
