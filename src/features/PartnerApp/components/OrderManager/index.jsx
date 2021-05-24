@@ -112,7 +112,7 @@ export default function OrderManager() {
   useEffect(() => {
     const fetchData = async () => {
       const orders = await orderApi.getOrderByPartner(partner._id);
-      if (orders.length > 0) {
+      if (Array.isArray(orders) && orders.length > 0) {
         setOrderDone(
           orders.filter(
             (od) => od.status === "complete" || od.status === "cancel"
@@ -127,6 +127,24 @@ export default function OrderManager() {
     };
     fetchData();
   }, [refresh]);
+  console.log(orderDone);
+
+  socket.on("changeStatus", ({ orderId, status }) => {
+    const ods = orderProcessing;
+    const idx = ods.findIndex((od) => od._id == orderId);
+    if (idx !== -1) {
+      ods[idx].status = status;
+      setOrderProcessing([...ods]);
+    }
+  });
+
+  socket.on("DeliveringOrder", (order_id) => {
+    const idx = orderProcessing.findIndex((od) => od._id == order_id);
+    if (idx !== -1) {
+      orderProcessing[idx].status = "delivering";
+      setOrderProcessing(orderProcessing);
+    }
+  });
 
   const handleChangeTab = (tab) => {
     setTab(tab);
@@ -186,7 +204,11 @@ export default function OrderManager() {
 
       <div className="order-manager__content">
         {tab === 0 ? (
-          <MapPick partner={partner} setRefresh={setRefresh} />
+          <MapPick
+            partner={partner}
+            setRefresh={setRefresh}
+            refresh={refresh}
+          />
         ) : tab === 1 ? (
           <MakingFood data={1} orderProcessing={orderProcessing} />
         ) : (
@@ -220,7 +242,7 @@ export default function OrderManager() {
   );
 }
 
-function MapPick({ partner, setRefresh }) {
+function MapPick({ partner, setRefresh, refresh }) {
   const [geo, setGeo] = useState({
     lat: "20.828790101307185",
     lng: "106.71664668177716",
@@ -267,12 +289,12 @@ function MapPick({ partner, setRefresh }) {
     socket.on("orderDelivering", (od) => {
       setOrderDelivering(od);
     });
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     const fetchPickingOrder = async () => {
-      const pickingOrder = await orderApi.getOrderByStatus("finding");
-      setPickingOrder(pickingOrder);
+      const pickingOrder = await orderApi.getOrderFindingPartner();
+      if (Array.isArray(pickingOrder)) setPickingOrder(pickingOrder);
     };
     fetchPickingOrder();
   }, []);
@@ -325,8 +347,6 @@ function MapPick({ partner, setRefresh }) {
     }
     setPickingOrder(newList);
   };
-
-  console.log(orderDelivering);
 
   return (
     <div>
@@ -433,11 +453,13 @@ function MakingFood({ orderProcessing }) {
   );
 }
 
-function FinishedDelivery() {
+function FinishedDelivery({ orderDone }) {
+  console.log("asdas", orderDone);
   return (
     <div className="finish-delivery-list">
-      {/* <Detail />
-      <Detail /> */}
+      {orderDone.length > 0
+        ? orderDone.map((od) => <Detail orderDetail={od} />)
+        : ""}
     </div>
   );
 }
@@ -454,7 +476,7 @@ function Detail({ orderDetail }) {
     history.push(location);
     history.replace(location);
   };
-
+  console.log("oddetail", orderDetail);
   return (
     <div
       className="making-food"
@@ -551,9 +573,17 @@ function Detail({ orderDetail }) {
 
       <div className="making-food__confirm">
         <div className="confirm-text">
-          {orderDetail.status !== "complete"
-            ? "Đã nhận đơn hàng"
-            : "Đã giao đơn hàng"}
+          {orderDetail.status === "waitConfirm"
+            ? "Đã nhận đơn hàng, chờ cửa hàng xác nhận"
+            : orderDetail.status === "picking"
+            ? "Đơn đã xác nhận, hãy chuẩn bị đến lấy"
+            : orderDetail.status === "waitPick"
+            ? "Đã chuẩn bị xong món, chờ đến lấy"
+            : orderDetail.status === "delivering"
+            ? "Đã lấy thành công, đang giao"
+            : orderDetail.status === "complete"
+            ? "Giao thành công"
+            : "Đơn đã bị hủy"}
         </div>
         <div className="confirm-time">
           Lúc{" "}
@@ -661,7 +691,6 @@ function CurrentOrder({
     setRefresh(true);
     handleClose();
   };
-  console.log("asd", order.timeDeliverDone);
 
   return (
     <div className="current-order">

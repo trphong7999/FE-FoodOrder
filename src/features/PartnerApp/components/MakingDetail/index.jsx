@@ -5,6 +5,7 @@ import { TiDelete } from "react-icons/ti";
 import { IoWallet } from "react-icons/io5";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import avtDefault from "assets/image/avartar/avt-default.jpg";
+import socket from "socket-io";
 
 import "./style.scss";
 import { sumQuantity, validatePrice } from "func";
@@ -12,16 +13,12 @@ import { useHistory, useLocation, useRouteMatch } from "react-router";
 
 export default function MakingDetail() {
   const history = useHistory();
-  const infoOrder = useLocation().state.orderDetail;
+  const [order, setOrder] = useState(useLocation().state.orderDetail);
   const [show, setShow] = useState(true);
-  const [pickUpStatus, setPickUpStatus] = useState(true);
+  console.log(order);
 
   const handleChangeShowHead = (data) => {
     setShow(data);
-  };
-
-  const handleChangePickUpStatus = (data) => {
-    setPickUpStatus(data);
   };
 
   return (
@@ -29,7 +26,7 @@ export default function MakingDetail() {
       <div
         className="making-detail"
         style={
-          pickUpStatus
+          order.status !== "delivering"
             ? { "--height-action": "118px" }
             : { "--height-action": "86px" }
         }
@@ -55,7 +52,7 @@ export default function MakingDetail() {
                 <BsDot className="head-shop__title-icon" />
                 <span>Quán</span>
               </div>
-              <div className="head-shop__code">{infoOrder._id}</div>
+              <div className="head-shop__code">{order._id}</div>
             </div>
             <div
               className={`head-customer ${
@@ -69,31 +66,28 @@ export default function MakingDetail() {
 
           <div className="making-detail__head-bot">
             {show === true ? (
-              <Infomation order={infoOrder} info={infoOrder.merchantId} />
+              <Infomation order={order} info={order.merchantId} />
             ) : (
-              <Infomation order={infoOrder} info={infoOrder.userOrderId.info} />
+              <Infomation order={order} info={order.userOrderId.info} />
             )}
           </div>
         </div>
 
         <div className="making-detail__content">
           <div className="content-main">
-            {pickUpStatus ? (
-              <ContentOrder order={infoOrder} />
+            {order.status !== "delivering" ? (
+              <ContentOrder order={order} />
             ) : (
-              <DeliveryFinish order={infoOrder} />
+              <DeliveryFinish order={order} />
             )}
           </div>
         </div>
 
         <div className="making-detail__action">
-          {pickUpStatus ? (
-            <MakingAction
-              pickUpCallback={handleChangePickUpStatus}
-              order={infoOrder}
-            />
+          {order.status !== "delivering" ? (
+            <MakingAction setOrder={setOrder} order={order} />
           ) : (
-            <FinisedAction />
+            <FinishedAction history={history} order={order} />
           )}
         </div>
       </div>
@@ -101,11 +95,15 @@ export default function MakingDetail() {
   );
 }
 
-function MakingAction({ pickUpCallback, order }) {
+function MakingAction({ setOrder, order }) {
   const history = useHistory();
   const match = useRouteMatch();
-  const sendDataPickUpStatus = (data) => {
-    pickUpCallback(data);
+  const PickupOrder = () => {
+    console.log("PickupOrder");
+    socket.emit("DeliveringOrder", order._id);
+    const od = order;
+    od.status = "delivering";
+    setOrder({ ...od });
   };
 
   const handleOpenChat = () => {
@@ -116,49 +114,74 @@ function MakingAction({ pickUpCallback, order }) {
     history.push(location);
     history.replace(location);
   };
+  console.log(order.status in ["complete", "cancel"], order.status);
 
   return (
     <div className="action-pending">
-      <div className="action-row">
-        <div
-          className="action-row__item"
-          onClick={() => window.open("tel:090451997")}
-        >
-          <AiFillPhone className="action-row__item-icon" />
-          Gọi
-        </div>
-        <div className="action-row__item" onClick={() => handleOpenChat()}>
-          <AiFillWechat className="action-row__item-icon" />
-          Chat
-        </div>
-        <div className="action-row__item">
-          <TiDelete className="action-row__item-icon" />
-          Hủy
-        </div>
-      </div>
-      <div className="action-row">
-        <div className="action-row__itemx2">
-          <div
-            style={{ "&::before": { content: "30'" } }}
-            onClick={() => sendDataPickUpStatus(false)}
-          >
-            Đã lấy hàng
+      {!["complete", "cancel"].includes(order.status) ? (
+        <React.Fragment>
+          <div className="action-row">
+            <div
+              className="action-row__item"
+              onClick={() => window.open("tel:090451997")}
+            >
+              <AiFillPhone className="action-row__item-icon" />
+              Gọi
+            </div>
+            <div className="action-row__item" onClick={() => handleOpenChat()}>
+              <AiFillWechat className="action-row__item-icon" />
+              Chat
+            </div>
+            <div className="action-row__item">
+              <TiDelete className="action-row__item-icon" />
+              Hủy
+            </div>
           </div>
+          <div className="action-row">
+            <div className="action-row__itemx2">
+              <div
+                style={{ "&::before": { content: "30'" } }}
+                onClick={() => PickupOrder()}
+              >
+                Đã lấy hàng
+              </div>
+            </div>
+            <div className="action-row__item">
+              <IoWallet className="action-row__item-icon" />
+              Ví
+            </div>
+          </div>
+        </React.Fragment>
+      ) : (
+        <div
+          className="action-row"
+          style={{
+            height: "var(--height-action)",
+            background: order.status === "complete" ? `#4a934a` : `#d9534f`,
+            lineHeight: "var(--height-action)",
+            fontWeight: "bold",
+            fontSize: "2rem",
+          }}
+        >
+          {order.status === "complete" ? "Đã hoàn thành" : "Đã hủy"}
         </div>
-        <div className="action-row__item">
-          <IoWallet className="action-row__item-icon" />
-          Ví
-        </div>
-      </div>
+      )}
     </div>
   );
 }
 
-function FinisedAction() {
+function FinishedAction({ history, order }) {
+  const completeOrder = () => {
+    socket.emit("completeOrder", order._id);
+    console.log("asd", history);
+    history.goBack();
+  };
   return (
     <div className="action-finised">
       <span>Vui lòng chuyển trạng thái đơn hàng</span>
-      <button className="finised-button">Đã giao xong</button>
+      <button className="finised-button" onClick={() => completeOrder()}>
+        Đã giao xong
+      </button>
     </div>
   );
 }
@@ -213,7 +236,19 @@ function ContentOrder({ order, headBot }) {
       <div className="order-status">
         <span>Trạng thái</span>
         <BsDot />
-        <span>Đã nhận đơn hàng</span>
+        <span>
+          {order.status === "waitConfirm"
+            ? "Đã nhận đơn hàng, chờ cửa hàng xác nhận"
+            : order.status === "picking"
+            ? "Đơn đã xác nhận, hãy chuẩn bị đến lấy"
+            : order.status === "waitPick"
+            ? "Đã chuẩn bị xong món, chờ đến lấy"
+            : order.status === "delivering"
+            ? "Đã lấy thành công, đang giao"
+            : order.status === "complete"
+            ? "Giao thành công"
+            : "Đơn đã bị hủy"}
+        </span>
       </div>
       <div className="order-note">
         <div className="order-note__avatar">

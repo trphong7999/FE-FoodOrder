@@ -1,6 +1,10 @@
 import axiosClient from "./axiosClient";
 
 const merchantApi = {
+  getOrderFindingPartner: () => {
+    const url = `/orders/getfindingpartner`;
+    return axiosClient.get(url);
+  },
   getOrderByStatus: (status) => {
     const url = `/orders/getbystatus?status=${status}`;
     return axiosClient.get(url);

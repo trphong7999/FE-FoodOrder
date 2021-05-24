@@ -20,7 +20,8 @@ export default function Brand({ merchant }) {
   const cartWarning = () =>
     toast.error(
       <div>
-        <span style={{ fontSize: "2.5rem" }}>🤚</span>Bạn đã có món này trong rỏ
+        <span style={{ fontSize: "2.5rem" }}>🤚</span>Bạn đã có món này trong
+        giỏ
       </div>
     );
   // ------------------------ HANDLE TIME OPEN - CLOSE ------------------

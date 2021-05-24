@@ -42,6 +42,10 @@ export default function DeliveryPage() {
     setHaveOrder(data);
   });
 
+  socket.on("changeStatus", (orderId, status) => {
+    setHaveOrder({ ...haveOrder, status: status });
+  });
+
   socket.on("geoPartner", (data) => {
     setGeoPartner(data);
   });
@@ -195,10 +199,10 @@ function DetailOrder({ order }) {
             <span className="status">
               {order.status === "new"
                 ? "Chờ quán chấp nhận"
-                : order.status === "finding"
+                : order.status === "finding" || !order.deliverId
                 ? "Đang tìm tài xế"
                 : order.status === "waitConfirm"
-                ? "Chờ quán xác nhận"
+                ? "Tìm tài xế thành công!, Chờ quán xác nhận"
                 : order.status === "picking" || order.status === "waitPick"
                 ? "Shipper đang lấy đồ ăn"
                 : order.status === "delivering"
@@ -265,50 +269,55 @@ function Chat({ order, setOrder }) {
   return (
     <div className="main-info__item">
       <div className="item-chat">
-        <div className="item-chat__partner">
-          <img src={deliverId.avt} alt="avt-partner" />
-          <span>{deliverId.name}</span>
-        </div>
-        <ScrollToBottom className="item-chat__content">
-          <div>
-            {chat.length > 0
-              ? chat.map((chat, index) =>
-                  chat.type == 0 ? (
-                    <div key={index} className="content-parter">
-                      <img
-                        src={order.deliverId.avt}
-                        alt="partnerAvt"
-                        width="32"
-                      />
-                      <div className="content">{chat.content}</div>
-                    </div>
-                  ) : (
-                    <div key={index} className="content-user">
-                      <div className="content">{chat.content}</div>
-                      <img
-                        src={order.userOrderId.info.avt}
-                        alt="userAvt"
-                        width="32"
-                      />
-                    </div>
-                  )
-                )
-              : ""}
-          </div>
-        </ScrollToBottom>
-
-        <div className="item-chat__input">
-          <input
-            type="text"
-            className="input-text"
-            placeholder="Type a message..."
-            value={chatMessage}
-            onChange={(e) => setChatMessage(e.target.value)}
-          />
-          <span className="input-send" onClick={() => handleActionChat()}>
-            <IoSend className="input-send__icon" />
-          </span>
-        </div>
+        {order.deliverId ? (
+          <React.Fragment>
+            <div className="item-chat__partner">
+              <img src={deliverId.avt} alt="avt-partner" />
+              <span>{deliverId.name}</span>
+            </div>
+            <ScrollToBottom className="item-chat__content">
+              <div>
+                {chat.length > 0
+                  ? chat.map((chat, index) =>
+                      chat.type == 0 ? (
+                        <div key={index} className="content-parter">
+                          <img
+                            src={order.deliverId.avt}
+                            alt="partnerAvt"
+                            width="32"
+                          />
+                          <div className="content">{chat.content}</div>
+                        </div>
+                      ) : (
+                        <div key={index} className="content-user">
+                          <div className="content">{chat.content}</div>
+                          <img
+                            src={order.userOrderId.info.avt}
+                            alt="userAvt"
+                            width="32"
+                          />
+                        </div>
+                      )
+                    )
+                  : ""}
+              </div>
+            </ScrollToBottom>
+            <div className="item-chat__input">
+              <input
+                type="text"
+                className="input-text"
+                placeholder="Type a message..."
+                value={chatMessage}
+                onChange={(e) => setChatMessage(e.target.value)}
+              />
+              <span className="input-send" onClick={() => handleActionChat()}>
+                <IoSend className="input-send__icon" />
+              </span>
+            </div>{" "}
+          </React.Fragment>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

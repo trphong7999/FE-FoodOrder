@@ -5,6 +5,7 @@ import { IoSend } from "react-icons/io5";
 import socket from "socket-io";
 import orderApi from "api/orderApi";
 import ScrollToBottom from "react-scroll-to-bottom";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 export default function Chat() {
   const [chatMessage, setChatMessage] = useState("");
@@ -40,6 +41,14 @@ export default function Chat() {
     <div className="main-info__item">
       <div className="item-chat">
         <div className="item-chat__partner">
+          <div
+            className="head-back"
+            onClick={() => {
+              history.goBack();
+            }}
+          >
+            <AiOutlineArrowLeft />
+          </div>
           <img src={userOrderId.info.avt} alt="avt-user" />
           <span>{userOrderId.info.name}</span>
         </div>

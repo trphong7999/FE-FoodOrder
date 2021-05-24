@@ -5,7 +5,6 @@ import ReceivedConfirm from "./receivedConfirm";
 import ReceivedPrepare from "./receivedPrepare";
 import ReceivedWait from "./receivedWait";
 import "./style.scss";
-import axios from "axios";
 import socket from "socket-io.js";
 import orderApi from "api/orderApi";
 
@@ -23,7 +22,6 @@ function ReceivedOrder() {
   const [listWait, setListWait] = useState([]);
 
   socket.on("findDonePartner", ({ orderId, partner }) => {
-    console.log("findDonePartner");
     const updatePartner = (list, setList) => {
       let currentList = [...list];
       let order = currentList.find((or) => or._id == orderId);
@@ -71,11 +69,14 @@ function ReceivedOrder() {
 
   useEffect(() => {
     const getReceivedList = async () => {
-      const ordersFinding = await orderApi.getOrderByStatus("finding");
-      ordersFinding.sort((a, b) => a.timeOrder - b.timeOrder);
-
-      const ordersWaitConfirm = await orderApi.getOrderByStatus("waitConfirm");
-      ordersWaitConfirm.sort((a, b) => a.timeOrder - b.timeOrder);
+      let ordersFinding = await orderApi.getOrderByStatus("finding");
+      if (Array.isArray(ordersFinding))
+        ordersFinding.sort((a, b) => a.timeOrder - b.timeOrder);
+      else ordersFinding = [];
+      let ordersWaitConfirm = await orderApi.getOrderByStatus("waitConfirm");
+      if (Array.isArray(ordersWaitConfirm))
+        ordersWaitConfirm.sort((a, b) => a.timeOrder - b.timeOrder);
+      else ordersWaitConfirm = [];
 
       setListReceived([...ordersWaitConfirm, ...ordersFinding]);
     };
@@ -86,6 +87,7 @@ function ReceivedOrder() {
   useEffect(() => {
     const getPrepareList = async () => {
       const ordersFinding = await orderApi.getOrderByStatus("picking");
+      console.log(ordersFinding);
       setListPrepare(ordersFinding);
     };
     getPrepareList();

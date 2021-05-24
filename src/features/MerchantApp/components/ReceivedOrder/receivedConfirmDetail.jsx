@@ -13,7 +13,8 @@ import {
 } from "func";
 import socket from "socket-io";
 import taixe1 from "assets/image/avartar/taixe1.jpg";
-import TimeInput from "react-time-input";
+import TimeInput from "react-input-time";
+import { toast, ToastContainer } from "react-toastify";
 
 function ReceivedConfirmDetail() {
   const history = useHistory();
@@ -21,8 +22,15 @@ function ReceivedConfirmDetail() {
   const orderDetail = location.state.orderDetail;
   const quantityOrdered = orderDetail.userOrderId.quantityOrderedSuccess;
   const [timePartnerGetFood, setTimePartnerGetFood] = useState(
-    orderDetail.timeOrder + 10 * 60000
+    orderDetail.timeOrder
   );
+  const hourWarning = () =>
+    toast.error(
+      <div>
+        <span style={{ fontSize: "2.5rem" }}>🤚</span>Giờ dự kiến giao không hợp
+        lệ
+      </div>
+    );
   // const totalNumberOfDishes = orderDetail.listFood.reduce(sumQuantity, 0);
   // const totalAmountOfDishes = orderDetail.listFood.reduce(sumTotal, 0);
   // const commissionMoney = totalAmountOfDishes * 0.1;
@@ -39,21 +47,27 @@ function ReceivedConfirmDetail() {
   // };
 
   const onTimeChangeHandle = (val) => {
-    let hour = new Date().setHours(val.split(":")[0]);
-    let time = new Date(hour).setMinutes(val.split(":")[0]);
+    let hour = new Date().setHours(parseInt(val.split(":")[0]));
+    let time = new Date(hour).setMinutes(parseInt(val.split(":")[1]));
+    console.log("new", time, val.split(":"));
     setTimePartnerGetFood(time);
   };
 
   const addReceivedPrepare = async () => {
-    socket.emit("approveOrder", {
-      order_id: orderDetail._id,
-      timePartnerGetFood: timePartnerGetFood,
-    });
-    history.goBack();
+    if (!isNaN(parseFloat(timePartnerGetFood))) {
+      socket.emit("approveOrder", {
+        order_id: orderDetail._id,
+        timePartnerGetFood: timePartnerGetFood,
+      });
+      history.goBack();
+    } else {
+      hourWarning();
+    }
   };
 
   return (
     <div className="received-confirm-detail">
+      <ToastContainer />
       <div className="detail-head">
         <div
           onClick={() => {
@@ -103,16 +117,19 @@ function ReceivedConfirmDetail() {
           </div>
           <div style={{ marginLeft: "8rem" }}>
             <span>Dự kiến giao cho Shipper </span>
+
             <TimeInput
-              initTime={
-                `0${new Date(Date.now() + 10 * 60000).getHours()}`.slice(-2) +
+              className="input-time"
+              initialTime={
+                `0${new Date(
+                  parseInt(timePartnerGetFood) + 10 * 60000
+                ).getHours()}`.slice(-2) +
                 ":" +
-                `0${new Date(Date.now() + 10 * 60000).getMinutes()}`.slice(-2)
+                `0${new Date(
+                  parseInt(timePartnerGetFood) + 10 * 60000
+                ).getMinutes()}`.slice(-2)
               }
-              useRef="TimeInputWrapper"
-              className="form-control"
-              mountFocus="true"
-              onTimeChange={(e) => onTimeChangeHandle(e)}
+              onChange={(e) => onTimeChangeHandle(e.target.value)}
             />
           </div>
           <div className="partner-action">

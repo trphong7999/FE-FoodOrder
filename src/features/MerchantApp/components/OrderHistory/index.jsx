@@ -4,14 +4,15 @@ import TabMenu from "../TabMenu";
 import "./style.scss";
 import { GiRoundStar } from "react-icons/gi";
 import { useHistory, useRouteMatch } from "react-router";
-import axios from "axios";
 import { validatePrice } from "func";
+import orderApi from "api/orderApi";
+import { formatDatetimeToString, sumQuantity } from "func";
 
 function OrderHistory() {
   const history = useHistory();
   const match = useRouteMatch();
   const [historyList, setHistoryList] = useState([]);
-
+  console.log(historyList);
   const handleToOrderHistoryDetail = (order) => {
     const location = {
       pathname: `${match.url}/${order.id}`,
@@ -23,10 +24,10 @@ function OrderHistory() {
 
   useEffect(() => {
     const getOrderHistoryList = async () => {
-      const result = await axios(`http://localhost:5000/orderHistory`);
-      if (result) {
-        setHistoryList(result.data);
-      }
+      const ordersDelivering = await orderApi.getOrderByStatus("delivering");
+      const ordersComplete = await orderApi.getOrderByStatus("complete");
+      // const ordersfail = await orderApi.getOrderByStatus("fail");
+      setHistoryList([...ordersDelivering, ...ordersComplete]);
     };
     getOrderHistoryList();
   }, []);
@@ -36,18 +37,24 @@ function OrderHistory() {
       <NavBar />
       <TabMenu />
       <div className="order-history">
-        {historyList.map((item, index) => (
+        {historyList.map((od, index) => (
           <div
             className="order-history__item"
             onClick={() => {
-              handleToOrderHistoryDetail(item);
+              handleToOrderHistoryDetail(od);
             }}
             key={index}
           >
             <div className="item-head">
-              <div className="head__date">{item.time.date}</div>
+              <div className="head__date">
+                {formatDatetimeToString(
+                  new Date(parseInt(od.timePartnerGetFood))
+                )}
+              </div>
               <div className="head__status">
-                {item.time.status === 0 ? "Chưa giao" : "Đã giao"}
+                {od.status === "delivering"
+                  ? "Đang giao"
+                  : (od.status = "complete" ? "Đã giao" : "Giao thất bại")}
               </div>
             </div>
             <div className="wrap">
@@ -55,9 +62,9 @@ function OrderHistory() {
                 <div className="item-top__left">{index + 1}</div>
                 <div className="item-top__right">
                   <div className="right__name-customer">
-                    {item.customer.name}
+                    {od.userOrderId.info.name}
                   </div>
-                  <div className="right__code-order">#{item.id}</div>
+                  <div className="right__code-order">#{od._id}</div>
                 </div>
               </div>
               <table className="item-table">
@@ -71,10 +78,20 @@ function OrderHistory() {
                 </thead>
                 <tbody className="item-table__row-2">
                   <tr>
-                    <td>{item.time.takeOrder}</td>
-                    <td>{item.time.deliveryOrder}</td>
-                    <td>{item.totalNumberOfDishes}</td>
-                    <td>{item.space}km</td>
+                    <td>
+                      {formatDatetimeToString(
+                        new Date(parseInt(od.timePartnerGetFood))
+                      )}
+                    </td>
+                    <td>
+                      {od.timeDeliverDone
+                        ? formatDatetimeToString(
+                            new Date(parseInt(od.timeDeliverDone))
+                          )
+                        : "Đang giao"}
+                    </td>
+                    <td>{od.detail.foods.reduce(sumQuantity, 0)}</td>
+                    <td>{od.distance}km</td>
                   </tr>
                 </tbody>
               </table>
@@ -88,7 +105,7 @@ function OrderHistory() {
                 <div className="bot__cash">
                   <span className="bot__cash-text">Cash</span>
                   <span className="bot__cash-number">
-                    {validatePrice(item.finalAmount)}đ
+                    {validatePrice(od.detail.total)}đ
                   </span>
                 </div>
               </div>
