@@ -392,12 +392,16 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
                 travelMode: "DRIVING",
               }}
               callback={(response) => {
-                console.log(response);
-                setDistance(
-                  (
-                    response["rows"][0].elements[0].distance.value / 1000
-                  ).toFixed(1)
-                );
+                if (
+                  response["rows"][0] &&
+                  response["rows"][0].elements[0].distance
+                )
+                  setDistance(
+                    (
+                      response["rows"][0].elements[0].distance.value / 1000
+                    ).toFixed(1)
+                  );
+                else setDistance(2);
               }}
             />
             <MapContainer

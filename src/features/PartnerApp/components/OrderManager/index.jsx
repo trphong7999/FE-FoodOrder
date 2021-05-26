@@ -273,10 +273,18 @@ function MapPick({ partner, setRefresh, refresh }) {
       ) < parseFloat(partner.setting.radiusWorking / 1000 || 2)
     );
   });
+
+  let a;
+
   const success = (pos) => {
     let { latitude, longitude } = pos.coords;
     if (latitude !== geo.lat || longitude !== geo.lng) {
       setGeo({ lat: latitude, lng: longitude });
+      if (orderDelivering) {
+        a = setInterval(() => {
+          socket.emit("sendGeo", { lat: latitude, lng: longitude });
+        }, 1500);
+      } else clearInterval(a);
     }
   };
 

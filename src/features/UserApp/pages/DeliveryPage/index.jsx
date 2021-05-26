@@ -13,6 +13,7 @@ import socket from "socket-io";
 import L from "leaflet";
 import shopIcon from "assets/image/icons/shop-icon.png";
 import homeIcon from "assets/image/icons/home.jfif";
+import shipperIcon from "assets/image/icons/icon_shipper.png";
 import { FcInspection } from "react-icons/fc";
 import { FcSurvey, FcSms } from "react-icons/fc";
 import { IoSend } from "react-icons/io5";
@@ -26,8 +27,10 @@ export default function DeliveryPage() {
   const [haveOrder, setHaveOrder] = useState(false);
   const [geoPartner, setGeoPartner] = useState(null);
   const [open, setOpen] = useState(true);
+  const [refresh, setRefresh] = useState(false);
 
   const dispatch = useDispatch();
+  console.log(haveOrder);
 
   const changeOpen = () => {
     setOpen(!open);
@@ -36,23 +39,37 @@ export default function DeliveryPage() {
   const user = useSelector((state) => state.loginUserApp);
   useEffect(() => {
     socket.emit("haveOrderProcessing", user.profile._id);
-  }, []);
+  }, [refresh]);
 
   socket.on("canOrder", (data) => {
     setHaveOrder(data);
+  });
+
+  socket.on("partnerCancelOrder", (orderId) => {
+    setRefresh(true);
+    setGeoPartner(null);
   });
 
   socket.on("changeStatus", (orderId, status) => {
     setHaveOrder({ ...haveOrder, status: status });
   });
 
-  socket.on("geoPartner", (data) => {
-    setGeoPartner(data);
+  socket.on("sendGeo", (geo) => {
+    setGeoPartner(geo);
   });
 
   var userIcon = new L.icon({
     iconUrl: homeIcon,
-    iconSize: [30, 42],
+    iconSize: [25, 36],
+    iconAnchor: [22, 34],
+    popupAnchor: [-3, -46],
+    shadowSize: [68, 45],
+    shadowAnchor: [22, 44],
+  });
+
+  var partnerIcon = new L.icon({
+    iconUrl: shipperIcon,
+    iconSize: [25, 36],
     iconAnchor: [22, 34],
     popupAnchor: [-3, -46],
     shadowSize: [68, 45],
@@ -61,7 +78,7 @@ export default function DeliveryPage() {
 
   var merchantIcon = new L.icon({
     iconUrl: shopIcon,
-    iconSize: [30, 42],
+    iconSize: [25, 36],
     iconAnchor: [22, 34],
     popupAnchor: [-3, -46],
     shadowSize: [68, 45],
@@ -120,7 +137,7 @@ export default function DeliveryPage() {
 
           {geoPartner ? (
             <Marker
-              icon={merchantIcon}
+              icon={partnerIcon}
               position={[geoPartner.lat, geoPartner.lng]}
             >
               <Popup>Shipper</Popup>

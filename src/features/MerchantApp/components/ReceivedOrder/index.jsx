@@ -41,6 +41,26 @@ function ReceivedOrder() {
     updatePartner(listPrepare, setListPrepare);
   });
 
+  socket.on("partnerCancelOrder", (orderId) => {
+    const updatePartner = (list, setList) => {
+      let currentList = [...list];
+      let order = currentList.find((or) => or._id == orderId);
+      if (order) {
+        order.deliverId = null;
+        currentList.sort((a, b) => {
+          let pa, pb;
+          pa = !a.deliverId ? 0 : 1;
+          pb = !a.deliverId ? 0 : 1;
+          if (pa !== pb) return pb - pa;
+          return a.timeOrder - b.timeOrder;
+        });
+        setList(currentList);
+      }
+    };
+    updatePartner(listReceived, setListReceived);
+    updatePartner(listPrepare, setListPrepare);
+  });
+
   useEffect(() => {
     let newList = listConfirm;
     if (sessionStorage.stateOrder) {

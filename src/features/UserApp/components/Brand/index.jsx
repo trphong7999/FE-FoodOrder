@@ -129,7 +129,10 @@ export default function Brand({ merchant }) {
                 travelMode: "DRIVING",
               }}
               callback={(response) => {
-                if (response["rows"][0].elements[0].distance)
+                if (
+                  response["rows"][0] &&
+                  response["rows"][0].elements[0].distance
+                )
                   setDistance(
                     response["rows"][0].elements[0].distance.text.split(" ")[0]
                   );

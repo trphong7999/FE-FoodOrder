@@ -13,6 +13,10 @@ const merchantApi = {
     const url = `/orders/getbypartner?id=${id}`;
     return axiosClient.get(url);
   },
+  getAllMyOrder: () => {
+    const url = `/orders/getallmyorder`;
+    return axiosClient.get(url);
+  },
   getChatData: (id) => {
     const url = `/orders/getchatdata?id=${id}`;
     return axiosClient.get(url);
