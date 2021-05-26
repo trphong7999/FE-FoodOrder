@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../NavBar";
-import { BsThreeDots, BsChevronLeft } from "react-icons/bs";
+import { BsThreeDots } from "react-icons/bs";
 import { GoPrimitiveDot } from "react-icons/go";
 import mi1 from "assets/image/dishes/mi1.jpg";
 import "./style.scss";
@@ -13,6 +13,8 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { useForm } from "react-hook-form";
 import loading from "assets/image/icons/loading.png";
+import axios from "axios";
+import { Image } from "cloudinary-react";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -71,27 +73,6 @@ export default function FoodMenu() {
     return list;
   };
 
-  const findByStatus = (elementOfList, compare) => {
-    let newC = elementOfList;
-    if (elementOfList !== []) {
-      return newC.filter((element) => element.status === compare);
-    }
-    return `nothing`;
-  };
-
-  const getDataMenuByStatus = (cat, boolean) => {
-    let listFoodByStatus = cat;
-
-    if (boolean !== "0") {
-      listFoodByStatus = cat.reduce(
-        (acc, curr) => acc.concat(findByStatus(curr.foods, boolean)),
-        []
-      );
-    }
-
-    return listFoodByStatus;
-  };
-
   const fetchMerchant = async () => {
     try {
       const res = await merchantApi.get(merchantId);
@@ -106,10 +87,20 @@ export default function FoodMenu() {
   };
 
   const handleSelectStatus = (e) => {
-    console.log(e.target.value);
     let status = e.target.value;
-    let catList = getDataMenu(category);
-    getDataMenuByStatus(catList, status);
+    let dishes = getDataMenu(category);
+
+    if (status === "0") {
+      setMenu(dishes);
+    }
+    if (status === "true") {
+      let newMenuByStatus = dishes.filter((dish, idx) => dish.status === true);
+      setMenu(newMenuByStatus);
+    }
+    if (status === "false") {
+      let newMenuByStatus = dishes.filter((dish, idx) => dish.status === false);
+      setMenu(newMenuByStatus);
+    }
   };
 
   const handleSelectCategories = (e) => {
@@ -254,7 +245,27 @@ function FormAddFood({ categoris, changeCatCallBack, closeForm }) {
   const { handleSubmit, register, errors } = useForm();
 
   const submitFormAddFood = async (data) => {
-    const res = await merchantApi.foodAdd(data);
+    if (data.foodImg.length === 0 || !data.name || !data.price) {
+      alert("Bạn chưa điền đủ thông tin!");
+      return;
+    }
+
+    const formData = new FormData();
+    const file = data.foodImg;
+    formData.append("file", file[0]);
+    formData.append("upload_preset", "zjd6i9ar");
+
+    let imgFood = await axios
+      .post("https://api.cloudinary.com/v1_1/soosoo/image/upload", formData)
+      .then((res) => {
+        return res.data.secure_url;
+      })
+      .catch((error) => {
+        alert("Bạn chưa chọn ảnh");
+        return;
+      });
+
+    const res = await merchantApi.foodAdd({ ...data, foodImg: imgFood });
     sendDataChangeCat(res.category);
     closeForm();
     alert("Thêm món ăn thành công");
@@ -269,6 +280,7 @@ function FormAddFood({ categoris, changeCatCallBack, closeForm }) {
       <form
         className="form-food__add"
         onSubmit={handleSubmit(submitFormAddFood)}
+        encType="multipart/form-data"
       >
         <h2>Thêm món ăn</h2>
         <div className="add-group">
@@ -300,8 +312,13 @@ function FormAddFood({ categoris, changeCatCallBack, closeForm }) {
           </select>
         </div>
         <div className="add-group">
-          <label>Ảnh</label>
-          <input type="file" name="foodImg" />
+          <label htmlFor="foodImg">Ảnh</label>
+          <input
+            type="file"
+            filename="foodImg"
+            name="foodImg"
+            {...register("foodImg")}
+          />
         </div>
         <div className="add-action">
           <input type="submit" value="Thêm mới" />
@@ -345,21 +362,6 @@ function Action({
     callBackNewCategories(res.category);
   };
 
-  // const [showFormEdit, setShowFormEdit] = useState(false);
-
-  // const getNewCatAfterEdit = (data) => {
-  //   callBackNewCategories(data);
-  // };
-
-  // const handleOpenFormEdit = () => {
-  //   setShowFormEdit(true);
-  // };
-
-  // const handleCloseFormEdit = () => {
-  //   setShowFormEdit(false);
-  //   callBackCloseShow();
-  // };
-
   return (
     <div
       className="modal-action"
@@ -399,115 +401,6 @@ function Action({
           </div>
         </div>
       </div>
-
-      {/* --------- form edit food start ------------- */}
-      {/* {showFormEdit ? (
-        <FormEditFood
-          category={category}
-          infoFood={dataModal}
-          closeForm={handleCloseFormEdit}
-          catIdOfFood={catIdOfFood._id}
-          newCategories={getNewCatAfterEdit}
-        />
-      ) : (
-        ""
-      )} */}
-      {/* --------- form edit food end------------- */}
     </div>
   );
 }
-
-// function FormEditFood({
-//   category,
-//   infoFood,
-//   closeForm,
-//   catIdOfFood,
-//   newCategories,
-// }) {
-//   const { register, handleSubmit, errors } = useForm();
-
-//   const submitFormEdit = async (data) => {
-//     let newDetail = { ...data, _id: infoFood._id, catIdCurrent: catIdOfFood };
-//     const res = await merchantApi.foodEdit(newDetail);
-//     newCategories(res.category);
-//   };
-
-//   return (
-//     <div className="food-menu-edit">
-//       <div className="edit-head">
-//         <div className="edit-head__link">
-//           <BsChevronLeft className="edit-head__icon" onClick={closeForm} />
-//           <span>Sửa món</span>
-//         </div>
-//       </div>
-
-//       <div
-//         className="edit-img"
-//         style={{
-//           backgroundImage: `url(${
-//             infoFood.img === "" ? loading : infoFood.img
-//           })`,
-//         }}
-//       ></div>
-
-//       <div className="edit-form">
-//         <form onSubmit={handleSubmit(submitFormEdit)}>
-//           <div className="edit-form__group">
-//             <label>Tên Món</label>
-//             <input
-//               type="text"
-//               name="nameFood"
-//               defaultValue={infoFood.name}
-//               {...register("name")}
-//             />
-//           </div>
-
-//           <div className="edit-form__group">
-//             <label>Giá</label>
-//             <input
-//               type="text"
-//               name="priceFood"
-//               defaultValue={infoFood.price}
-//               {...register("price")}
-//             />
-//           </div>
-
-//           <div className="edit-form__group">
-//             <label>Nhóm</label>
-//             <select name="catFood" {...register("catIdNew")}>
-//               {category.map((val, idx) =>
-//                 val._id === catIdOfFood ? (
-//                   <option key={idx} value={val._id} selected={true}>
-//                     {val.name}
-//                   </option>
-//                 ) : (
-//                   <option key={idx} value={val._id}>
-//                     {val.name}
-//                   </option>
-//                 )
-//               )}
-//             </select>
-//           </div>
-
-//           <div className="edit-form__group">
-//             <label>Trạng thái</label>
-
-//             <label className="switch">
-//               <input
-//                 type="checkbox"
-//                 name="statusFood"
-//                 checked={infoFood.status}
-//                 {...register("status")}
-//               />
-//               <span className="slider round"></span>
-//             </label>
-//           </div>
-
-//           <div className="edit-form__action">
-//             <input type="submit" value="Lưu" />
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// }
