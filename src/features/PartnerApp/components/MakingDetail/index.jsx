@@ -10,6 +10,8 @@ import socket from "socket-io";
 import "./style.scss";
 import { sumQuantity, validatePrice } from "func";
 import { useHistory, useLocation, useRouteMatch } from "react-router";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 export default function MakingDetail() {
   const history = useHistory();
@@ -98,12 +100,31 @@ export default function MakingDetail() {
 function MakingAction({ setOrder, order }) {
   const history = useHistory();
   const match = useRouteMatch();
+
   const PickupOrder = () => {
-    console.log("PickupOrder");
     socket.emit("DeliveringOrder", order._id);
     const od = order;
     od.status = "delivering";
     setOrder({ ...od });
+  };
+
+  const handleCancelOrder = () => {
+    confirmAlert({
+      title: "Confirm to submit",
+      message: "Are you sure to do this.",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => {
+            socket.emit("cancelOrder", order._id);
+            history.goBack();
+          },
+        },
+        {
+          label: "No",
+        },
+      ],
+    });
   };
 
   const handleOpenChat = () => {
@@ -133,7 +154,10 @@ function MakingAction({ setOrder, order }) {
               Chat
             </div>
             <div className="action-row__item">
-              <TiDelete className="action-row__item-icon" />
+              <TiDelete
+                className="action-row__item-icon"
+                onClick={() => handleCancelOrder()}
+              />
               Hủy
             </div>
           </div>

@@ -72,7 +72,7 @@ function ChangeInfo({ close }) {
   const submitForm = async (data) => {
     let res = await partnerApi.changeInfo(data);
 
-    if (res.status !== 400) {
+    if (typeof res === "object" && res.status !== 400 && res.status !== 404) {
       let action = getProfile(res);
       dispatch(action);
       alert("Thay đổi thông tin cá nhân thành công");
