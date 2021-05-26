@@ -26,42 +26,15 @@ export default function Footer() {
             <Link to="/" className="footer-link">
               FoodShip - giao đồ ăn
             </Link>
-            <Link to="/" className="footer-link">
-              FoodShip - giao đồ ăn
-            </Link>
-            <Link to="/" className="footer-link">
-              FoodShip - giao đồ ăn
-            </Link>
-            <Link to="/" className="footer-link">
-              FoodShip - giao đồ ăn
-            </Link>
           </section>
           <section className="footer-item col l-2 m-6 c-12">
             <h3 className="footer-title">FoodLovers khu vực</h3>
             <Link to="/" className="footer-link">
               FoodLovers - Hải Phòng
             </Link>
-            <Link to="/" className="footer-link">
-              FoodLovers - Hải Phòng
-            </Link>
-            <Link to="/" className="footer-link">
-              FoodLovers - Hải Phòng
-            </Link>
-            <Link to="/" className="footer-link">
-              FoodLovers - Hải Phòng
-            </Link>
           </section>
           <section className="footer-item col l-2 m-6 c-12">
             <h3 className="footer-title">Media</h3>
-            <Link to="/" className="footer-link">
-              Giới thiệu về FoodLovers
-            </Link>
-            <Link to="/" className="footer-link">
-              Giới thiệu về FoodLovers
-            </Link>
-            <Link to="/" className="footer-link">
-              Giới thiệu về FoodLovers
-            </Link>
             <Link to="/" className="footer-link">
               Giới thiệu về FoodLovers
             </Link>
@@ -78,7 +51,7 @@ export default function Footer() {
           </section>
         </div>
         <div className="footer-copyright">
-          <span>© 2021 Wind. All rights reserved.</span>
+          <span>© 2021 TranPhong. All rights reserved.</span>
         </div>
       </div>
     </div>

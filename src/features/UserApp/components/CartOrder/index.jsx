@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    overflow: "scroll",
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
@@ -392,12 +393,16 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
                 travelMode: "DRIVING",
               }}
               callback={(response) => {
-                console.log(response);
-                setDistance(
-                  (
-                    response["rows"][0].elements[0].distance.value / 1000
-                  ).toFixed(1)
-                );
+                if (
+                  response["rows"][0] &&
+                  response["rows"][0].elements[0].distance.value
+                )
+                  setDistance(
+                    (
+                      response["rows"][0].elements[0].distance.value / 1000
+                    ).toFixed(1)
+                  );
+                else setDistance(2);
               }}
             />
             <MapContainer
