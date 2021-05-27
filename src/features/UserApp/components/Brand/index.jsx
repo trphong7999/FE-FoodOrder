@@ -136,6 +136,7 @@ export default function Brand({ merchant }) {
                   setDistance(
                     response["rows"][0].elements[0].distance.text.split(" ")[0]
                   );
+                else setDistance(2);
               }}
             />
             <IoLocationOutline className="brand-info__distant-icon" />
@@ -168,7 +169,7 @@ export default function Brand({ merchant }) {
       </div>
 
       <div className="brand-content row">
-        <div className="col l-3 brand__category">
+        <div className="col l-3 m-3 c-12 brand__category">
           <ul id="category-list" className="category__list">
             {merchant.category.map((item, index) => (
               <li key={index}>
@@ -180,7 +181,7 @@ export default function Brand({ merchant }) {
           </ul>
         </div>
 
-        <div className="col l-9 brand__products">
+        <div className="col l-9 m-9 c-12 brand__products">
           {merchant.category.map((cat, index) => (
             <div id={`group${index}`} className="product__category" key={index}>
               <div className="product__category-name">{cat.name}</div>

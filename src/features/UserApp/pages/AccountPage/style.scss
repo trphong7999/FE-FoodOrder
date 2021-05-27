@@ -1,10 +1,15 @@
+@import "App.scss";
 .account-page {
   background-color: var(--bg-color);
   color: var(--text-color);
 
   .account-page__container {
     margin-top: 3rem;
-
+    .wrap {
+      @include mobile {
+        display: block;
+      }
+    }
     .account-left {
       padding: 1rem;
       margin-bottom: 1rem;

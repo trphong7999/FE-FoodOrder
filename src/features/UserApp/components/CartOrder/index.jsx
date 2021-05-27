@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    overflow: "scroll",
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
@@ -394,7 +395,7 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
               callback={(response) => {
                 if (
                   response["rows"][0] &&
-                  response["rows"][0].elements[0].distance
+                  response["rows"][0].elements[0].distance.value
                 )
                   setDistance(
                     (

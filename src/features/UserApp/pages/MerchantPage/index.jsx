@@ -32,30 +32,26 @@ export default function MerchantPage() {
   }, []);
   return (
     <div className="merchant__main">
+      <Navbar />
       {typeof merchant === "object" ? (
-        <div>
-          <Navbar />
-
-          <div className="merchant__content">
-            <section className="grid wide">
-              <div className="row">
-                <div className="col l-8">
-                  <Brand merchant={merchant} />
-                </div>
-                <div className="col l-4">
-                  <CartOrder merchant={merchant} />
-                </div>
+        <div className="merchant__content">
+          <section className="grid wide">
+            <div className="row">
+              <div className="col l-8 m-12">
+                <Brand merchant={merchant} />
               </div>
-            </section>
-          </div>
-
-          <Footer />
+              <div className="col l-4 m-0 c-12">
+                <CartOrder merchant={merchant} />
+              </div>
+            </div>
+          </section>
         </div>
       ) : merchant === 1 ? (
         ""
       ) : (
         <NotFound />
       )}
+      <Footer />
     </div>
   );
 }

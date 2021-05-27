@@ -69,7 +69,7 @@ export default function AccountPage() {
 
       <div className="account-page__container">
         <div className="grid wide">
-          <div className="row">
+          <div className="row wrap">
             <div className="col l-3">
               <div className="account-left">
                 <div className="account-avatar">
