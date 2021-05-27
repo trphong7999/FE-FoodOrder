@@ -395,11 +395,7 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
               callback={(response) => {
                 if (
                   response["rows"][0] &&
-<<<<<<< HEAD
                   response["rows"][0].elements[0].distance.value
-=======
-                  response["rows"][0].elements[0].distance
->>>>>>> f53a1100bf16a2d8e4d9d56901f720a15a427d19
                 )
                   setDistance(
                     (

@@ -1,3 +1,4 @@
+@import "App.scss";
 .account-right {
   .account-right__head {
     .tab-navigation {
@@ -12,6 +13,8 @@
         font-size: 1.6rem;
         font-weight: bold;
         border-radius: 8px;
+        width: 33%;
+        text-align: center;
 
         &:hover {
           cursor: pointer;
@@ -28,5 +31,10 @@
     min-height: 4rem;
     background-color: var(--white-color);
     padding: 1.5rem;
+    margin-bottom: 1rem;
+
+    @include mobile {
+      padding: 1rem;
+    }
   }
 }
