@@ -12,7 +12,7 @@ import orderApi from "api/orderApi";
 function MainPageMerchant() {
   const dispatch = useDispatch();
   const [newListOrder, setNewListOrder] = useState([]);
-  console.log(newListOrder);
+
   // Check login is the manager
   merchantApi.checkAuth().then((res) => {
     try {
@@ -25,8 +25,18 @@ function MainPageMerchant() {
     }
   });
   socket.on("newOrder", (data) => {
-    console.log("new order");
     setNewListOrder([...newListOrder, data]);
+  });
+
+  socket.on("userCancelOrder", (orderId) => {
+    const idx = newListOrder.findIndex((order) => {
+      return String(order._id) == orderId;
+    });
+    console.log(idx, orderId, newListOrder);
+    if (idx > -1) {
+      newListOrder.splice(idx, 1);
+      setNewListOrder([...newListOrder]);
+    }
   });
 
   useEffect(() => {

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./style.scss";
 import { sumQuantity, validatePrice } from "func";
 import Modal from "react-modal";
+import { formatDatetimeToString } from "func";
 
 export default function YourOrder({ historyOrders }) {
   console.log(historyOrders);
@@ -41,6 +42,7 @@ export default function YourOrder({ historyOrders }) {
 function OrderLine({ order, idx }) {
   const [openDetail, setOpenDetail] = useState(false);
   const [openChatHistory, setOpenChatHistory] = useState(false);
+  const [openReasonsCancel, setOpenReasonsCancel] = useState(false);
   const openModalDetail = () => {
     setOpenDetail(true);
   };
@@ -54,6 +56,9 @@ function OrderLine({ order, idx }) {
 
   function closeModalChatHistory() {
     setOpenChatHistory(false);
+  }
+  function closeModalReasonsCancel() {
+    setOpenReasonsCancel(false);
   }
   return (
     <div className="history-table-row ">
@@ -72,9 +77,15 @@ function OrderLine({ order, idx }) {
         // style={{ textAlign: "center" }}
       >
         <div>Thời gian đặt</div>
-        <div style={{ marginBottom: "0.5rem" }}>28/09/2019 11:24</div>
+        <div style={{ marginBottom: "0.5rem" }}>
+          {formatDatetimeToString(new Date(parseInt(order.timeOrder)))}
+        </div>
         <div>Thời gian giao</div>
-        <div>28/09/2019 11:45</div>
+        <div>
+          {order.timeDeliverDone !== "0" && order.timeDeliverDone !== null
+            ? formatDatetimeToString(new Date(parseInt(order.timeDeliverDone)))
+            : "Không có"}
+        </div>
       </div>
       <div className="history-table-cell history-table-col4">
         <a
@@ -127,7 +138,18 @@ function OrderLine({ order, idx }) {
         className="history-table-cell history-table-col8"
         style={{ textAlign: "center" }}
       >
-        <div className="d-block mb-1">Lý do hủy</div>
+        {order.status === "cancel" ? (
+          <div
+            className="d-block mb-1"
+            onClick={() =>
+              order.reasonCancel.length > 0 ? setOpenReasonsCancel(true) : ""
+            }
+          >
+            Lý do hủy
+          </div>
+        ) : (
+          ""
+        )}
         <div className="d-block mb-1" onClick={() => openModalDetail()}>
           Chi tiết đơn hàng
         </div>
@@ -148,6 +170,13 @@ function OrderLine({ order, idx }) {
         >
           <HistoryChat order={order} />
         </Modal>
+        <Modal
+          isOpen={openReasonsCancel}
+          onRequestClose={closeModalReasonsCancel}
+          style={StylesCancel}
+        >
+          <ReasonsCancel reasons={order.reasonCancel} />
+        </Modal>
       </div>
     </div>
   );
@@ -163,10 +192,21 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
     padding: "0",
     width: "70%",
-    height: "40%",
+    height: "47%",
   },
   overlay: {
     backgroundColor: "rgba(0,0,0,0.4)",
+  },
+};
+
+const StylesCancel = {
+  content: {
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    fontSize: "1.4rem",
+    width: "auto",
+    height: "auto",
   },
 };
 
@@ -204,6 +244,10 @@ function DetailOrder({ order }) {
           <div className="checkout-feeship">
             <p>Phí vận chuyển: </p>
             <p>{validatePrice(order.detail.fee)} đ</p>
+          </div>
+          <div className="checkout-feeship">
+            <p>Giảm giá: </p>
+            <p>{validatePrice(order.detail.discount)} đ</p>
           </div>
           <div className="checkout-total">
             <p>Tổng cộng</p>
@@ -274,6 +318,17 @@ function HistoryChat({ order }) {
           ""
         )}
       </div>
+    </div>
+  );
+}
+
+function ReasonsCancel({ reasons }) {
+  return (
+    <div>
+      <div>Lý do hủy :</div>
+      {reasons.map((rs) => (
+        <p style={{ marginLeft: "2rem" }}>{rs}</p>
+      ))}
     </div>
   );
 }

@@ -32,39 +32,6 @@ function Navbar(props) {
             </Link>
           </div>
 
-          <ul className="nav__list">
-            <li className="nav-list__item">
-              <Link to="#" className="nav-list__link  ">
-                Cửa hàng gần bạn
-              </Link>
-            </li>
-            <li className="nav-list__item">
-              <Link to="#" className="nav-list__link nav-list__link--active">
-                Ăn sáng
-              </Link>
-            </li>
-            <li className="nav-list__item">
-              <Link to="#" className="nav-list__link">
-                Ăn trưa
-              </Link>
-            </li>
-            <li className="nav-list__item">
-              <Link to="#" className="nav-list__link">
-                Ăn tối
-              </Link>
-            </li>
-            <li className="nav-list__item">
-              <Link to="#" className="nav-list__link">
-                Đồ ăn
-              </Link>
-            </li>
-            <li className="nav-list__item">
-              <Link to="#" className="nav-list__link">
-                Đồ uống
-              </Link>
-            </li>
-          </ul>
-
           <div className="nav__account">
             {user.username === null ? (
               <ModalLogin />
