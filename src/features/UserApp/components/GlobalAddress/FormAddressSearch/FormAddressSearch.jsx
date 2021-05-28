@@ -30,7 +30,16 @@ export default function FormAddressSearch({
   }
 
   function handleChangeCurrentAddress() {
-    setLocation({ ...location, address: "", currentAddress: location.address });
+    if (location.address) {
+      setLocation({
+        ...location,
+        address: "",
+        currentAddress: location.address,
+      });
+      localStorage.tempLocation = location.address;
+      localStorage.lat = location.lat;
+      localStorage.lng = location.lng;
+    }
   }
 
   //--------GET ADDRESS FROM LAT LNG--------------
@@ -60,11 +69,12 @@ export default function FormAddressSearch({
         whenReady={(map) => {
           map.target.on("click", function (e) {
             const { lat, lng } = e.latlng;
+            console.log(location);
             setLocation({ ...location, lat: lat, lng: lng });
           });
         }}
       >
-        <ChangeView center={[location.lat, location.lng]} zoom={18} />
+        <ChangeView center={[location.lat, location.lng]} zoom={16} />
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

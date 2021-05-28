@@ -10,14 +10,15 @@ import Navbar from "features/UserApp/components/Navbar";
 
 export default function MainPage() {
   const [SlideImage, setSlideImage] = useState([]);
+  const [keyFind, setKeyFind] = useState("");
 
   return (
     <div className="main-page">
       <Navbar />
-      <Banner />
+      <Banner setKeyFind={setKeyFind} />
       <GlobalAddress />
       <SlickList />
-      <Newfeed />
+      <Newfeed keyFind={keyFind} />
       <Footer />
     </div>
   );

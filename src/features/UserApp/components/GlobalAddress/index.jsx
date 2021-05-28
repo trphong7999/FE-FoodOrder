@@ -4,6 +4,7 @@ import { FaAngleRight } from "react-icons/fa";
 import "./style.scss";
 import FormAddressSearch from "./FormAddressSearch/FormAddressSearch";
 import Modal from "react-modal";
+import { useSelector } from "react-redux";
 
 const customStyles = {
   content: {
@@ -31,13 +32,13 @@ function GlobalAddress(props) {
   function closeModal() {
     setIsOpen(false);
   }
+  const user = useSelector((state) => state.loginUserApp.profile);
   // ----------------------------------Map---------------
   const [location, setLocation] = useState({
     address: "",
-    currentAddress:
-      "Số 8 ngõ 33 Kiều Sơn, Đằng Lâm, Hải An, Hải Phòng, Việt Nam",
-    lat: "20.828790101307185",
-    lng: "106.71664668177716",
+    currentAddress: user.info.location.address,
+    lat: user.info.location.lat,
+    lng: user.info.location.lng,
   });
 
   return (
