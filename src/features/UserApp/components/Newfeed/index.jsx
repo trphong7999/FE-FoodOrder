@@ -19,14 +19,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Newfeed() {
+export default function Newfeed({ keyFind }) {
   const [merchant, setMerchant] = useState([]);
+  const [merchantFiltered, setMerchantFiltered] = useState([]);
   const [openDrop1, setOpenDrop1] = useState(false);
   const [openDrop2, setOpenDrop2] = useState(false);
   const [page, setPage] = useState(1);
+  const [checkDistrict, setCheckDistrict] = useState([]);
+  const [checkTypeFood, setCheckTypeFood] = useState([]);
   const user = useSelector((state) => state.loginUserApp.profile);
   const numPerPage = 20;
-  let pageCount = Math.ceil(merchant.length / numPerPage);
+  let pageCount = Math.ceil(merchantFiltered.length / numPerPage);
+  console.log(checkDistrict);
+  function removeAccents(str) {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D");
+  }
 
   const handleChangePage = (event, value) => {
     setPage(value);
@@ -40,6 +51,19 @@ export default function Newfeed() {
   const handleChangeOpenDrop2 = () => {
     setOpenDrop2(!openDrop2);
     if (openDrop1) setOpenDrop1(!openDrop1);
+  };
+
+  const handleSetCheckBox = (e, value, setValue) => {
+    if (e.target.checked) {
+      value.push(e.target.value);
+      setValue([...value]);
+    } else {
+      const idx = value.findIndex((item) => item == e.target.value);
+      if (idx > -1) {
+        value.splice(idx, 1);
+        setValue([...value]);
+      }
+    }
   };
 
   useEffect(() => {
@@ -70,12 +94,44 @@ export default function Newfeed() {
         }));
         res = res.sort((pre, next) => pre.distance - next.distance);
         setMerchant(res);
+        setMerchantFiltered(res);
       } catch (error) {
         console.log("Failed to fetch product list: ", error);
       }
     };
     fetchMerchantsList();
   }, []);
+
+  useEffect(() => {
+    let filteredMerchant = merchant.filter((mc) => {
+      let arrFoods = mc.category.map((cat) =>
+        cat.foods.map((food) => food.name)
+      );
+      arrFoods = [].concat.apply([], arrFoods);
+      let rs = false;
+      for (let food of arrFoods) {
+        if (
+          removeAccents(food)
+            .toLowerCase()
+            .match(removeAccents(keyFind).toLowerCase())
+        )
+          rs = true;
+      }
+      return (removeAccents(mc.name)
+        .toLowerCase()
+        .match(removeAccents(keyFind).toLowerCase()) ||
+        rs) &&
+        checkDistrict.length > 0
+        ? checkDistrict.includes(String(mc.location.district))
+        : true && checkTypeFood > 0
+        ? checkTypeFood.includes(String(mc.typeFood))
+        : true;
+    });
+    filteredMerchant = filteredMerchant.sort(
+      (pre, next) => pre.distance - next.distance
+    );
+    setMerchantFiltered(filteredMerchant);
+  }, [keyFind, checkDistrict]);
 
   const classes = useStyles();
 
@@ -112,6 +168,9 @@ export default function Newfeed() {
                       type="checkbox"
                       value={district.key}
                       className="filter-dropdown__input"
+                      onChange={(e) =>
+                        handleSetCheckBox(e, checkDistrict, setCheckDistrict)
+                      }
                     />
                     <label>{district.value}</label>
                   </div>
@@ -144,6 +203,9 @@ export default function Newfeed() {
                   <input
                     type="checkbox"
                     value={0}
+                    onChange={(e) =>
+                      handleSetCheckBox(e, checkTypeFood, setCheckTypeFood)
+                    }
                     className="filter-dropdown__input"
                   />
                   <label>Đồ ăn</label>
@@ -152,6 +214,9 @@ export default function Newfeed() {
                   <input
                     type="checkbox"
                     value={1}
+                    onChange={(e) =>
+                      handleSetCheckBox(e, checkTypeFood, setCheckTypeFood)
+                    }
                     className="filter-dropdown__input"
                   />
                   <label>Đồ uống</label>
@@ -161,7 +226,7 @@ export default function Newfeed() {
           </div>
 
           <div className="filter-sort">
-            200 kết quả
+            {merchantFiltered.length} kết quả
             <select className="filter-sort--item">
               <option value="">Gần tôi</option>
               <option value="">Đánh giá</option>
@@ -172,7 +237,7 @@ export default function Newfeed() {
 
         <div className="content">
           <div className="list-view row sm-gutter">
-            {merchant
+            {merchantFiltered
               .slice((page - 1) * numPerPage, page * numPerPage)
               .map((mer, index) => (
                 <Card merchant={mer} key={index} index={index} />

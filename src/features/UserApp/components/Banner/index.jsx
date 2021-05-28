@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Banner.scss";
 import banner from "assets/image/banner.jpg";
 import { BsSearch } from "react-icons/bs";
 
-function Banner(props) {
+function Banner({ keyFind, setKeyFind }) {
+  let a;
+  const handleChangeQuery = (val) => {
+    clearTimeout(a);
+    a = setTimeout(() => setKeyFind(val), 400);
+  };
   return (
     <div className="banner-wrap">
       <section className="grid__full-width">
@@ -18,8 +23,10 @@ function Banner(props) {
 
             <input
               type="text"
+              // value={keyFind}
+              onChange={(e) => handleChangeQuery(e.target.value)}
               className="input-search"
-              placeholder="Tìm quán ăn yêu thích để đặt FoodLovers giao ngay"
+              placeholder="Tìm món ăn yêu thích để đặt FoodLovers giao ngay"
             />
           </div>
         </div>
