@@ -26,7 +26,7 @@ export default function RightColAccount() {
     const fetchHistoryOrder = async () => {
       const historyOrders = await orderApi.getAllMyOrder();
       if (Array.isArray(historyOrders) && historyOrders.length > 0)
-        setHistoryOrders(historyOrders);
+        setHistoryOrders(historyOrders.reverse());
     };
     fetchHistoryOrder();
   }, []);

@@ -22,15 +22,15 @@ import { makeStyles } from "@material-ui/core";
 import loading from "assets/image/avartar/avatar-default.png";
 import { datetimeFromTimestamp, validatePrice } from "func.js";
 import ScrollToBottom from "react-scroll-to-bottom";
+import { confirmAlert } from "react-confirm-alert";
 
 export default function DeliveryPage() {
   const [haveOrder, setHaveOrder] = useState(false);
   const [geoPartner, setGeoPartner] = useState(null);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
-  const dispatch = useDispatch();
-  console.log(haveOrder);
+  console.log(!!haveOrder);
 
   const changeOpen = () => {
     setOpen(!open);
@@ -48,6 +48,10 @@ export default function DeliveryPage() {
   socket.on("partnerCancelOrder", (orderId) => {
     setRefresh(true);
     setGeoPartner(null);
+  });
+
+  socket.on("merchantCancelOrder", (orderId) => {
+    setRefresh(true);
   });
 
   socket.on("changeStatus", (orderId, status) => {
@@ -88,8 +92,20 @@ export default function DeliveryPage() {
   return (
     <div className="tracking-page">
       <Navbar />
-      <FcInspection className="icon-detail" onClick={changeOpen} />
-      {open ? <OrderInfo order={haveOrder} setHaveOrder={setHaveOrder} /> : ""}
+      {haveOrder ? (
+        <FcInspection className="icon-detail" onClick={changeOpen} />
+      ) : (
+        ""
+      )}
+      {open ? (
+        <OrderInfo
+          order={haveOrder}
+          setHaveOrder={setHaveOrder}
+          setOpen={setOpen}
+        />
+      ) : (
+        ""
+      )}
 
       <ToastContainer />
       {haveOrder ? (
@@ -147,26 +163,28 @@ export default function DeliveryPage() {
           )}
         </MapContainer>
       ) : (
-        <div>Không có đơn hàng đang vận chuyển, vui lòng đặt hàng!</div>
+        <div className="no-order">
+          Không có đơn hàng đang vận chuyển, vui lòng đặt hàng!
+        </div>
       )}
       <Footer />
     </div>
   );
 }
 
-function OrderInfo({ order, setHaveOrder }) {
+function OrderInfo({ order, setHaveOrder, setOpen }) {
   const [numShow, setNumShow] = useState(true);
 
   return (
-    <div class="tracking-info">
-      <div class="nav-info">
+    <div className="tracking-info">
+      <div className="nav-info">
         <div
           className={`nav-info__item ${
             numShow ? "nav-info__item--active" : ""
           }`}
           onClick={() => setNumShow(true)}
         >
-          <FcSurvey class="icon-nav" />
+          <FcSurvey className="icon-nav" />
         </div>
         <div
           className={`nav-info__item ${
@@ -174,12 +192,16 @@ function OrderInfo({ order, setHaveOrder }) {
           }`}
           onClick={() => setNumShow(false)}
         >
-          <FcSms class="icon-nav" />
+          <FcSms className="icon-nav" />
         </div>
       </div>
-      <div class="main-info">
+      <div className="main-info">
         {numShow ? (
-          <DetailOrder order={order} />
+          <DetailOrder
+            order={order}
+            setOpen={setOpen}
+            setHaveOrder={setHaveOrder}
+          />
         ) : (
           <Chat order={order} setOrder={setHaveOrder} />
         )}
@@ -188,8 +210,26 @@ function OrderInfo({ order, setHaveOrder }) {
   );
 }
 
-function DetailOrder({ order }) {
-  console.log("this is", order);
+function DetailOrder({ order, setOpen, setHaveOrder }) {
+  const handleCancelOrder = () => {
+    confirmAlert({
+      title: "Xác nhận trước khi gửi",
+      message: "Bạn có chắc muốn hủy đơn.",
+      buttons: [
+        {
+          label: "Có",
+          onClick: () => {
+            socket.emit("userCancelOrder", order._id);
+            setHaveOrder(null);
+          },
+        },
+        {
+          label: "Không",
+        },
+      ],
+    });
+    setOpen(false);
+  };
   return (
     <div className="main-info__item">
       {order ? (
@@ -229,31 +269,35 @@ function DetailOrder({ order }) {
                 : "Đơn hàng đã bị hủy"}
             </span>
           </div>
+          <div className="detail-item">
+            <span style={{ color: "#727076" }}>
+              {order.detail.foods.reduce((arr, curr) => arr + curr.quantity, 0)}{" "}
+              món
+            </span>
+          </div>
           <ul className="detail-list">
-            <div className="detail-list__title">
-              <span style={{ color: "#939297" }}>
-                {order.detail.foods.reduce(
-                  (arr, curr) => arr + curr.quantity,
-                  0
-                )}{" "}
-                món
-              </span>
-            </div>
             {order.detail.foods.map((dish, index) => (
               <li className="detail-list__item">
                 <span>{dish.name}</span> <span>x {dish.quantity}</span>
               </li>
             ))}
-            <div className="detail-list__title">
-              <span>Tổng tiền</span>
-              <span>
-                {validatePrice(
-                  order.detail.total + order.detail.fee - order.detail.discount
-                )}{" "}
-                đ
-              </span>
-            </div>
           </ul>
+          <div className="detail-item">
+            <span>Tổng tiền</span>
+            <span>
+              {validatePrice(
+                order.detail.total + order.detail.fee - order.detail.discount
+              )}{" "}
+              đ
+            </span>
+          </div>
+          <button
+            className="cancel-btn"
+            onClick={() => handleCancelOrder()}
+            disabled={order.status !== "new" && order.status !== "finding"}
+          >
+            Hủy đơn
+          </button>
         </div>
       ) : (
         ""

@@ -7,8 +7,17 @@
     z-index: 10000;
   }
 }
+
+.no-order {
+  text-align: center;
+  height: 70vh;
+  line-height: 70vh;
+  font-size: 3rem;
+}
+
 .tracking-info {
   width: 30rem;
+  max-width: 75%;
   position: absolute;
   right: 6.8rem;
   top: 10rem;
@@ -17,7 +26,7 @@
   box-shadow: 0px 4px 12px 2px rgb(0 0 0 / 40%);
 
   .main-info {
-    height: 30rem;
+    height: 33rem;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 
@@ -142,6 +151,8 @@
         .detail-list {
           padding: 0;
           list-style: none;
+          max-height: 7rem;
+          overflow-y: scroll;
           .detail-list__title {
             display: flex;
             justify-content: space-between;
@@ -168,6 +179,23 @@
               }
             }
           }
+        }
+        .cancel-btn {
+          background-color: #ff4f4f;
+          color: #f2f2f2;
+          padding: 0.7rem 0.7rem;
+          border-radius: 10px;
+          cursor: pointer;
+          border: 1px solid #777;
+          position: absolute;
+          bottom: 1rem;
+          right: 1rem;
+        }
+        .cancel-btn:hover {
+          background-color: var(--primary-color);
+        }
+        .cancel-btn:focus {
+          outline: none;
         }
       }
     }
@@ -199,4 +227,7 @@
       background-color: rgb(248, 231, 231);
     }
   }
+}
+.react-confirm-alert {
+  margin-bottom: 7rem;
 }

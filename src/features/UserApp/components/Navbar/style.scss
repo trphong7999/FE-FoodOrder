@@ -29,41 +29,6 @@
       width: 100%;
     }
 
-    .nav__list {
-      list-style: none;
-      display: flex;
-      padding-left: 0;
-      margin: 0;
-
-      .nav-list__link {
-        display: block;
-        text-decoration: none;
-        font-size: 1.6rem;
-        color: var(--text-color);
-        padding: 3px 10px;
-        height: 100%;
-        display: flex;
-        align-items: center;
-
-        &:hover {
-          color: var(--primary-color);
-          opacity: 0.75;
-          background-color: #99999936;
-        }
-      }
-
-      .nav-list__link--active {
-        font-weight: bold;
-        color: var(--primary-color);
-        border-bottom: 3px solid var(--primary-color);
-
-        &:hover {
-          background-color: var(--white-color);
-          opacity: 1;
-        }
-      }
-    }
-
     .nav__account {
       position: absolute;
       right: 0;

@@ -410,7 +410,7 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
                 (parseFloat(merchantLat) + parseFloat(userLat)) / 2,
                 (parseFloat(merchantLng) + parseFloat(userLng)) / 2,
               ]}
-              zoom={14}
+              zoom={13}
               scrollWheelZoom={false}
               style={{ height: "300px", width: "100%" }}
             >
