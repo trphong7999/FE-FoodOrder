@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { HashLink as Link } from "react-router-hash-link";
-import "./style.scss";
-import productimg from "assets/image/dishes/trasua.jpg";
 import { BiTimeFive } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { IoLocationOutline } from "react-icons/io5";
@@ -10,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addCartOrder } from "redux/cartOrderSlice";
 import { DistanceMatrixService } from "@react-google-maps/api";
 import { toast } from "react-toastify";
+import loading from "assets/image/icons/loading.png";
+import "./style.scss";
 
 export default function Brand({ merchant }) {
   const [distance, setDistance] = useState(0);
@@ -190,12 +190,24 @@ export default function Brand({ merchant }) {
                   <div className="product__item" key={index}>
                     <div
                       className="product__item-img hover-mode"
-                      style={{ backgroundImage: `url("${productimg}")` }}
+                      style={{
+                        backgroundImage: `${
+                          food.img === ""
+                            ? `url("${loading}")`
+                            : `url("${food.img}")`
+                        }`,
+                      }}
                     >
                       <div className="img-big__wrapper hidden">
                         <div
                           className="img-big"
-                          style={{ backgroundImage: `url("${productimg}")` }}
+                          style={{
+                            backgroundImage: `${
+                              food.img === ""
+                                ? `url("${loading}")`
+                                : `url("${food.img}")`
+                            }`,
+                          }}
                         ></div>
                       </div>
                     </div>
