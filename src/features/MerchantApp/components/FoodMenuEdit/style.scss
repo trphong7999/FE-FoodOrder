@@ -24,28 +24,50 @@
     }
   }
 
-  .edit-img {
-    margin: 3rem auto;
-    width: 120px;
-    height: 120px;
-    background-size: cover;
-    background-position: center;
-  }
-
   .edit-form {
+    .edit-img {
+      border-radius: 4px;
+      margin: 3rem auto;
+      width: 120px;
+      height: 120px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+
+      label {
+        position: absolute;
+        bottom: -4px;
+        right: 0;
+      }
+
+      img {
+        width: 30px;
+        height: 30px;
+        background: white;
+        border-radius: 8px;
+      }
+    }
     .edit-form__group {
       background-color: white;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem;
       border-bottom: 1px solid #ebebeb;
 
-      input[type="text"] {
+      input {
         color: #acaeaf;
         border: none;
         text-align: right;
         font-size: 1.6rem;
+        padding: 1rem;
+        border: 1px solid #ebebeb;
+        border-radius: 12px;
+
+        &:focus {
+          border-radius: 12px;
+          outline: var(--merchant-color);
+        }
       }
 
       select {
@@ -54,6 +76,14 @@
         font-size: 1.6rem;
         color: #acaeaf;
         text-transform: capitalize;
+        padding: 1rem;
+        border: 1px solid #ebebeb;
+        border-radius: 12px;
+
+        &:focus {
+          border-radius: 12px;
+          outline: var(--merchant-color);
+        }
       }
       option {
         text-transform: capitalize;
@@ -130,7 +160,7 @@
       margin: 2rem 1rem;
       input {
         width: 100%;
-        padding: 1.5rem;
+        padding: 1.2rem;
         border-radius: 4px;
 
         background-color: var(--merchant-color);

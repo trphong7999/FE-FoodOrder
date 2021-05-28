@@ -158,10 +158,6 @@ export default function FoodMenu() {
             <option value={true}>Còn hàng</option>
             <option value={false}>Hết hàng</option>
           </select>
-
-          <div className="top-add">
-            <button onClick={handleOpen}>Thêm mới</button>
-          </div>
         </div>
 
         <div className="food-menu__body">
@@ -202,6 +198,10 @@ export default function FoodMenu() {
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="food-menu__add">
+          <button onClick={handleOpen}>Thêm mới</button>
         </div>
 
         <Action
@@ -343,9 +343,14 @@ function Action({
   };
 
   const changeUrlToDetailFood = () => {
+    let catNewFind = getNameCatOfFood();
     const location = {
       pathname: `${match.url}/thuc-don/${dataModal._id}`,
-      state: { foodData: dataModal, catList: category },
+      state: {
+        foodData: dataModal,
+        catList: category,
+        currentCatId: catNewFind._id,
+      },
     };
     history.push(location);
     history.replace(location);

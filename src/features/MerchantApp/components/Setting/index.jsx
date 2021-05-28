@@ -402,7 +402,7 @@ function Address({ address, recover }) {
           center={[geo.lat, geo.lng]}
           zoom={15}
           scrollWheelZoom={false}
-          style={{ height: "400px", width: "100%" }}
+          style={{ height: "350px", width: "100%" }}
           whenReady={(map) => {
             map.target.on("click", function (e) {
               const { lat, lng } = e.latlng;

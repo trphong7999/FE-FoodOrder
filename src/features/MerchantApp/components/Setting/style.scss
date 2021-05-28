@@ -135,12 +135,14 @@
         }
 
         .form-address__btn {
-          margin: 2rem 1rem;
+          padding: 1rem;
           text-align: center;
           position: fixed;
           bottom: 0;
           left: 0;
           right: 0;
+          border-top: 1px solid #ebebeb;
+          z-index: 9999;
 
           .button-address {
             width: 100%;
@@ -150,6 +152,7 @@
             border: none;
             font-size: 1.6rem;
             color: white;
+            z-index: 1;
           }
         }
       }
