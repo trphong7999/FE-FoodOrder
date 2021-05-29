@@ -4,10 +4,29 @@ import { sumQuantity, validatePrice, formatDatetimeToString } from "func";
 import Modal from "react-modal";
 import "assets/css/base.scss";
 import { FaChevronLeft } from "react-icons/fa";
+import merchantApi from "api/merchantApi";
 
 export default function YourOrder({ historyOrders }) {
-  const [open, setOpen] = useState(false);
-  console.log(historyOrders);
+  const [currenOrder, setCurrenOrder] = useState("");
+
+  const sumQuantity = (list) => {
+    let newList = list.reduce((arr, curr) => arr + curr.quantity, 0);
+    return newList;
+  };
+
+  const convertTimeTodate = (time) => {
+    var now = new Date(time);
+    return now.toLocaleString();
+  };
+
+  const handleOpen = async (order) => {
+    setCurrenOrder(order);
+  };
+
+  const handleClose = () => {
+    setCurrenOrder("");
+  };
+
   return (
     <div className="history-table">
       {/* ---------------- LIST HISTORY ORDER PC START -------------- */}
@@ -42,118 +61,163 @@ export default function YourOrder({ historyOrders }) {
 
       {/* ---------------- LIST HISTORY ORDER MOBILE START -------------- */}
       <div className="history-table__mobile">
-        <div className="history-item" onClick={() => setOpen(true)}>
-          <div className="history-item__head">
-            <div className="head-id">#e345o3453535o345</div>
-            <div className="head-date">27/05/2020 lúc 12:12</div>
-          </div>
-          <div className="history-item__body">
-            <div className="body-amount">
-              <div className="body-amount__dish">4 món</div>
-              <div className="body-amount__total">
-                35.000 <span style={{ color: "red" }}>đ</span>
+        {historyOrders.map((order, index) => (
+          <div
+            key={index}
+            className="history-item"
+            onClick={() => handleOpen(order)}
+          >
+            <div className="history-item__head">
+              <div className="head-id">#{order._id}</div>
+              <div className="head-date">
+                {convertTimeTodate(parseInt(order.timeOrder))}
+              </div>
+            </div>
+            <div className="history-item__body">
+              <div className="body-amount">
+                <div className="body-amount__dish">
+                  {sumQuantity(order.detail.foods)} món
+                </div>
+                <div className="body-amount__total">
+                  {validatePrice(order.detail.total)}{" "}
+                  <span style={{ color: "red" }}>đ</span>
+                </div>
+              </div>
+            </div>
+            <div className="history-item__status">
+              <div
+                style={{
+                  textAlign: "right",
+                  fontWeight: "500",
+                  color: `${order.status === "cancel" ? "red" : "green"}`,
+                  paddingTop: "1rem",
+                }}
+              >
+                {order.status === "cancel" ? "Đã hủy" : "Đã giao"}
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="history-item">
-          <div className="history-item__head">
-            <div className="head-id">#e345o3453535o345</div>
-            <div className="head-date">27/05/2020 lúc 12:12</div>
-          </div>
-          <div className="history-item__body">
-            <div className="body-amount">
-              <div className="body-amount__dish">4 món</div>
-              <div className="body-amount__total">
-                35.000 <span style={{ color: "red" }}>đ</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* --------- ORDER DETAIL ------------- */}
-      <div className="modal" style={{ display: `${open ? "block" : "none"}` }}>
-        <div className="modal__overlay"></div>
-        <div className="modal__body">
-          <div className="history-detail__mobile">
-            <div className="history-header">
-              <div className="history-header__icon">
-                <FaChevronLeft onClick={() => setOpen(false)} />
+      {currenOrder === "" ? (
+        ""
+      ) : (
+        <div className="modal">
+          <div className="modal__overlay"></div>
+          <div className="modal__body">
+            <div className="history-detail__mobile">
+              <div className="history-header">
+                <div className="history-header__icon">
+                  <FaChevronLeft onClick={() => handleClose()} />
+                </div>
+                <div className="history-header__title">Chi tiết đơn hàng</div>
               </div>
-              <div className="history-header__title">Chi tiết đơn hàng</div>
-            </div>
-            <div className="history-body">
-              <div className="history-body__item">
-                <div className="item-id">#e345o3453535o345</div>
-                <div className="item-date">
-                  <span>27/05/2020 lúc 12:12</span>
-                  <span>Đã giao</span>
+              <div className="history-body">
+                <div className="history-body__item">
+                  <div className="item-id">#{currenOrder._id}</div>
+                  <div className="item-date">
+                    <span>
+                      {convertTimeTodate(parseInt(currenOrder.timeOrder))}
+                    </span>
+                    <span
+                      style={{
+                        color: `${
+                          currenOrder.status === "cancel" ? "red" : "green"
+                        }`,
+                      }}
+                    >
+                      {currenOrder.status === "cancel" ? "Đã hủy" : "Đã giao"}
+                    </span>
+                  </div>
+                  <div className="item-address">
+                    <span>Giao tới địa chỉ</span>
+                    <div>193 Văn Cao, Ngô Quyền, Hải Phòng, Việt Nam</div>
+                  </div>
                 </div>
-                <div className="item-address">
-                  <span>Giao tới địa chỉ</span>
-                  <div>193 Văn Cao, Ngô Quyền, Hải Phòng, Việt Nam</div>
-                </div>
-                <div className="item-address">
-                  <span>Phương thức thanh toán</span>
-                  <div>Tiền mặt</div>
-                </div>
-              </div>
 
-              <div className="history-body__item">
-                <ul className="item-list">
-                  <li>
-                    <span>Salad rong biển x 2</span>
-                    <span>
-                      50.000 <span style={{ color: "red" }}>đ</span>
-                    </span>
-                  </li>
-                  <li>
-                    <span>Rong biển sấy x 2</span>
-                    <span>
-                      150.000 <span style={{ color: "red" }}>đ</span>
-                    </span>
-                  </li>
-                  <li>
-                    <span>Cơm rong biển x 1</span>
-                    <span>
-                      80.000 <span style={{ color: "red" }}>đ</span>
-                    </span>
-                  </li>
-                </ul>
-              </div>
+                <div className="history-body__item">
+                  <div className="item-infomation">
+                    <span>{currenOrder.merchantId.name}</span>
+                    <div>{currenOrder.merchantId.location.address}</div>
+                  </div>
+                  {currenOrder.partnerId ? (
+                    <div className="item-infomation">
+                      <span>tên người giao</span>
+                      <div>số phone</div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
 
-              <div className="history-body__item">
-                <div className="item-amount">
-                  <span>Tổng tiền món</span>
-                  <span className="item-amount__number">
-                    280.000 <span style={{ color: "red" }}>đ</span>
-                  </span>
+                  <div className="item-infomation">
+                    <span>Phương thức thanh toán</span>
+                    <div>Tiền mặt</div>
+                  </div>
                 </div>
-                <div className="item-amount">
-                  <span>Phí ship</span>
-                  <span className="item-amount__number">
-                    20.000 <span style={{ color: "red" }}>đ</span>
-                  </span>
+
+                <div className="history-body__item">
+                  <ul className="item-list">
+                    {currenOrder.detail.foods.map((dish, idx) => (
+                      <li className="item-list__li">
+                        <div
+                          className="item-list__name"
+                          style={{
+                            textTransform: "capitalize",
+                          }}
+                        >
+                          {dish.name} {dish.name} {dish.name}
+                        </div>
+                        <div className="item-list__quantity">
+                          x {dish.quantity}
+                        </div>
+                        <div className="item-list__total">
+                          {validatePrice(dish.total)}{" "}
+                          <span style={{ color: "red" }}>đ</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <div className="item-amount">
-                  <span>Giảm giá</span>
-                  <span className="item-amount__number">
-                    0 <span style={{ color: "red" }}>đ</span>
-                  </span>
-                </div>
-                <div className="item-amount">
-                  <span>Số tiền trả</span>
-                  <span className="item-amount__number">
-                    300.000 <span style={{ color: "red" }}>đ</span>
-                  </span>
+
+                <div className="history-body__item">
+                  <div className="item-amount">
+                    <span>Tổng tiền món</span>
+                    <span className="item-amount__number">
+                      {validatePrice(currenOrder.detail.total)}{" "}
+                      <span style={{ color: "red" }}>đ</span>
+                    </span>
+                  </div>
+                  <div className="item-amount">
+                    <span>Phí ship</span>
+                    <span className="item-amount__number">
+                      {validatePrice(currenOrder.detail.fee)}{" "}
+                      <span style={{ color: "red" }}>đ</span>
+                    </span>
+                  </div>
+                  <div className="item-amount">
+                    <span>Giảm giá</span>
+                    <span className="item-amount__number">
+                      {validatePrice(currenOrder.detail.discount)}{" "}
+                      <span style={{ color: "red" }}>đ</span>
+                    </span>
+                  </div>
+                  <div className="item-amount">
+                    <span>Số tiền trả</span>
+                    <span className="item-amount__number">
+                      {validatePrice(
+                        currenOrder.detail.fee + currenOrder.detail.total
+                      )}{" "}
+                      <span style={{ color: "red" }}>đ</span>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
       {/* ---------------- LIST HISTORY ORDER MOBILE END -------------- */}
     </div>
   );
