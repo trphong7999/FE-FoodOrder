@@ -12,6 +12,8 @@ export default function MainPage() {
   const [SlideImage, setSlideImage] = useState([]);
   const [keyFind, setKeyFind] = useState("");
 
+  console.log(keyFind);
+
   return (
     <div className="main-page">
       <Navbar />

@@ -30,7 +30,6 @@ export default function Newfeed({ keyFind }) {
   const user = useSelector((state) => state.loginUserApp.profile);
   const numPerPage = 20;
   let pageCount = Math.ceil(merchantFiltered.length / numPerPage);
-  console.log(checkDistrict);
   function removeAccents(str) {
     return str
       .normalize("NFD")
@@ -117,15 +116,16 @@ export default function Newfeed({ keyFind }) {
         )
           rs = true;
       }
-      return (removeAccents(mc.name)
-        .toLowerCase()
-        .match(removeAccents(keyFind).toLowerCase()) ||
-        rs) &&
-        checkDistrict.length > 0
-        ? checkDistrict.includes(String(mc.location.district))
-        : true && checkTypeFood > 0
-        ? checkTypeFood.includes(String(mc.typeFood))
-        : true;
+      return (
+        (removeAccents(mc.name)
+          .toLowerCase()
+          .match(removeAccents(keyFind).toLowerCase()) ||
+          rs) &&
+        (checkDistrict.length > 0
+          ? checkDistrict.includes(String(mc.location.district))
+          : true) &&
+        (checkTypeFood > 0 ? checkTypeFood.includes(String(mc.typeFood)) : true)
+      );
     });
     filteredMerchant = filteredMerchant.sort(
       (pre, next) => pre.distance - next.distance
