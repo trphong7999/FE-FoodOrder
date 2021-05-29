@@ -10,7 +10,6 @@ import {
   sumTotal,
   datetimeFromTimestamp,
 } from "func";
-import socket from "socket-io.js";
 
 export default function ReceivedConfirm({ listReceived, setListReceived }) {
   const match = useRouteMatch();
