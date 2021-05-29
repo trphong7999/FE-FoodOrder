@@ -24,7 +24,10 @@ const userAPi = {
   },
   changePhone: (params) => {
     const url = `users/changephone`;
-
+    return axiosClient.post(url, params);
+  },
+  changeAvt: (params) => {
+    const url = `users/changeavt`;
     return axiosClient.post(url, params);
   },
 };
