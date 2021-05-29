@@ -299,7 +299,10 @@ function OrderLine({ order, idx }) {
       <div className="history-table-cell history-table-col6">
         <div style={{ fontWeight: "bold" }}>
           <span>
-            {order.detail.total + order.detail.fee - order.detail.discount}đ
+            {validatePrice(
+              order.detail.total + order.detail.fee - order.detail.discount
+            )}
+            đ
           </span>
         </div>
         <div>

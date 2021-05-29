@@ -17,11 +17,7 @@ export default function NavAccount({ avt }) {
   return (
     <div className="account">
       <AiFillCaretDown className="account__icon" />
-      <img
-        src={avt === "" ? avtDefault : avt}
-        alt="Avatar"
-        className="account__img"
-      />
+      <img src={avt} alt="Avatar" className="account__img" />
 
       <ul className="action__list">
         <li className="action__list--item">

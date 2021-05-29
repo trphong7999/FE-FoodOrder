@@ -3,7 +3,8 @@ import "./style.scss";
 import { TiThMenu } from "react-icons/ti";
 import { IoWallet } from "react-icons/io5";
 import { HiClipboardList, HiDocumentReport } from "react-icons/hi";
-import { MdClear } from "react-icons/md";
+import { MdClear, MdRestaurantMenu } from "react-icons/md";
+import { AiFillSetting } from "react-icons/ai";
 import { Link, useHistory, NavLink } from "react-router-dom";
 import merchantApi from "api/merchantApi";
 
@@ -89,19 +90,37 @@ export default function NavBar() {
                 <span>Đơn hàng</span>
               </div>
               <div className="menu-content__item">
+                <HiDocumentReport className="menu-content__item-icon menu-content__item-icon--purple" />
+                <span>Báo cáo</span>
+              </div>
+              <div
+                className="menu-content__item"
+                onClick={() => {
+                  createNewPlace(`/merchant/thuc-don`);
+                }}
+              >
+                <MdRestaurantMenu className="menu-content__item-icon menu-content__item-icon--yellow" />
+                <span>Thực đơn</span>
+              </div>
+              <div
+                className="menu-content__item"
+                onClick={() => {
+                  createNewPlace(`/merchant/cai-dat`);
+                }}
+              >
+                <AiFillSetting className="menu-content__item-icon menu-content__item-icon--gray" />
+                <span>Cài đặt</span>
+              </div>
+              {/* <div className="menu-content__item">
                 <HiClipboardList className="menu-content__item-icon menu-content__item-icon--yellow" />
                 <span>Khuyến mãi</span>
               </div>
               <div className="menu-content__item">
-                <HiDocumentReport className="menu-content__item-icon menu-content__item-icon--purple" />
-                <span>Báo cáo</span>
-              </div>
-              <div className="menu-content__item">
                 <IoWallet className="menu-content__item-icon menu-content__item-icon--gray" />
                 <span>FLM Wallet</span>
-              </div>
+              </div> */}
 
-              <ul className="menu-content__list">
+              {/* <ul className="menu-content__list">
                 <li
                   className="menu-content__list-item"
                   onClick={() => {
@@ -128,7 +147,7 @@ export default function NavBar() {
                 >
                   Cài đặt
                 </li>
-              </ul>
+              </ul> */}
             </div>
           </div>
         </div>

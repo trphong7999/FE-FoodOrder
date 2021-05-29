@@ -11,7 +11,7 @@ import { HiLocationMarker } from "react-icons/hi";
 import { MdEmail } from "react-icons/md";
 import { FaChevronRight, FaRegSmileBeam } from "react-icons/fa";
 import { SiFacebook } from "react-icons/si";
-import avt from "assets/image/avartar/slide1.jpg";
+import avtDefault from "assets/image/avartar/slide1.jpg";
 
 import "./style.scss";
 import "assets/css/base.scss";
@@ -25,11 +25,16 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { changeSuccess } from "redux/loginUserAppSlice";
 import { useDispatch } from "react-redux";
+import camera from "assets/image/icons/photo-camera.png";
+import axios from "axios";
+import userAPi from "api/userApi";
+import { getProfile } from "redux/loginPartnerAppSlice";
 
 export default function AccountPage() {
   const user = useSelector((state) => state.loginUserApp);
   const [account, setAccount] = useState(user.profile.info);
-  console.log(account);
+  const [avt, setAvt] = useState(user.profile.info.avt);
+
   const dispatch = useDispatch();
 
   const [showModal, setShowModal] = useState({
@@ -62,6 +67,29 @@ export default function AccountPage() {
     setShowModal({ phoneForm: childData });
   };
 
+  const handleInputAvaUser = async (e) => {
+    let newAvt = e.target.files;
+
+    const formData = new FormData();
+    formData.append("file", newAvt[0]);
+    formData.append("upload_preset", "zjd6i9ar");
+
+    let avt = await axios
+      .post("https://api.cloudinary.com/v1_1/soosoo/image/upload", formData)
+      .then((res) => {
+        return res.data.secure_url;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    setAvt(avt);
+    const res = await userAPi.changeAvt({ avt: avt });
+    const action = getProfile(res);
+    dispatch(action);
+
+    alert("Thay đổi ảnh đại diện thành công");
+  };
+
   return (
     <div className="account-page">
       <Navbar />
@@ -73,7 +101,23 @@ export default function AccountPage() {
             <div className="col l-3">
               <div className="account-left">
                 <div className="account-avatar">
-                  <img src={avt} alt="avatar" className="account-avatar__img" />
+                  <img
+                    src={avt === "" ? avtDefault : avt}
+                    alt="avatar"
+                    className="account-avatar__img"
+                  />
+                  <label
+                    htmlFor="file-input-user"
+                    className="account-avatar__input"
+                  >
+                    <img src={camera} alt="avatar-user" />
+                  </label>
+                  <input
+                    id="file-input-user"
+                    type="file"
+                    hidden
+                    onChange={(e) => handleInputAvaUser(e)}
+                  />
                 </div>
 
                 <div className="account-info">

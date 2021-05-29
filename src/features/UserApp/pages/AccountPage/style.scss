@@ -19,10 +19,22 @@
 
       .account-avatar {
         text-align: center;
-
+        position: relative;
         .account-avatar__img {
           width: 8rem;
+          height: 8rem;
           border-radius: 50%;
+          border: 1px solid #ebebeb;
+        }
+        .account-avatar__input {
+          position: absolute;
+          right: 35%;
+          bottom: -5px;
+          cursor: pointer;
+          img {
+            width: 25px;
+            height: 25px;
+          }
         }
       }
 

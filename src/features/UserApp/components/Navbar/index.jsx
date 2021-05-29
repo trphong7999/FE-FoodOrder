@@ -36,7 +36,7 @@ function Navbar(props) {
             {user.username === null ? (
               <ModalLogin />
             ) : (
-              <NavAccount avt={user.profile.avt || avt} />
+              <NavAccount avt={user.profile.info.avt || avt} />
             )}
           </div>
 
