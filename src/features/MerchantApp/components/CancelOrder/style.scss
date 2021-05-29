@@ -1,0 +1,139 @@
+@import "App.scss";
+.received-content-list {
+  padding: 1rem;
+  font-size: 1.3rem;
+
+  .status {
+    padding: 0.5rem 1rem;
+    background-color: red;
+    border-radius: 10px;
+    color: #f1f1f1;
+    font-weight: bold;
+  }
+
+  .rs-cancel {
+    padding: 0.2rem 0.4rem;
+    background-color: orange;
+    margin: 0rem 0.5rem;
+    color: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  a {
+    text-decoration: none;
+    color: var(--text-color);
+  }
+
+  .list-item {
+    background-color: #fff;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    box-shadow: var(--box-shadow);
+
+    .list-item__dashed-boder {
+      @include dashed-border;
+    }
+
+    .list-item--p1 {
+      padding: 1rem 0;
+    }
+
+    .list-item__top {
+      display: flex;
+      justify-content: space-between;
+
+      .list-item__top-number {
+        span {
+          &:first-child {
+            padding: 0.5rem;
+            background-color: #789fc5;
+            color: white;
+          }
+
+          &:last-child {
+            padding: 0.5rem;
+            color: #789fc5;
+            background-color: #d8e7f5;
+          }
+        }
+      }
+
+      .list-item__top-icon {
+        color: #ccc;
+        font-size: 2rem;
+      }
+    }
+
+    .list-item__time {
+      padding: 1rem 0;
+      color: #aeafb3;
+    }
+
+    .list-item__customer {
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    .list-item__status-driver {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .status-driver__text {
+        color: #5f6267;
+
+        .status-driver-1 {
+          color: #aeafb3;
+          padding-left: 0.5rem;
+        }
+        .status-driver-2 {
+          color: #f5cda2;
+          padding-left: 0.5rem;
+        }
+      }
+
+      .status-driver__action {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc;
+        border-radius: 16px;
+        padding: 0.1rem 1rem;
+        .status-driver__action-icon {
+          color: var(--merchant-color);
+          font-size: 2.2rem;
+          margin-right: 0.5rem;
+        }
+      }
+    }
+
+    .list-item__bot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .list-item__bot-total {
+        display: flex;
+        align-items: center;
+        .list-item__bot-cash {
+          background-color: #7a8491;
+          color: white;
+          font-size: 1.1rem;
+          padding: 0 0.2rem;
+          margin-right: 0.2rem;
+          border-radius: 4px;
+        }
+      }
+    }
+
+    .list-item__wait-time {
+      padding: 0.5rem 0;
+      color: #ccc;
+    }
+    .list-item__wait-cus {
+      padding-bottom: 0.5rem;
+      font-weight: bold;
+    }
+  }
+}
