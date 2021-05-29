@@ -32,6 +32,7 @@
       border-radius: 8px;
       background-size: cover;
       margin: 0;
+      cursor: pointer;
 
       @include tablet {
         width: 314px;
@@ -79,5 +80,59 @@
   .slick-next {
     position: absolute;
     right: -54px;
+  }
+}
+
+.modal-discount {
+  border-radius: 12px;
+  width: 600px;
+  background-color: #f6f6f6;
+
+  @include mobile {
+    width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .discount-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-transform: capitalize;
+    padding: 1rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .discount-title__icon {
+      position: absolute;
+      right: 1rem;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+  }
+  .discount-content {
+    // overflow-y: scroll;
+
+    .discount-img {
+      width: 100%;
+    }
+    .discount-head {
+      font-size: 1.8rem;
+      text-transform: capitalize;
+      font-weight: bold;
+      padding: 1rem 2rem;
+
+      @include mobile {
+        padding: 1rem 0.5rem;
+      }
+    }
+    .discount-text {
+      font-size: 1.5rem;
+      padding: 0 2rem 1rem;
+
+      @include mobile {
+        padding: 0 0.5rem 1rem;
+      }
+    }
   }
 }

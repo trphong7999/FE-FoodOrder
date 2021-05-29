@@ -80,7 +80,7 @@ export default function Profile() {
 
       <div className="profile-content">
         <ul className="profile-content__list">
-          <li>
+          {/* <li>
             <div
               className="profile-content__list-item"
               onClick={() => {
@@ -101,7 +101,7 @@ export default function Profile() {
               <FaHeartbeat className="list-item__icon" />
               <span>Chăm sóc tài xế</span>
             </div>
-          </li>
+          </li> */}
           <li>
             <div
               className="profile-content__list-item"
@@ -124,7 +124,7 @@ export default function Profile() {
               <span>Cài đặt</span>
             </div>
           </li>
-          <li>
+          {/* <li>
             <div
               className="profile-content__list-item"
               onClick={() => {
@@ -134,7 +134,7 @@ export default function Profile() {
               <FaTimesCircle className="list-item__icon" />
               <span>Nghỉ việc</span>
             </div>
-          </li>
+          </li> */}
           <li>
             <div
               className="profile-content__list-item"
