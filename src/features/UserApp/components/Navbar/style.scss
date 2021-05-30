@@ -104,7 +104,7 @@
           .content__head {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            position: relative;
             padding: 1rem;
             border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1);
 
@@ -112,7 +112,20 @@
               width: 80px;
               margin-left: 1rem;
             }
+            .content__head-avt {
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              border: 1px solid #ebebeb;
+            }
+            .content__head-text {
+              font-size: 1.6rem;
+              font-weight: 500;
+              margin-left: 1rem;
+            }
             .content__head-icon {
+              position: absolute;
+              right: 1rem;
             }
           }
 
@@ -126,9 +139,11 @@
               font-size: 1.6rem;
               display: flex;
               align-items: center;
-
+              color: var(--text-color);
+              text-decoration: none;
               .content__list-icon {
                 margin: 0 1.5rem;
+                font-size: 2rem;
               }
               .content__list-span {
               }
