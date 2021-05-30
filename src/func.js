@@ -42,6 +42,7 @@ const getLocationUser = () => {
   function callback(position) {
     localStorage.setItem("lat", position.coords.latitude);
     localStorage.setItem("lng", position.coords.longitude);
+    localStorage.removeItem("address");
   }
   return lat;
 };

@@ -9,6 +9,10 @@ const merchantApi = {
     const url = `/orders/getbystatus?status=${status}`;
     return axiosClient.get(url);
   },
+  getOrderById: (id) => {
+    const url = `/orders/getbyid?id=${id}`;
+    return axiosClient.get(url);
+  },
   getOrderByPartner: (id) => {
     const url = `/orders/getbypartner?id=${id}`;
     return axiosClient.get(url);

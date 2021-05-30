@@ -397,8 +397,8 @@ function MapPick({ partner, setRefresh, refresh }) {
             <Marker
               icon={userIcon}
               position={[
-                orderDelivering.userOrderId.info.location.lat,
-                orderDelivering.userOrderId.info.location.lng,
+                orderDelivering.detail.location.lat,
+                orderDelivering.detail.location.lng,
               ]}
             >
               <Popup autoClose={false} closeOnClick={false} open={true}>
@@ -567,7 +567,7 @@ function Detail({ orderDetail }) {
           </div>
         </div>
         <div className="shop-address">
-          {orderDetail.userOrderId.info.location.address}{" "}
+          {orderDetail.detail.location.address}{" "}
         </div>
         <div className="shop-take">
           <div className="shop-take__time">
@@ -698,7 +698,7 @@ function CurrentOrder({
 }) {
   const chooseOrder = (order_id) => {
     socket.emit("chooseOrder", order_id);
-    setOrderDelivering(order);
+    setOrderDelivering({ ...order });
     removeOrderPicked(order_id);
     setRefresh(true);
     handleClose();
@@ -753,9 +753,7 @@ function CurrentOrder({
               </span>
             </div>
           </div>
-          <div className="cus-address">
-            {order.userOrderId.info.location.address}
-          </div>
+          <div className="cus-address">{order.detail.location.address}</div>
         </div>
 
         <div className="content-action">

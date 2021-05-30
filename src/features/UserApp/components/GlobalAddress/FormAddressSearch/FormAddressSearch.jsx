@@ -22,12 +22,14 @@ export default function FormAddressSearch({
   closeModal,
   location,
   setLocation,
+  setRefreshNewFeed,
 }) {
   function ChangeView({ center, zoom }) {
     const map = useMap();
     map.setView(center, zoom);
     return null;
   }
+  console.log("asd", location);
 
   function handleChangeCurrentAddress() {
     if (location.address) {
@@ -36,9 +38,10 @@ export default function FormAddressSearch({
         address: "",
         currentAddress: location.address,
       });
-      localStorage.tempLocation = location.address;
+      localStorage.address = location.address;
       localStorage.lat = location.lat;
       localStorage.lng = location.lng;
+      setRefreshNewFeed(true);
     }
   }
 

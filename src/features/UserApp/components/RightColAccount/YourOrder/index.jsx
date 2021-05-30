@@ -133,7 +133,7 @@ export default function YourOrder({ historyOrders }) {
                   </div>
                   <div className="item-address">
                     <span>Giao tới địa chỉ</span>
-                    <div>193 Văn Cao, Ngô Quyền, Hải Phòng, Việt Nam</div>
+                    <div>{currenOrder.detail.location.address}</div>
                   </div>
                 </div>
 

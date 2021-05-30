@@ -30,8 +30,6 @@ export default function DeliveryPage() {
   const [open, setOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
-  console.log(!!haveOrder);
-
   const changeOpen = () => {
     setOpen(!open);
   };
@@ -54,12 +52,20 @@ export default function DeliveryPage() {
     setRefresh(true);
   });
 
-  socket.on("changeStatus", (orderId, status) => {
-    setHaveOrder({ ...haveOrder, status: status });
+  socket.on("changeStatus", ({ order, orderId, status }) => {
+    setHaveOrder({ ...order });
+  });
+
+  socket.on("findDonePartner", (partner) => {
+    setRefresh(true);
   });
 
   socket.on("sendGeo", (geo) => {
     setGeoPartner(geo);
+  });
+
+  socket.on("DeliveringOrder", () => {
+    setRefresh(true);
   });
 
   var userIcon = new L.icon({
@@ -88,7 +94,6 @@ export default function DeliveryPage() {
     shadowSize: [68, 45],
     shadowAnchor: [22, 44],
   });
-
   return (
     <div className="tracking-page">
       <Navbar />
@@ -108,14 +113,14 @@ export default function DeliveryPage() {
       )}
 
       <ToastContainer />
-      {haveOrder ? (
+      {typeof haveOrder === "object" && haveOrder !== null ? (
         <MapContainer
           center={[
             (parseFloat(haveOrder.merchantId.location.lat) +
-              parseFloat(haveOrder.userOrderId.info.location.lat)) /
+              parseFloat(haveOrder.detail.location.lat)) /
               2,
             (parseFloat(haveOrder.merchantId.location.lng) +
-              parseFloat(haveOrder.userOrderId.info.location.lng)) /
+              parseFloat(haveOrder.detail.location.lng)) /
               2,
           ]}
           zoom={13.5}
@@ -134,8 +139,8 @@ export default function DeliveryPage() {
           <Marker
             icon={userIcon}
             position={[
-              haveOrder.userOrderId.info.location.lat,
-              haveOrder.userOrderId.info.location.lng,
+              haveOrder.detail.location.lat,
+              haveOrder.detail.location.lng,
             ]}
           >
             <Popup>Nhà của tôi</Popup>

@@ -42,9 +42,7 @@ export default function FormLoginValidation({ clickSwitchForm }) {
         id: res.id,
       });
       dispatch(action);
-      console.log("profile");
       const profile = await userApi.getProfile();
-      console.log("profile");
       const actionGetProfile = getProfile(profile);
       dispatch(actionGetProfile);
     }

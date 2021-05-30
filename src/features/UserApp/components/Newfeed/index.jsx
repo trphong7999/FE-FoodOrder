@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Newfeed({ keyFind }) {
+export default function Newfeed({ keyFind, refreshNewFeed }) {
   const [merchant, setMerchant] = useState([]);
   const [merchantFiltered, setMerchantFiltered] = useState([]);
   const [openDrop1, setOpenDrop1] = useState(false);
@@ -75,7 +75,7 @@ export default function Newfeed({ keyFind }) {
         // };
         let res = await merchantApi.getAll();
         var userLat, userLng;
-        if (typeof user.info == "undefined") {
+        if (localStorage.getItem("lat") && localStorage.getItem("lng")) {
           userLat = localStorage.getItem("lat");
           userLng = localStorage.getItem("lng");
         } else {
@@ -99,7 +99,7 @@ export default function Newfeed({ keyFind }) {
       }
     };
     fetchMerchantsList();
-  }, []);
+  }, [refreshNewFeed]);
 
   useEffect(() => {
     let filteredMerchant = merchant.filter((mc) => {
@@ -131,7 +131,7 @@ export default function Newfeed({ keyFind }) {
       (pre, next) => pre.distance - next.distance
     );
     setMerchantFiltered(filteredMerchant);
-  }, [keyFind, checkDistrict]);
+  }, [keyFind, checkDistrict, refreshNewFeed]);
 
   const classes = useStyles();
 

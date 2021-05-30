@@ -3,7 +3,7 @@ import { HashLink as Link } from "react-router-hash-link";
 import { BiTimeFive } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { IoLocationOutline } from "react-icons/io5";
-import { validatePrice, computeDistant, getLocationUser } from "func.js";
+import { validatePrice, computeDistant } from "func.js";
 import { useDispatch, useSelector } from "react-redux";
 import { addCartOrder } from "redux/cartOrderSlice";
 import { DistanceMatrixService } from "@react-google-maps/api";
@@ -16,6 +16,8 @@ export default function Brand({ merchant }) {
   const dispatch = useDispatch();
   const listCartOrder = useSelector((state) => state.cartOrder);
   const user = useSelector((state) => state.loginUserApp.profile);
+  const latUser = localStorage.getItem("lat") || user.info.location.lat;
+  const lngUser = localStorage.getItem("lng") || user.info.location.lng;
 
   const cartWarning = () =>
     toast.error(
@@ -114,16 +116,8 @@ export default function Brand({ merchant }) {
                 ],
                 origins: [
                   {
-                    lng: parseFloat(
-                      user.info.location.lng ||
-                        localStorage.getItem("lng") ||
-                        106.692183
-                    ),
-                    lat: parseFloat(
-                      user.info.location.lat ||
-                        localStorage.getItem("lat") ||
-                        20.8366544
-                    ),
+                    lng: parseFloat(lngUser),
+                    lat: parseFloat(latUser),
                   },
                 ],
                 travelMode: "DRIVING",
@@ -136,7 +130,15 @@ export default function Brand({ merchant }) {
                   setDistance(
                     response["rows"][0].elements[0].distance.text.split(" ")[0]
                   );
-                else setDistance(2);
+                else
+                  setDistance(
+                    computeDistant(
+                      latUser,
+                      lngUser,
+                      merchant.location.lat,
+                      merchant.location.lng
+                    )
+                  );
               }}
             />
             <IoLocationOutline className="brand-info__distant-icon" />
@@ -144,7 +146,7 @@ export default function Brand({ merchant }) {
             km
           </div>
           <div className="brand-info__time">
-            {computeStatus(merchant.openTime) ? (
+            {merchant.status == "open" ? (
               <div className="brand-info__open">
                 <GoPrimitiveDot />
                 Đang mở cửa

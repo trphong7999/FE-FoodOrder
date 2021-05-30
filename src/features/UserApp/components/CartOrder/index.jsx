@@ -294,7 +294,26 @@ export default function CartOrder({ merchant }) {
 function CheckOut({ userId, user, items, merchant, handleClose }) {
   const [applyVoucher, setApplyVoucher] = useState({});
   const [voucher, setVoucher] = useState("");
-  const [distance, setDistance] = useState(0);
+
+  const {
+    name: userName,
+    location: { address: userAddress, lat: userLat, lng: userLng },
+    phone: userPhone,
+  } = user;
+  const [tempAddress, setTempAddress] = useState(
+    localStorage.address || userAddress
+  );
+  const [tempLat, setTempLat] = useState(localStorage.lat || userLat);
+  const [tempLng, setTempLng] = useState(localStorage.lng || userLng);
+  console.log(tempLat, tempLng);
+
+  const {
+    name: merchantName,
+    location: { address: merchantAddress, lat: merchantLat, lng: merchantLng },
+  } = merchant;
+
+  const distance = computeDistant(tempLat, tempLng, merchantLat, merchantLng);
+
   const orderSuccess = () =>
     toast.success(
       <Link to="/user/dang-den">
@@ -306,16 +325,6 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
         </div>
       </Link>
     );
-
-  const {
-    name: userName,
-    location: { address: userAddress, lat: userLat, lng: userLng },
-    phone: userPhone,
-  } = user;
-  const {
-    name: merchantName,
-    location: { address: merchantAddress, lat: merchantLat, lng: merchantLng },
-  } = merchant;
 
   const totalPrice = items.reduce(
     (value, item) => value + item.price * item.quantity,
@@ -336,12 +345,10 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
     const diffTime = distance * 5 + 10;
     const now = new Date();
     now.setMinutes(now.getMinutes() + diffTime);
-    console.log(distance, diffTime, now);
     return formatDatetimeToString(now);
   };
 
   const handleOrder = () => {
-    console.log(distance);
     const order = {
       userOrderId: userId,
       merchantId: merchant._id,
@@ -355,6 +362,11 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
         fee: feeShip,
         discount: applyVoucher.discount || 0,
         total: totalPrice,
+        location: {
+          address: tempAddress,
+          lat: tempLat,
+          lng: tempLng,
+        },
       },
       distance: distance,
       note: "Đây là note",
@@ -368,7 +380,7 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
   var myIcon = new L.icon({
     iconUrl: shopIcon,
     iconSize: [28, 45],
-    iconAnchor: [22, 34],
+    iconAnchor: [22, 49],
     popupAnchor: [-3, -46],
     shadowSize: [68, 45],
     shadowAnchor: [22, 44],
@@ -379,36 +391,10 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
       <div className="checkout--detail-order">
         <div className="checkout--detail-order--profile">
           <div className="checkout--detail-order--map">
-            <DistanceMatrixService
-              options={{
-                destinations: [
-                  {
-                    lat: parseFloat(merchantLat),
-                    lng: parseFloat(merchantLng),
-                  },
-                ],
-                origins: [
-                  { lng: parseFloat(userLng), lat: parseFloat(userLat) },
-                ],
-                travelMode: "DRIVING",
-              }}
-              callback={(response) => {
-                if (
-                  response["rows"][0] &&
-                  response["rows"][0].elements[0].distance.value
-                )
-                  setDistance(
-                    (
-                      response["rows"][0].elements[0].distance.value / 1000
-                    ).toFixed(1)
-                  );
-                else setDistance(2);
-              }}
-            />
             <MapContainer
               center={[
-                (parseFloat(merchantLat) + parseFloat(userLat)) / 2,
-                (parseFloat(merchantLng) + parseFloat(userLng)) / 2,
+                (parseFloat(merchantLat) + parseFloat(tempLat)) / 2,
+                (parseFloat(merchantLng) + parseFloat(tempLng)) / 2,
               ]}
               zoom={13}
               scrollWheelZoom={false}
@@ -418,7 +404,7 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker position={[userLat, userLng]}>
+              <Marker position={[tempLat, tempLng]}>
                 <Popup>Location</Popup>
               </Marker>
               <Marker icon={myIcon} position={[merchantLat, merchantLng]}>
@@ -440,7 +426,7 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
                 <p>
                   {userName} - {userPhone}
                 </p>
-                <p>{userAddress}</p>
+                <p>{tempAddress}</p>
               </div>
             </div>
             <span className="checkout--predict">

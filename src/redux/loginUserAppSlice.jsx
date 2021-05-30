@@ -52,8 +52,15 @@ const loginUserAppSlice = createSlice({
     },
     getProfile: (state, action) => {
       state.profile = action.payload;
-      console.log(action.payload);
       localStorage.setItem("profile", JSON.stringify(action.payload));
+      if (
+        action.payload.info.location.lat &&
+        action.payload.info.location.lng
+      ) {
+        localStorage.setItem("address", action.payload.info.location.address);
+        localStorage.setItem("lng", action.payload.info.location.lng);
+        localStorage.setItem("lat", action.payload.info.location.lat);
+      }
     },
   },
 });

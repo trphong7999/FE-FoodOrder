@@ -11,6 +11,7 @@ import Navbar from "features/UserApp/components/Navbar";
 export default function MainPage() {
   const [SlideImage, setSlideImage] = useState([]);
   const [keyFind, setKeyFind] = useState("");
+  const [refreshNewFeed, setRefreshNewFeed] = useState(false);
 
   console.log(keyFind);
 
@@ -18,9 +19,9 @@ export default function MainPage() {
     <div className="main-page">
       <Navbar />
       <Banner setKeyFind={setKeyFind} />
-      <GlobalAddress />
+      <GlobalAddress setRefreshNewFeed={setRefreshNewFeed} />
       <SlickList />
-      <Newfeed keyFind={keyFind} />
+      <Newfeed keyFind={keyFind} refreshNewFeed={refreshNewFeed} />
       <Footer />
     </div>
   );

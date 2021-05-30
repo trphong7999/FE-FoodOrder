@@ -2,4 +2,59 @@
   flex-grow: 1;
   background: #f7f8fa;
   min-width: 400px;
+  .create {
+    padding: 1em 6.5em;
+    display: flex;
+    align-items: center;
+    input {
+      outline: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+    }
+    .search-order {
+      display: flex;
+      align-self: center;
+    }
+  }
+}
+.received-order-detail {
+  position: fixed;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: auto;
+  .customer-info,
+  .partner-info {
+    width: 100%;
+  }
+  .detail-dishes {
+    height: 15rem;
+    overflow-y: scroll;
+  }
+
+  .wrap-info-line {
+    display: flex;
+    width: 100%;
+  }
+  .wrap-info {
+    display: flex;
+    margin: 0 5rem;
+    width: 100%;
+    position: relative;
+
+    .title-info {
+      width: 55% !important;
+    }
+    .info-render {
+      font-size: 1.7rem !important;
+      color: green !important;
+      max-width: 4rem;
+
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      min-width: 23rem;
+    }
+  }
 }

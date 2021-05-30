@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiLocationMarker } from "react-icons/hi";
 import { FaAngleRight } from "react-icons/fa";
 import "./style.scss";
@@ -21,7 +21,7 @@ const customStyles = {
   },
 };
 
-function GlobalAddress(props) {
+function GlobalAddress({ setRefreshNewFeed }) {
   const [modalIsOpen, setIsOpen] = React.useState(false);
   function openModal() {
     setIsOpen(true);
@@ -36,10 +36,21 @@ function GlobalAddress(props) {
   // ----------------------------------Map---------------
   const [location, setLocation] = useState({
     address: "",
-    currentAddress: user.info.location.address,
-    lat: user.info.location.lat,
-    lng: user.info.location.lng,
+    currentAddress: localStorage.address || "Vị trí hiện tại của bạn",
+    lat: localStorage.lat,
+    lng: localStorage.lng,
   });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLocation({
+        ...location,
+        currentAddress: localStorage.address || "Vị trí hiện tại của bạn",
+        lat: localStorage.lat,
+        lng: localStorage.lng,
+      });
+    }, 100);
+  }, []);
 
   return (
     <div id="yourAppElement" className="global-address-search">
@@ -48,7 +59,9 @@ function GlobalAddress(props) {
           <span className="global-address__title">Giao tới địa chỉ</span>
           <div className="global-address__content">
             <HiLocationMarker className="icon-location" />
-            <div className="content">{location.currentAddress}</div>
+            <div className="content" style={{ marginRight: "auto" }}>
+              {location.currentAddress}
+            </div>
             <FaAngleRight className="icon-right" />
           </div>
         </div>
@@ -64,6 +77,7 @@ function GlobalAddress(props) {
           closeModal={closeModal}
           location={location}
           setLocation={setLocation}
+          setRefreshNewFeed={setRefreshNewFeed}
         />
       </Modal>
     </div>
