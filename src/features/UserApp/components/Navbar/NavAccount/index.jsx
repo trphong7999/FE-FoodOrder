@@ -7,8 +7,8 @@ import { logout } from "redux/loginUserAppSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function NavAccount({ avt }) {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.loginUserApp);
+  const dispatch = useDispatch();
   const handleLogout = (e) => {
     e.preventDefault();
 
