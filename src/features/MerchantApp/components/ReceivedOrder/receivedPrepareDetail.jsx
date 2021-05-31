@@ -57,7 +57,12 @@ function ReceivedPrepareDetail() {
           </span>
         </div>
         <div className="partner-action">
-          <FaPhoneAlt className="icon" />
+          <FaPhoneAlt
+            className="icon"
+            onClick={() =>
+              window.open("tel:" + prepareDetail.userOrderId.info.phone)
+            }
+          />
         </div>
       </div>
 
@@ -81,7 +86,12 @@ function ReceivedPrepareDetail() {
             style={{ fontSize: "2.2rem", marginLeft: "2rem" }}
           />
           <div className="partner-action">
-            <FaPhoneAlt className="icon" />
+            <FaPhoneAlt
+              className="icon"
+              onClick={() =>
+                window.open("tel:" + prepareDetail.deliverId.phone)
+              }
+            />
           </div>
         </div>
       ) : (
@@ -106,15 +116,17 @@ function ReceivedPrepareDetail() {
           </div>
           <div className="count-discount">
             <span>Giảm giá</span>
-            <span>{validatePrice(prepareDetail.detail.discount)}</span>
+            <span>{validatePrice(prepareDetail.detail.discount)} đ</span>
           </div>
           <div className="count-commission">
-            <span>Tiền hoa hồng(10%)</span>
+            <span>Tiền chiết khấu({prepareDetail.merchantId.deduct}%)</span>
             <span>
+              -
               {validatePrice(
                 (prepareDetail.detail.total * prepareDetail.merchantId.deduct) /
                   100
-              )}
+              )}{" "}
+              đ
             </span>
           </div>
           <div className="count-total">

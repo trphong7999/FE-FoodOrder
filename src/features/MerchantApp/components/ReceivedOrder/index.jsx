@@ -7,8 +7,11 @@ import ReceivedWait from "./receivedWait";
 import "./style.scss";
 import socket from "socket-io.js";
 import orderApi from "api/orderApi";
+import { useDispatch } from "react-redux";
+import { haveUnread } from "redux/navMerchantUnread";
 
 function ReceivedOrder() {
+  const dispatch = useDispatch();
   const [listConfirm, setListConfirm] = useState([
     { id: 0, title: "Xác nhận bởi cửa hàng", active: false },
     { id: 1, title: "Đang chuẩn bị", active: false },
@@ -21,7 +24,9 @@ function ReceivedOrder() {
   const [listPrepare, setListPrepare] = useState([]);
   const [listWait, setListWait] = useState([]);
 
+  socket.off("findDonePartner");
   socket.on("findDonePartner", ({ orderId, partner }) => {
+    console.log("have", orderId, partner);
     const updatePartner = (list, setList) => {
       let currentList = [...list];
       let order = currentList.find((or) => or._id == orderId);
@@ -35,12 +40,14 @@ function ReceivedOrder() {
           return a.timeOrder - b.timeOrder;
         });
         setList(currentList);
+        dispatch(haveUnread(1));
       }
     };
     updatePartner(listReceived, setListReceived);
     updatePartner(listPrepare, setListPrepare);
   });
 
+  socket.off("partnerCancelOrder");
   socket.on("partnerCancelOrder", (orderId) => {
     const updatePartner = (list, setList) => {
       let currentList = [...list];
@@ -55,9 +62,42 @@ function ReceivedOrder() {
           return a.timeOrder - b.timeOrder;
         });
         setList(currentList);
+        dispatch(haveUnread(3));
       }
     };
     updatePartner(listReceived, setListReceived);
+    updatePartner(listPrepare, setListPrepare);
+  });
+
+  socket.off("completeOrder");
+  socket.on("completeOrder", (orderId) => {
+    const updatePartner = (list, setList) => {
+      let currentList = [...list];
+      let idx = currentList.findIndex((or) => or._id == orderId);
+      if (idx > -1) {
+        list.splice(idx, 1);
+        setList([...list]);
+        console.log("okcomple");
+        dispatch(haveUnread(2));
+      }
+    };
+    updatePartner(listWait, setListWait);
+    updatePartner(listPrepare, setListPrepare);
+  });
+
+  socket.off("DeliveringOrder");
+  socket.on("DeliveringOrder", (orderId) => {
+    const updatePartner = (list, setList) => {
+      let currentList = [...list];
+      let idx = currentList.findIndex((or) => or._id == orderId);
+      if (idx > -1) {
+        list.splice(idx, 1);
+        setList([...list]);
+        console.log("okdeli");
+        dispatch(haveUnread(2));
+      }
+    };
+    updatePartner(listWait, setListWait);
     updatePartner(listPrepare, setListPrepare);
   });
 
