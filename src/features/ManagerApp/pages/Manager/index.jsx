@@ -31,8 +31,10 @@ function Manager(props) {
     <div className="ManagerApp">
       <NavbarManage />
       <div className="main">
-        <Sidebar setSidebar={setSidebar} />
-        <div className="content">
+        <div className="col l-2">
+          <Sidebar setSidebar={setSidebar} />
+        </div>
+        <div className="col l-10 content">
           {sidebar === 1 ? (
             <DashBoard />
           ) : sidebar === 2 ? (

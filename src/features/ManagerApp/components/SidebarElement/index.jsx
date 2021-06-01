@@ -11,7 +11,9 @@ function SidebarElement({ item, index, changeActive }) {
       <div>
         <Icon className="icon" />
       </div>
-      <p>{content}</p>
+      <div>
+        <span>{content}</span>
+      </div>
     </div>
   );
 }

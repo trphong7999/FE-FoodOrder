@@ -70,7 +70,10 @@ export default function Profile() {
     <div className="profile">
       <div className="profile-head">
         <div className="profile-head__avt">
-          <img src={avtDefault} alt="avatar" />
+          <img
+            src={profile.avt === "" ? avtDefault : profile.avt}
+            alt="avatar"
+          />
         </div>
         <div className="profile-head__info">
           <div>{profile.name}</div>
