@@ -17,6 +17,10 @@ const voucherApi = {
     const url = `/vouchers/modify`;
     return axiosClient.post(url, params);
   },
+  check: (params) => {
+    const url = `/vouchers/check`;
+    return axiosClient.post(url, params);
+  },
 };
 
 export default voucherApi;

@@ -75,6 +75,7 @@ function Voucher() {
   const [open, setOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [keyFilter, setKeyFilter] = useState("");
+  const [filterBanner, setFilterBanner] = useState(false);
   const voucherListTable = voucherListFiltered.map((vc, idx) => ({
     ...vc,
     id: idx + 1,
@@ -104,14 +105,26 @@ function Voucher() {
 
   const filterVoucher = () => {
     const vcs = voucherList.filter((vc) =>
-      vc.name.toUpperCase().includes(keyFilter.toUpperCase())
+      vc.name.toUpperCase().includes(keyFilter.toUpperCase()) && filterBanner
+        ? vc.banner == true
+        : true
     );
     setVoucherListFiltered([...vcs]);
   };
 
+  useEffect(() => {
+    filterVoucher();
+  }, [filterBanner]);
+
   return (
     <>
       <div className="find-group">
+        <input
+          type="checkbox"
+          checked={filterBanner}
+          onChange={(e) => setFilterBanner(e.target.checked)}
+        />
+
         <input
           type="text"
           placeholder="Tên voucher"
@@ -172,7 +185,10 @@ function ModalCreateVoucher({
   const [valid, setValid] = useState(
     voucherModify ? voucherModify.valid : true
   );
-  console.log(valid);
+  const [banner, setBanner] = useState(
+    voucherModify ? voucherModify.banner : false
+  );
+
   const handleUploadImg = async (e) => {
     let newAvt = e.target.files;
 
@@ -202,6 +218,7 @@ function ModalCreateVoucher({
       code,
       retained: count,
       valid,
+      banner,
     };
     let res;
     if (voucherModify) {
@@ -300,6 +317,17 @@ function ModalCreateVoucher({
             value={valid}
             checked={valid}
             onChange={(e) => setValid(e.target.checked)}
+            required
+          />
+        </div>
+        <div className="field-wrap">
+          <label className="required-field">Hiển thị Banner</label>
+          <input
+            type="checkbox"
+            name="banner"
+            value={banner}
+            checked={banner}
+            onChange={(e) => setBanner(e.target.checked)}
             required
           />
         </div>

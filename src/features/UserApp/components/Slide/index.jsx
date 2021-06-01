@@ -126,19 +126,21 @@ export default function SlickList() {
   return (
     <div className="grid wide slide-wrapper">
       <Slider {...settings}>
-        {vouchers.map((slide, idx) => (
-          <div
-            key={idx}
-            className="slide-item"
-            style={{ display: "inline-block" }}
-          >
+        {vouchers
+          .filter((vc) => vc.banner == true)
+          .map((slide, idx) => (
             <div
-              className="slide-img"
-              style={{ backgroundImage: `url(${slide.img})` }}
-              onClick={() => handleOpen(slide)}
-            ></div>
-          </div>
-        ))}
+              key={idx}
+              className="slide-item"
+              style={{ display: "inline-block" }}
+            >
+              <div
+                className="slide-img"
+                style={{ backgroundImage: `url(${slide.img})` }}
+                onClick={() => handleOpen(slide)}
+              ></div>
+            </div>
+          ))}
       </Slider>
       <Modal
         aria-labelledby="transition-modal-title"
