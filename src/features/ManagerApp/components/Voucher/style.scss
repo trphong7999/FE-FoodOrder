@@ -1,0 +1,61 @@
+.modal-voucher {
+  display: flex;
+  padding: 1.5rem;
+  position: relative;
+  height: 55rem;
+  .form-voucher {
+    border-right: 1px solid gray;
+    .field-wrap {
+      display: flex;
+      align-items: center;
+      width: 40rem;
+      margin: 1.5rem 0rem;
+
+      label {
+        flex-basis: 30%;
+        font-size: 1.4rem;
+      }
+      label::after {
+        content: "*";
+        color: red;
+        right: 5px;
+      }
+      input,
+      textarea {
+        flex-basis: 60%;
+        outline: none;
+        padding: 0.7rem 0.5rem;
+        border-radius: 8px;
+      }
+    }
+  }
+  .preview-voucher {
+    padding: 1rem;
+  }
+  button {
+    position: absolute;
+    bottom: 2rem;
+    padding: 0.7rem 1.2rem;
+    background: linear-gradient(-45deg, #4a02e0, #781de1);
+    color: white;
+    border-radius: 6px;
+  }
+  .btn-create {
+    right: 3rem;
+  }
+  .btn-cancel {
+    left: 3rem;
+  }
+}
+
+.call-to-action-voucher {
+  display: flex;
+  div {
+    margin: 0 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  div:hover {
+    color: green;
+  }
+}

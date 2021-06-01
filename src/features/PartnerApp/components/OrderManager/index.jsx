@@ -700,7 +700,7 @@ function CurrentOrder({
     socket.emit("chooseOrder", order_id);
     setOrderDelivering({ ...order });
     removeOrderPicked(order_id);
-    setRefresh(true);
+    setRefresh({});
     handleClose();
   };
 

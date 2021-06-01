@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -16,6 +16,7 @@ import img3 from "assets/image/slide3.jpg";
 import img4 from "assets/image/slide4.jpg";
 import img5 from "assets/image/slide5.jpg";
 import img6 from "assets/image/slide6.jpg";
+import voucherApi from "api/voucherApi";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -34,38 +35,38 @@ const useStyles = makeStyles((theme) => ({
 const listImg = [
   {
     img: img1,
-    title: "tặng bạn mã 20k",
-    content:
+    name: "tặng bạn mã 20k",
+    description:
       "Nắng chiếu lung linh muôn hoa vàng, thèm Phúc Long là phải lên Loship liền nghen! Giảm liền 30K cho đơn từ 100K, lại còn freeship tận tay. Sao lại chần chừ chưa đặt ngay! Nhớ nhập mã PHUCLONGNHA bạn nhé!",
   },
   {
     img: img2,
-    title: "tặng bạn mã 10k",
-    content:
+    name: "tặng bạn mã 10k",
+    description:
       "Muộn rồi mà sao còn chưa đặt tiệc to tháng Năm này với mã giảm TIECTOTHANG5, nhập ngay giảm liền 30K cho đơn 150K, lại freeship 5km. Đừng bỏ lỡ, đặt ngay 😘😘",
   },
   {
     img: img3,
-    title: "tặng bạn mã 50k",
-    content:
+    name: "tặng bạn mã 50k",
+    description:
       "Đến hẹn lại lên, Loship công bố top 20 cửa hàng được yêu thích nhất trên Loship của tháng qua. Đảm bảo bạn sẽ có được những món ăn ngon mỗi ngày, không cần đắn đo suy nghĩ lại còn freeship mỗi ngày 😘😘",
   },
   {
     img: img4,
-    title: "tặng bạn mã 60k",
-    content:
+    name: "tặng bạn mã 60k",
+    description:
       "Còn gì tuyệt hơn khi lên Loship có ngay đại tiệc trà sữa hấp dẫn như TocoToco, Tiger Sugar, Royal Tea, Haocha,... tuyệt ngon mà tất cả chỉ từ 25.000 đồng. Miễn phí giao hàng 5km, không giới hạn số lượng đặt trong ngày. Đặt ngay!!",
   },
   {
     img: img5,
-    title: "tặng bạn mã 30k",
-    content:
+    name: "tặng bạn mã 30k",
+    description:
       "Anh ơi anh muốn đi ăn gì đâу ? Ăn chè haу là bánh giò. Hôm naу em muốn đi ăn thật no cho nên anh đừng tiếc tiền. À i á i a i à.. Đặt nhanh thôi anh ơi em đói rồi. Nhập mã THANG5 giảm ngay 10K cho đơn 60K lại freeship tận nơi 😎😎",
   },
   {
     img: img6,
-    title: "tặng bạn mã 15k",
-    content:
+    name: "tặng bạn mã 15k",
+    description:
       "Còn gì tuyệt hơn khi lên Loship có ngay đại tiệc trà sữa hấp dẫn như TocoToco, Tiger Sugar, Royal Tea, Haocha,... tuyệt ngon mà tất cả chỉ từ 25.000 đồng. Miễn phí giao hàng 5km, không giới hạn số lượng đặt trong ngày. Đặt ngay!!",
   },
 ];
@@ -74,6 +75,17 @@ export default function SlickList() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [slide, setSlide] = useState({});
+  const [vouchers, setVouchers] = useState([]);
+
+  useEffect(() => {
+    const fetchVoucherList = async () => {
+      const res = await voucherApi.getAll();
+      console.log(res);
+      setVouchers(res);
+    };
+
+    fetchVoucherList();
+  }, []);
 
   const handleOpen = (val) => {
     setSlide(val);
@@ -114,7 +126,7 @@ export default function SlickList() {
   return (
     <div className="grid wide slide-wrapper">
       <Slider {...settings}>
-        {listImg.map((slide, idx) => (
+        {vouchers.map((slide, idx) => (
           <div
             key={idx}
             className="slide-item"
@@ -144,7 +156,7 @@ export default function SlickList() {
           <div className={classes.paper}>
             <div className="modal-discount">
               <div className="discount-title">
-                {slide.title}{" "}
+                {slide.name}{" "}
                 <MdClear
                   className="discount-title__icon"
                   onClick={handleClose}
@@ -156,8 +168,8 @@ export default function SlickList() {
                   alt="img-discount"
                   className="discount-img"
                 />
-                <div className="discount-head">{slide.title}</div>
-                <div className="discount-text">{slide.content}</div>
+                <div className="discount-head">{slide.name}</div>
+                <div className="discount-text">{slide.description}</div>
               </div>
             </div>
           </div>

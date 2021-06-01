@@ -4,9 +4,10 @@ import banner from "assets/image/banner.jpg";
 import { BsSearch } from "react-icons/bs";
 
 function Banner({ keyFind, setKeyFind }) {
-  // let a;
+  let a;
   const handleChangeQuery = (val) => {
-    setKeyFind(val);
+    clearTimeout(a);
+    a = setTimeout(() => setKeyFind(val), 400);
   };
   return (
     <div className="banner-wrap">
