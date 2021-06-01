@@ -1,14 +1,54 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import "./style.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { readDone, haveCancelOrder } from "redux/navMerchantUnread";
 
 function TabMenu() {
+  const dispatch = useDispatch();
+  const unRead = useSelector((state) => state.unRead);
   const [tabNavOrder, setTabNavOrder] = useState([
-    { id: 0, title: "Mới", active: true, link: "/merchant" },
-    { id: 1, title: "Đã nhận", active: false, link: "/merchant/da-nhan" },
-    { id: 2, title: "Lịch sử", active: false, link: "/merchant/lich-su" },
-    { id: 3, title: "Đã hủy", active: false, link: "/merchant/da-huy" },
+    {
+      id: 0,
+      title: "Mới",
+      active: true,
+      link: "/merchant",
+      unRead: unRead[0].count,
+    },
+    {
+      id: 1,
+      title: "Đã nhận",
+      active: false,
+      link: "/merchant/da-nhan",
+      unRead: unRead[1].count,
+    },
+    {
+      id: 2,
+      title: "Lịch sử",
+      active: false,
+      link: "/merchant/lich-su",
+      unRead: unRead[2].count,
+    },
+    {
+      id: 3,
+      title: "Đã hủy",
+      active: false,
+      link: "/merchant/da-huy",
+      unRead: unRead[3].count,
+    },
   ]);
+  console.log(unRead);
+
+  useEffect(() => {
+    const updateUnread = () => {
+      tabNavOrder.map((tab, idx) => {
+        tab.unRead = unRead[idx].count;
+        return tab;
+      });
+      setTabNavOrder([...tabNavOrder]);
+    };
+    updateUnread();
+  }, [unRead]);
 
   const handleActive = (index) => {
     const list = tabNavOrder;
@@ -22,6 +62,8 @@ function TabMenu() {
       return item;
     });
     setTabNavOrder(list);
+    console.log("change", index);
+    dispatch(readDone(parseInt(index)));
   };
   return (
     <ul className="tab-menu">
@@ -40,7 +82,11 @@ function TabMenu() {
             }}
             to={item.link}
           >
-            {item.title}
+            {item.title} (
+            <span style={{ color: "green", fontWeight: "bold" }}>
+              {item.unRead}
+            </span>
+            )
           </NavLink>
         </li>
       ))}

@@ -64,9 +64,12 @@ function MerchantApp() {
         component={ReceivedPrepareDetail}
       />
       <Route path={`${match.url}/da-huy`} exact component={CancelOrder} />
-      <Route path={`${match.url}/da-huy/:id`} component={CancelOrderDetail} />
+      {/* <Route path={`${match.url}/da-huy/:id`} component={CancelOrderDetail} /> */}
       <Route path={`${match.url}/lich-su`} exact component={OrderHistory} />
-      <Route path={`${match.url}/lich-su/:id`} component={OrderHistoryDetail} />
+      <Route
+        path={`${match.url}/lich-su/chi-tiet`}
+        component={OrderHistoryDetail}
+      />
       <Route path={`${match.url}/thuc-don`} exact component={FoodMenu} />
       <Route path={`${match.url}/thuc-don/:id`} component={FoodMenuEdit} />
 

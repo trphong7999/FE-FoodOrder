@@ -15,7 +15,7 @@ function OrderHistory() {
   console.log(historyList);
   const handleToOrderHistoryDetail = (order) => {
     const location = {
-      pathname: `${match.url}/${order.id}`,
+      pathname: `${match.url}/chi-tiet`,
       state: { detailHistory: order },
     };
     history.push(location);
@@ -25,7 +25,9 @@ function OrderHistory() {
   useEffect(() => {
     const getOrderHistoryList = async () => {
       const ordersDelivering = await orderApi.getOrderByStatus("delivering");
+      ordersDelivering.reverse();
       const ordersComplete = await orderApi.getOrderByStatus("complete");
+      ordersComplete.reverse();
       // const ordersfail = await orderApi.getOrderByStatus("fail");
       setHistoryList([...ordersDelivering, ...ordersComplete]);
     };

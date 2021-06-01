@@ -126,6 +126,11 @@
     align-items: initial !important;
   }
 }
+.makeStyles-paper-10 {
+  @include mobile {
+    height: 100vh;
+  }
+}
 .checkout {
   border-radius: 8px;
   width: 50vw;
@@ -414,3 +419,19 @@
   width: 100%;
 }
 // =======================================
+
+.modal-location {
+  position: fixed;
+  top: 0%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  .leaflet-container {
+    height: 70vh !important;
+    width: 100% !important;
+  }
+  .modal-search__form {
+    height: 30vh !important;
+  }
+}

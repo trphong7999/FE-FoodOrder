@@ -23,6 +23,7 @@ import L from "leaflet";
 import shopIcon from "assets/image/icons/shop-icon.png";
 import { DistanceMatrixService } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
+import FormAddressSearch from "../GlobalAddress/FormAddressSearch/FormAddressSearch";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -294,7 +295,8 @@ export default function CartOrder({ merchant }) {
 function CheckOut({ userId, user, items, merchant, handleClose }) {
   const [applyVoucher, setApplyVoucher] = useState({});
   const [voucher, setVoucher] = useState("");
-
+  const [open, setOpen] = useState(false);
+  console.log(open);
   const {
     name: userName,
     location: { address: userAddress, lat: userLat, lng: userLng },
@@ -305,7 +307,12 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
   );
   const [tempLat, setTempLat] = useState(localStorage.lat || userLat);
   const [tempLng, setTempLng] = useState(localStorage.lng || userLng);
-  console.log(tempLat, tempLng);
+
+  const [location, setLocation] = useState({
+    address: localStorage.address || userAddress,
+    lat: localStorage.lat || userLat,
+    lng: localStorage.lng || userLng,
+  });
 
   const {
     name: merchantName,
@@ -385,6 +392,11 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
     shadowSize: [68, 45],
     shadowAnchor: [22, 44],
   });
+
+  const callBackOpenChangeAddress = () => {
+    setOpen(false);
+  };
+
   return (
     <div className="checkout">
       <div className="checkout--header">Xác nhận đơn hàng</div>
@@ -434,10 +446,23 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
               Dự kiến: {getTimeExpect()} -
               <span style={{ color: "red" }}> {distance}km</span>
             </span>
-            <div className="checkout--change">
+            <div className="checkout--change" onClick={() => setOpen(true)}>
               <p>Thay đổi thông tin nhận hàng</p>
+
               <IoIosArrowForward />
             </div>
+            {open ? (
+              <div className="modal-location">
+                <FormAddressSearch
+                  location={location}
+                  setLocation={setLocation}
+                  setRefreshNewFeed={setOpen}
+                  closeModal={callBackOpenChangeAddress}
+                />
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
         <div className="checkout--detail-order--order">
@@ -544,3 +569,20 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
     </div>
   );
 }
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    padding: "0",
+    width: "70%",
+    height: "47%",
+  },
+  overlay: {
+    backgroundColor: "rgba(0,0,0,0.4)",
+  },
+};

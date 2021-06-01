@@ -86,7 +86,10 @@ function LoginMerchant() {
           </div>
           <div className="login__support-item">
             <span>0345 029 068</span>
-            <FaPhoneAlt className="item-icon phone" />
+            <FaPhoneAlt
+              className="item-icon phone"
+              onClick={() => window.open("tel:0345 029 068")}
+            />
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import "./style.scss";
 import merchantApi from "api/merchantApi";
 import { useDispatch } from "react-redux";
 import { logoutMerchant } from "redux/loginMerchantAppSlice";
+import { haveUnread } from "redux/navMerchantUnread";
 import TabMenu from "features/MerchantApp/components/TabMenu";
 import NavBar from "features/MerchantApp/components/NavBar";
 import socket from "socket-io.js";
@@ -24,18 +25,23 @@ function MainPageMerchant() {
       return;
     }
   });
+
+  socket.off("newOrder");
   socket.on("newOrder", (data) => {
     setNewListOrder([...newListOrder, data]);
+    dispatch(haveUnread(0));
   });
 
+  socket.off("userCancelOrder");
   socket.on("userCancelOrder", (orderId) => {
+    console.log(orderId, newListOrder);
     const idx = newListOrder.findIndex((order) => {
       return String(order._id) == orderId;
     });
-    console.log(idx, orderId, newListOrder);
     if (idx > -1) {
       newListOrder.splice(idx, 1);
       setNewListOrder([...newListOrder]);
+      dispatch(haveUnread(3));
     }
   });
 

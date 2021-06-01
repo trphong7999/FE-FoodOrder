@@ -106,6 +106,7 @@ export default function Newfeed({ keyFind, refreshNewFeed }) {
       let arrFoods = mc.category.map((cat) =>
         cat.foods.map((food) => food.name)
       );
+      console.log(mc);
       arrFoods = [].concat.apply([], arrFoods);
       let rs = false;
       for (let food of arrFoods) {

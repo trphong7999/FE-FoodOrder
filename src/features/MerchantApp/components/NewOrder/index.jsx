@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { IoWallet } from "react-icons/io5";
 import "./style.scss";
 import { useHistory, useRouteMatch } from "react-router-dom";
-import axios from "axios";
-import { validatePrice, datetimeFromTimestamp } from "func";
+import { validatePrice, datetimeFromTimestamp, sumQuantity } from "func";
 import socket from "socket-io.js";
 
 function NewOrder({ newListOrder }) {
@@ -18,19 +17,6 @@ function NewOrder({ newListOrder }) {
   const handleChangeOrderDetail = (index) => {
     setSerialOrder(index);
   };
-
-  let sumQuantity = (acc, curr) => acc + curr.quantity;
-
-  let sumTotal = (acc, curr) => acc + curr.total;
-  //---------------------------------------------------------------//
-  const addReceivedOrder = async (order) => {
-    await axios.post(`http://localhost:5000/receivedOrder`, order);
-  };
-
-  const removeListNewOrderItem = async (idNewOrder) => {
-    await axios.delete(`http://localhost:5000/newListOrder/${idNewOrder}`);
-  };
-
   const handleConfirmAdd = () => {
     socket.emit("acceptOrder", detailOrder._id);
     history.push(`merchant/da-nhan`);
@@ -38,7 +24,7 @@ function NewOrder({ newListOrder }) {
   // ------------------------------------------------------------
   const changeUrlToRefusal = () => {
     const location = {
-      pathname: `${match.url}/moi-tu-choi/${detailOrder.id}`,
+      pathname: `${match.url}/moi-tu-choi}`,
       state: { detailOrderNeedCancel: detailOrder },
     };
     history.push(location);

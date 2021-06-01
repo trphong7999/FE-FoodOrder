@@ -6,15 +6,21 @@ import avatarDefault from "assets/image/avartar/avatar-default.png";
 import taixe2 from "assets/image/avartar/taixe2.jpg";
 import { useHistory, useLocation } from "react-router-dom";
 import "../ReceivedOrder/style.scss";
-import { validatePrice } from "func";
+import {
+  formatDatetimeToString,
+  sumQuantity,
+  sumTotal,
+  validatePrice,
+} from "func";
+import "./style.scss";
 
 function OrderHistoryDetail() {
   const history = useHistory();
   const location = useLocation();
-  const detail = location.state.detailHistory;
+  const order = location.state.detailHistory;
 
   return (
-    <div className="received-order-detail">
+    <div className="received-order-detail received-order-detail-merchant">
       <div className="detail-head">
         <div
           className="detail-head__link"
@@ -33,18 +39,18 @@ function OrderHistoryDetail() {
           style={{ backgroundImage: `url(${avatarDefault})` }}
         ></div>
         <div className="customer-info">
-          <span>{detail.customer.name}</span>
+          <span>{order.userOrderId.info.name}</span>
           <span>
-            {detail.customer.quantityOrdered < 1
+            {order.userOrderId.quantityOrderedSuccess < 1
               ? "Lần đầu đặt"
-              : `Đã đặt ${detail.customer.quantityOrdered} đơn`}
+              : `Đã đặt ${order.userOrderId.quantityOrderedSuccess} đơn`}
           </span>
         </div>
       </div>
 
       <div className="detail-note">
         <span>Ghi chú khách hàng:</span>
-        <span>{detail.note}</span>
+        <span>{order.note}</span>
       </div>
 
       <div className="detail-partner">
@@ -53,17 +59,20 @@ function OrderHistoryDetail() {
           style={{ backgroundImage: `url(${taixe2})` }}
         ></div>
         <div className="partner-info">
-          <span>{detail.infoPartner.name}</span>
-          <span>{detail.infoPartner.phone}</span>
+          <span>{order.deliverId.name}</span>
+          <span>{order.deliverId.phone}</span>
         </div>
         <div className="partner-action">
-          <FaPhoneAlt className="icon" />
+          <FaPhoneAlt
+            className="icon"
+            onClick={() => window.open("tel:" + order.deliverId.phone)}
+          />
         </div>
       </div>
 
       <div className="detail-dishes">
         <div className="detail-dishes__list">
-          {detail.listFood.map((item, index) => (
+          {order.detail.foods.map((item, index) => (
             <div className="detail-dishes__item" key={index}>
               <div className="item-quantity">{item.quantity} x</div>
               <div className="item-name">{item.name}</div>
@@ -75,19 +84,36 @@ function OrderHistoryDetail() {
         <div className="detail-dishes__count">
           <div className="count-cost">
             <span>Tổng tiền món (giá gốc)</span>
-            <span>{validatePrice(detail.totalAmountOfDishes)} đ</span>
+            <span>
+              {" "}
+              {validatePrice(order.detail.foods.reduce(sumTotal, 0))} đ
+            </span>
           </div>
-          <div className="count-discount">
+          {/* <div className="count-discount">
             <span>Giảm giá</span>
-            <span>{validatePrice(detail.discountMoney)}</span>
-          </div>
+            <span>{validatePrice(order.detail.discount)} đ</span>
+          </div> */}
           <div className="count-commission">
-            <span>Tiền hoa hồng(20%)</span>
-            <span>-{validatePrice(detail.commissionMoney)}</span>
+            <span>Tiền chiết khấu ({order.merchantId.deduct}%)</span>
+            <span>
+              -
+              {validatePrice(
+                (order.detail.total * order.merchantId.deduct) / 100
+              )}
+            </span>
           </div>
           <div className="count-total">
-            <span>Tổng tiền ({detail.totalNumberOfDishes} món)</span>
-            <span>{validatePrice(detail.finalAmount)} đ</span>
+            <span>
+              Tổng tiền ({order.detail.foods.reduce(sumQuantity, 0)} món)
+            </span>
+            <span>
+              {" "}
+              {validatePrice(
+                order.detail.total -
+                  order.detail.total * (order.merchantId.deduct / 100)
+              )}{" "}
+              đ
+            </span>
           </div>
         </div>
       </div>
@@ -96,20 +122,26 @@ function OrderHistoryDetail() {
         <div className="detail-bot__id">
           <span>Mã Đơn Hàng</span>
           <span>
-            {detail.id} <RiFileCopyLine />
+            {order._id} <RiFileCopyLine />
           </span>
         </div>
         <div className="detail-bot__time">
           <span>Thời gian đặt đơn</span>
-          <span>Hôm nay {detail.time.startOrder}</span>
+          <span>
+            {formatDatetimeToString(new Date(parseInt(order.timeOrder)))}
+          </span>
         </div>
         <div className="detail-bot__space">
           <span>Khoảng cách</span>
-          <span>{detail.space}km</span>
+          <span>{order.distance}km</span>
         </div>
         <div className="detail-bot__time">
           <span>Thời gian lấy hàng</span>
-          <span>Hôm nay {detail.time.takeOrder}</span>
+          <span>
+            {formatDatetimeToString(
+              new Date(parseInt(order.timePartnerGetFood))
+            )}
+          </span>
         </div>
       </div>
     </div>

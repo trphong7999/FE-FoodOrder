@@ -99,7 +99,12 @@ function ReceivedConfirmDetail() {
           </span>
         </div>
         <div className="partner-action">
-          <FaPhoneAlt className="icon" />
+          <FaPhoneAlt
+            className="icon"
+            onClick={() =>
+              window.open("tel:" + orderDetail.userOrderId.info.phone)
+            }
+          />
         </div>
       </div>
 
@@ -133,7 +138,10 @@ function ReceivedConfirmDetail() {
             />
           </div>
           <div className="partner-action">
-            <FaPhoneAlt className="icon" />
+            <FaPhoneAlt
+              className="icon"
+              onClick={() => window.open("tel:" + orderDetail.deliverId.phone)}
+            />
           </div>
         </div>
       ) : (

@@ -5,6 +5,7 @@ import partnerReducer from "./loginPartnerAppSlice";
 import tabNavSlice from "./tabNavSlice";
 import loginUserAppSlice from "./loginUserAppSlice";
 import cartOrderSlice from "./cartOrderSlice";
+import unReadSlice from "./navMerchantUnread";
 
 const rootReducer = {
   merchant: merchantReducer,
@@ -13,6 +14,7 @@ const rootReducer = {
   tabNav: tabNavSlice,
   loginUserApp: loginUserAppSlice,
   cartOrder: cartOrderSlice,
+  unRead: unReadSlice,
 };
 
 const store = configureStore({
