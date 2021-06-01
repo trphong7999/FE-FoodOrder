@@ -1,16 +1,17 @@
 .ManagerApp {
   height: 100vh;
   .create {
-    height: 200px;
+    height: 140px;
+    width: 100%;
+    border-bottom: 1px solid #ebebeb;
+    background-color: white;
   }
   .main {
-    height: calc(100vh - 9em);
     display: flex;
     .content {
-      flex-grow: 9;
       .find-group {
         display: flex;
-        margin: 5rem 8rem;
+        padding: 5rem 8rem;
         font-size: 1.2rem;
 
         input {

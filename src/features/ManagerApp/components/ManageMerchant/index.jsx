@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import DataTable from "components/DataTable";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import Modal from "@material-ui/core/Modal";
 import ModalForm from "../ModalRegisterMerchantForm";
@@ -42,8 +42,19 @@ const columns = [
 ];
 
 function ManageMerchant(props) {
+  const history = useHistory();
   const [open, setOpen] = useState(false);
   const [merchantList, setMerchantList] = useState([]);
+  const [allDataMerchant, setAllDataMerchant] = useState([]);
+
+  const changeLinkToDetailMer = (data) => {
+    let location = {
+      pathname: `/manager/merchant/${data._id}`,
+      state: { merchantDetail: data },
+    };
+    history.push(location);
+    history.replace(location);
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -71,6 +82,7 @@ function ManageMerchant(props) {
           deduct: merchant.deduct,
         }));
         setMerchantList(data);
+        setAllDataMerchant(data);
       } catch (error) {
         console.log("Failed to fetch product list: ", error);
       }

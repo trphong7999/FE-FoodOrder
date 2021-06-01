@@ -6,7 +6,7 @@ function NavbarManager(props) {
   return (
     <div className="navbar-manager">
       <div className="logo">
-        <img src={logo} alt="logo" width="100" />
+        <img src={logo} alt="logo" width="80" />
       </div>
       <div className="infos">
         <div className="account">

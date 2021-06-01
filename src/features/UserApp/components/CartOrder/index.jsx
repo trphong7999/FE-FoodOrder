@@ -485,8 +485,9 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
               ""
             )}
             <div className="checkout-voucher">
-              <div>Mã khuyến mãi</div>
-              <div>
+              <div className="title">Mã khuyến mãi</div>
+
+              <div className="voucher-group">
                 <input
                   type="text"
                   onChange={(e) => setVoucher(e.target.value)}

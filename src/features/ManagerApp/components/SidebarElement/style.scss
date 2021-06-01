@@ -1,14 +1,15 @@
 .sidebarEl {
   display: flex;
-  padding: 1em 4em;
+  align-items: center;
+  padding: 4rem;
   color: #aaa;
-  font-size: 2em;
+  font-size: 1.8rem;
   height: 10rem;
   position: relative;
+  cursor: pointer;
   .icon {
-    position: relative;
-    top: 0.8em;
-    left: -0.3em;
+    margin-right: 1rem;
+    font-size: 2rem;
   }
 }
 .actived {
@@ -22,7 +23,7 @@
 }
 .actived:before {
   content: "";
-  width: 7px;
+  width: 1rem;
   height: 10rem;
   background: #781de1;
   position: absolute;
