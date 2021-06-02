@@ -10,6 +10,7 @@ import ManageCustomer from "features/ManagerApp/components/ManageCustomer";
 import managerApi from "api/managerApi";
 import { logout } from "redux/loginManagerAppSlice";
 import { useDispatch } from "react-redux";
+import Voucher from "../../components/Voucher";
 
 function Manager(props) {
   const [sidebar, setSidebar] = useState(1);
@@ -43,7 +44,7 @@ function Manager(props) {
           ) : sidebar === 4 ? (
             <ManageCustomer />
           ) : (
-            <DashBoard />
+            <Voucher />
           )}
         </div>
       </div>

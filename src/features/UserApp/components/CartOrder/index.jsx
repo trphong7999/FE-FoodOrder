@@ -24,7 +24,10 @@ import shopIcon from "assets/image/icons/shop-icon.png";
 import { DistanceMatrixService } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
 import FormAddressSearch from "../GlobalAddress/FormAddressSearch/FormAddressSearch";
+
 import { MdClear } from "react-icons/md";
+
+import voucherApi from "api/voucherApi";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -333,6 +336,16 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
         </div>
       </Link>
     );
+  console.log(applyVoucher);
+  const wrongCode = () => toast.error("🤔Mã không hợp lệ!");
+
+  const applyFail = () => toast.error("🤔Đơn hàng không đạt điều kiện!");
+
+  const codeOut = () => toast.error("🤔Mã hết lượt sử dụng!");
+
+  const codeUsed = () => toast.error("🤔Bạn chỉ được sử dụng mã này một lần!");
+
+  const applySuccess = () => toast.success("😍Áp mã thành công!");
 
   const totalPrice = items.reduce(
     (value, item) => value + item.price * item.quantity,
@@ -340,13 +353,16 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
   );
   const feeShip = distance <= 3 ? 13000 : distance * 4500;
 
-  const handleApplyVoucher = () => {
-    if (voucher === "VUICUOITUAN" && totalPrice >= 60000)
-      setApplyVoucher({
-        name: voucher,
-        condition: 60000,
-        discount: 10000,
-      });
+  const handleApplyVoucher = async () => {
+    const vc = await voucherApi.check({ code: voucher.toUpperCase() });
+    if (vc.status != 400) {
+      if (vc.status == 201) codeOut();
+      else if (vc.status == 202) codeUsed();
+      else if (vc.condition <= totalPrice) {
+        setApplyVoucher(vc);
+        applySuccess();
+      } else applyFail();
+    } else wrongCode();
   };
 
   const getTimeExpect = () => {
@@ -379,6 +395,7 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
       distance: distance,
       note: "Đây là note",
       timeDeliverDone: Date.now() + (distance * 5 + 10) * 60000,
+      code: applyVoucher.code,
     };
     socket.emit("startOrder", order);
     handleClose();
@@ -404,6 +421,10 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
         Xác nhận đơn hàng
         <MdClear className="header-icon" onClick={() => handleClose()} />
       </div>
+
+      <ToastContainer />
+      <div className="checkout--header">Xác nhận đơn hàng</div>
+
       <div className="checkout--detail-order">
         <div className="checkout--detail-order--profile">
           <div className="checkout--detail-order--map">
@@ -521,6 +542,8 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
                   type="text"
                   onChange={(e) => setVoucher(e.target.value)}
                   placeholder="Nhập mã"
+                  maxLength="15"
+                  minLength="3"
                 />
                 {Object.keys(applyVoucher).length !== 0 ? (
                   <TiTimesOutline
@@ -533,10 +556,6 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
                   ""
                 )}
                 <button onClick={() => handleApplyVoucher()}>Áp dụng</button>
-              </div>
-              <div className="checkout--pointer">
-                Xem mã của bạn
-                <IoIosArrowForward className="icon" />
               </div>
             </div>
             <div className="checkout-total">

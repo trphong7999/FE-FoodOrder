@@ -117,9 +117,9 @@ export default function OrderManager() {
       const orders = await orderApi.getOrderByPartner(partner._id);
       if (Array.isArray(orders) && orders.length > 0) {
         setOrderDone(
-          orders.filter(
-            (od) => od.status === "complete" || od.status === "cancel"
-          )
+          orders
+            .filter((od) => od.status === "complete" || od.status === "cancel")
+            .reverse()
         );
         setOrderProcessing(
           orders.filter(
@@ -700,7 +700,7 @@ function CurrentOrder({
     socket.emit("chooseOrder", order_id);
     setOrderDelivering({ ...order });
     removeOrderPicked(order_id);
-    setRefresh(true);
+    setRefresh({});
     handleClose();
   };
 

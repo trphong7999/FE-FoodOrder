@@ -10,7 +10,7 @@ import "./style.scss";
 import { FcSearch } from "react-icons/fc";
 import { FaPhoneAlt } from "react-icons/fa";
 import { BsChevronLeft } from "react-icons/bs";
-import { RiFileCopyLine } from "react-icons/ri";
+import { RiFileCopyLine, RiCoupon3Line } from "react-icons/ri";
 import Modal from "@material-ui/core/Modal";
 import { Link, useRouteMatch } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -33,6 +33,7 @@ function Sidebar({ setSidebar }) {
     { Icon: FaStore, content: "Merchant", active: false },
     { Icon: FaMotorcycle, content: "Partner", active: false },
     { Icon: FaUserAlt, content: "Customer", active: false },
+    { Icon: RiCoupon3Line, content: "Voucher", active: false },
   ]);
   const [orderId, setOrderId] = useState("");
   const [open, setOpen] = useState(true);

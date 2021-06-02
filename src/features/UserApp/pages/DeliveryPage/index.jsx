@@ -44,12 +44,12 @@ export default function DeliveryPage() {
   });
 
   socket.on("partnerCancelOrder", (orderId) => {
-    setRefresh(true);
+    setRefresh({});
     setGeoPartner(null);
   });
 
   socket.on("merchantCancelOrder", (orderId) => {
-    setRefresh(true);
+    setRefresh({});
   });
 
   socket.on("changeStatus", ({ order, orderId, status }) => {
@@ -57,7 +57,7 @@ export default function DeliveryPage() {
   });
 
   socket.on("findDonePartner", (partner) => {
-    setRefresh(true);
+    setRefresh({});
   });
 
   socket.on("sendGeo", (geo) => {
@@ -65,7 +65,7 @@ export default function DeliveryPage() {
   });
 
   socket.on("DeliveringOrder", () => {
-    setRefresh(true);
+    setRefresh({});
   });
 
   var userIcon = new L.icon({
