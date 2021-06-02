@@ -5,6 +5,7 @@ import Modal from "react-modal";
 import "assets/css/base.scss";
 import { FaChevronLeft } from "react-icons/fa";
 import merchantApi from "api/merchantApi";
+import Review from "../../Review";
 
 export default function YourOrder({ historyOrders }) {
   const [currenOrder, setCurrenOrder] = useState("");
@@ -52,7 +53,7 @@ export default function YourOrder({ historyOrders }) {
       </div>
       {historyOrders.map((od, idx) =>
         od.status === "complete" || od.status === "cancel" ? (
-          <OrderLine order={od} idx={idx + 1} />
+          <OrderLine key={idx} order={od} idx={idx + 1} />
         ) : (
           ""
         )
@@ -70,7 +71,7 @@ export default function YourOrder({ historyOrders }) {
             <div className="history-item__head">
               <div className="head-id">#{order._id}</div>
               <div className="head-date">
-                {convertTimeTodate(parseInt(order.timeOrder))}
+                {formatDatetimeToString(new Date(parseInt(order.timeOrder)))}
               </div>
             </div>
             <div className="history-item__body">
@@ -119,7 +120,9 @@ export default function YourOrder({ historyOrders }) {
                   <div className="item-id">#{currenOrder._id}</div>
                   <div className="item-date">
                     <span>
-                      {convertTimeTodate(parseInt(currenOrder.timeOrder))}
+                      {formatDatetimeToString(
+                        new Date(parseInt(currenOrder.timeOrder))
+                      )}
                     </span>
                     <span
                       style={{
@@ -139,28 +142,63 @@ export default function YourOrder({ historyOrders }) {
 
                 <div className="history-body__item">
                   <div className="item-infomation">
-                    <span>{currenOrder.merchantId.name}</span>
-                    <div>{currenOrder.merchantId.location.address}</div>
-                  </div>
-                  {currenOrder.partnerId ? (
-                    <div className="item-infomation">
-                      <span>tên người giao</span>
-                      <div>số phone</div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-
-                  <div className="item-infomation">
                     <span>Phương thức thanh toán</span>
                     <div>Tiền mặt</div>
                   </div>
+                  {currenOrder.status === "cancel" ? (
+                    <div className="item-address">
+                      <span>Lý do hủy</span>
+                      <div>hello</div>
+                    </div>
+                  ) : (
+                    <div className="item-address">
+                      <span>Thời gian nhận</span>
+                      <div>
+                        {formatDatetimeToString(
+                          new Date(parseInt(currenOrder.timeDeliverDone))
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                <div className="history-body__item">
+                  <div className="item-infomation">
+                    <span>{currenOrder.merchantId.name}</span>
+                    <div>{currenOrder.merchantId.location.address}</div>
+                  </div>
+                  {currenOrder.status === "complete" ? (
+                    <Review
+                      orderId={currenOrder._id}
+                      data={currenOrder.merchantId}
+                      type={"1"}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+
+                {currenOrder.deliverId ? (
+                  <div className="history-body__item">
+                    <div className="item-infomation">
+                      <span>{currenOrder.deliverId.name}</span>
+                      <div>{currenOrder.deliverId.phone}</div>
+                    </div>
+
+                    <Review
+                      orderId={currenOrder._id}
+                      data={currenOrder.deliverId}
+                      type={"2"}
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
 
                 <div className="history-body__item">
                   <ul className="item-list">
                     {currenOrder.detail.foods.map((dish, idx) => (
-                      <li className="item-list__li">
+                      <li className="item-list__li" key={idx}>
                         <div
                           className="item-list__name"
                           style={{
@@ -292,9 +330,13 @@ function OrderLine({ order, idx }) {
           {order.deliverId ? order.deliverId.name : "Không có"}
         </strong>
         <br></br>
-        <a href="" className="font-weight-bold" data-toggle="modal">
-          {order.deliverId ? "Đánh giá" : ""}
-        </a>
+        <span className="review">
+          {order.deliverId ? (
+            <Review orderId={order._id} data={order.deliverId} type={"2"} />
+          ) : (
+            ""
+          )}
+        </span>
       </div>
       <div className="history-table-cell history-table-col6">
         <div style={{ fontWeight: "bold" }}>
@@ -335,7 +377,9 @@ function OrderLine({ order, idx }) {
             Lý do hủy
           </div>
         ) : (
-          ""
+          <span className="review">
+            <Review orderId={order._id} data={order.merchantId} type={"1"} />
+          </span>
         )}
         <div className="d-block mb-1" onClick={() => openModalDetail()}>
           Chi tiết đơn hàng
@@ -513,8 +557,10 @@ function ReasonsCancel({ reasons }) {
   return (
     <div>
       <div>Lý do hủy :</div>
-      {reasons.map((rs) => (
-        <p style={{ marginLeft: "2rem" }}>{rs}</p>
+      {reasons.map((rs, idx) => (
+        <p key={idx} style={{ marginLeft: "2rem" }}>
+          {rs}
+        </p>
       ))}
     </div>
   );

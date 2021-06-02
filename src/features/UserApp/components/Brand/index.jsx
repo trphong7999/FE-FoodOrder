@@ -3,16 +3,22 @@ import { HashLink as Link } from "react-router-hash-link";
 import { BiTimeFive } from "react-icons/bi";
 import { GoPrimitiveDot } from "react-icons/go";
 import { IoLocationOutline } from "react-icons/io5";
-import { validatePrice, computeDistant } from "func.js";
+import { validatePrice, computeDistant, formatDatetimeToString } from "func.js";
 import { useDispatch, useSelector } from "react-redux";
 import { addCartOrder } from "redux/cartOrderSlice";
 import { DistanceMatrixService } from "@react-google-maps/api";
 import { toast } from "react-toastify";
 import loading from "assets/image/icons/loading.png";
+import avtDefault from "assets/image/avartar/slide1.jpg";
 import "./style.scss";
+import { FaComment, FaStar } from "react-icons/fa";
+import { AiFillHeart } from "react-icons/ai";
+import reviewApi from "api/review";
 
 export default function Brand({ merchant }) {
   const [distance, setDistance] = useState(0);
+  const [switchh, setSwitchh] = useState(1);
+  const [allReview, setAllReview] = useState([]);
   const dispatch = useDispatch();
   const listCartOrder = useSelector((state) => state.cartOrder);
   const user = useSelector((state) => state.loginUserApp.profile);
@@ -76,6 +82,15 @@ export default function Brand({ merchant }) {
     return () => {
       window.removeEventListener("scroll", scrollCallBack);
     };
+  }, []);
+
+  useEffect(() => {
+    const getAllReviewByMer = async () => {
+      const res = await reviewApi.getReviewByMerId(merchant._id);
+      res.reverse();
+      setAllReview(res);
+    };
+    getAllReviewByMer();
   }, []);
 
   return (
@@ -184,25 +199,34 @@ export default function Brand({ merchant }) {
         </div>
 
         <div className="col l-9 m-9 c-12 brand__products">
-          {merchant.category.map((cat, index) => (
-            <div id={`group${index}`} className="product__category" key={index}>
-              <div className="product__category-name">{cat.name}</div>
-              <div className="product__list-item">
-                {cat.foods.map((food, index) => (
-                  <div className="product__item" key={index}>
-                    <div
-                      className="product__item-img hover-mode"
-                      style={{
-                        backgroundImage: `${
-                          food.img === ""
-                            ? `url("${loading}")`
-                            : `url("${food.img}")`
-                        }`,
-                      }}
-                    >
-                      <div className="img-big__wrapper hidden">
+          <div className="brand__product-switch">
+            <div
+              className={`switch ${switchh === 1 ? "active" : ""}`}
+              onClick={() => setSwitchh(1)}
+            >
+              Menu
+            </div>
+            <div
+              className={`switch ${switchh === 2 ? "active" : ""}`}
+              onClick={() => setSwitchh(2)}
+            >
+              Đánh giá
+            </div>
+          </div>
+          {switchh === 1 ? (
+            <div>
+              {merchant.category.map((cat, index) => (
+                <div
+                  id={`group${index}`}
+                  className="product__category"
+                  key={index}
+                >
+                  <div className="product__category-name">{cat.name}</div>
+                  <div className="product__list-item">
+                    {cat.foods.map((food, index) => (
+                      <div className="product__item" key={index}>
                         <div
-                          className="img-big"
+                          className="product__item-img hover-mode"
                           style={{
                             backgroundImage: `${
                               food.img === ""
@@ -210,34 +234,98 @@ export default function Brand({ merchant }) {
                                 : `url("${food.img}")`
                             }`,
                           }}
-                        ></div>
+                        >
+                          <div className="img-big__wrapper hidden">
+                            <div
+                              className="img-big"
+                              style={{
+                                backgroundImage: `${
+                                  food.img === ""
+                                    ? `url("${loading}")`
+                                    : `url("${food.img}")`
+                                }`,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                        <div className="product__item-content">
+                          <div className="product__name">{food.name}</div>
+                          <div className="product__price">
+                            {validatePrice(food.price)} đ
+                          </div>
+                        </div>
+                        <div className="product__add">
+                          <button
+                            className="product__add-btn"
+                            onClick={() => {
+                              handleAddCartOrder(
+                                food.name,
+                                food.price,
+                                merchant._id
+                              );
+                            }}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="brand-review">
+              {allReview.map((review, idx) => (
+                <div key={idx} className="brand-reviewm__item">
+                  <div className="item-head">
+                    <div className="item-head__left">
+                      <img
+                        src={
+                          review.reviewer.avt === ""
+                            ? avtDefault
+                            : review.reviewer.avt
+                        }
+                        alt="avt-user-review"
+                      />
+                      <div className="user">
+                        <span>{review.reviewer.name}</span>
+                        <span>
+                          {formatDatetimeToString(
+                            new Date(parseInt(review.timeReview))
+                          )}
+                        </span>
                       </div>
                     </div>
-                    <div className="product__item-content">
-                      <div className="product__name">{food.name}</div>
-                      <div className="product__price">
-                        {validatePrice(food.price)} đ
-                      </div>
-                    </div>
-                    <div className="product__add">
-                      <button
-                        className="product__add-btn"
-                        onClick={() => {
-                          handleAddCartOrder(
-                            food.name,
-                            food.price,
-                            merchant._id
-                          );
-                        }}
-                      >
-                        +
-                      </button>
+                    <div className="item-head__right">
+                      {[...Array(review.rate)].map((star, i) => {
+                        return (
+                          <label className="review-star__wrap" key={i}>
+                            <FaStar
+                              className="icon-star"
+                              color={"#ffc107"}
+                              size={12}
+                            />
+                          </label>
+                        );
+                      })}
                     </div>
                   </div>
-                ))}
-              </div>
+                  <div className="item-body">
+                    <span>{review.text}</span>
+                    <div className="item-body__action">
+                      <span>
+                        <AiFillHeart /> Thích
+                      </span>
+                      <span>
+                        <FaComment /> Thảo luận
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>

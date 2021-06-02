@@ -95,6 +95,12 @@
     a:active {
       text-decoration: none;
     }
+    .review {
+      cursor: pointer;
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
   }
   .history-table-heading {
     color: red;
@@ -220,7 +226,10 @@
       align-items: center;
       background-color: #fe3839;
       color: white;
-      position: relative;
+      position: fix;
+      top: 0;
+      right: 0;
+      left: 0;
       font-weight: 500;
 
       .history-header__title {
@@ -252,7 +261,7 @@
           color: #64657a;
           display: flex;
           justify-content: space-between;
-          margin-bottom: 1rem;
+
           span {
             &:first-child {
               color: #64657a;
@@ -263,6 +272,7 @@
           }
         }
         .item-address {
+          margin-top: 1rem;
           font-weight: bold;
           span {
             font-weight: 500;
