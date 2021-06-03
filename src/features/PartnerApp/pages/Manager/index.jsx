@@ -20,6 +20,7 @@ export default function Manager() {
     try {
       if (res.status === 400) {
         dispatch(logoutPartner());
+        window.location.reload();
       }
     } catch {
       return;

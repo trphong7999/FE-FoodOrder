@@ -30,6 +30,8 @@ export default function Newfeed({ keyFind, refreshNewFeed }) {
   const user = useSelector((state) => state.loginUserApp.profile);
   const numPerPage = 20;
   let pageCount = Math.ceil(merchantFiltered.length / numPerPage);
+  if (pageCount == 0) pageCount = 1;
+  if (page > pageCount) setPage(pageCount);
   function removeAccents(str) {
     return str
       .normalize("NFD")
@@ -106,7 +108,6 @@ export default function Newfeed({ keyFind, refreshNewFeed }) {
       let arrFoods = mc.category.map((cat) =>
         cat.foods.map((food) => food.name)
       );
-      console.log(mc);
       arrFoods = [].concat.apply([], arrFoods);
       let rs = false;
       for (let food of arrFoods) {
@@ -135,6 +136,12 @@ export default function Newfeed({ keyFind, refreshNewFeed }) {
   }, [keyFind, checkDistrict, refreshNewFeed]);
 
   const classes = useStyles();
+  console.log(
+    "filted",
+    page,
+    pageCount,
+    merchantFiltered.slice((page - 1) * numPerPage, page * numPerPage)
+  );
 
   return (
     <div className="newfeed-wrap">

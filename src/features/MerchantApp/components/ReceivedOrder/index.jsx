@@ -47,7 +47,7 @@ function ReceivedOrder() {
     updatePartner(listPrepare, setListPrepare);
   });
 
-  socket.off("partnerCancelOrder");
+  socket.off("  ");
   socket.on("partnerCancelOrder", (orderId) => {
     const updatePartner = (list, setList) => {
       let currentList = [...list];

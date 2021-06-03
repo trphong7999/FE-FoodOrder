@@ -21,6 +21,7 @@ function Manager(props) {
     try {
       if (res.status === 400) {
         dispatch(logout());
+        window.location.reload();
       }
     } catch {
       return;

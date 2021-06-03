@@ -299,7 +299,11 @@ function DetailOrder({ order, setOpen, setHaveOrder }) {
           <button
             className="cancel-btn"
             onClick={() => handleCancelOrder()}
-            disabled={order.status !== "new" && order.status !== "finding"}
+            disabled={
+              order.status !== "new" &&
+              order.status !== "finding" &&
+              order.status !== "waitConfirm"
+            }
           >
             Hủy đơn
           </button>

@@ -16,9 +16,8 @@ const managerSlice = createSlice({
       localStorage.setItem("type", "manager");
     },
     logout: (state) => {
-      state.username = null;
-      localStorage.removeItem("username");
-      localStorage.removeItem("auth_token");
+      state = null;
+      localStorage.clear();
     },
   },
 });

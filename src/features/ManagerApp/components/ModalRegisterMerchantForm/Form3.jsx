@@ -4,8 +4,16 @@ import TogglePickTime from "../TogglePickTime";
 import ImageUploader from "react-images-upload";
 
 function Form3(props) {
-  const { dataImg, setDataImg, infoDetail, setInfoDetail } = props;
-  const { phone, dayPart, typeFood, openTime } = infoDetail;
+  const {
+    avt,
+    setAvt,
+    contractImg,
+    setContractImg,
+    uploadImg,
+    infoDetail,
+    setInfoDetail,
+  } = props;
+  const { phone, deduct, typeFood, openTime } = infoDetail;
   return (
     <form className="form-apply-validation">
       <h1 style={{ textAlign: "start", margin: "0 0 2rem 0" }}>
@@ -63,70 +71,6 @@ function Form3(props) {
         </div>
       </div>
 
-      <div className="checkbox-wrap">
-        <label
-          className="wrap-left required-field"
-          style={{ flexBasis: "30%" }}
-        >
-          Thời điểm trong ngày
-        </label>
-
-        <div className="wrap-right">
-          <div className="item">
-            <label htmlFor="" className="label">
-              Buổi sáng
-            </label>
-            <Checkbox
-              defaultChecked
-              checked={dayPart.indexOf(0) !== -1}
-              color="primary"
-              inputProps={{ "aria-label": "secondary checkbox" }}
-              className="input-check"
-              onChange={() => {
-                dayPart.indexOf(0) !== -1
-                  ? dayPart.splice(dayPart.indexOf(0), 1)
-                  : dayPart.push(0);
-                setInfoDetail({ ...infoDetail, dayPart: dayPart });
-              }}
-            />
-            {/* <input type="checkbox"  /> */}
-          </div>
-          <div className="item">
-            <label htmlFor="" className="label">
-              Buổi trưa
-            </label>
-            <Checkbox
-              checked={dayPart.indexOf(1) !== -1}
-              color="primary"
-              inputProps={{ "aria-label": "secondary checkbox" }}
-              className="input-check"
-              onChange={() => {
-                dayPart.indexOf(1) !== -1
-                  ? dayPart.splice(dayPart.indexOf(1), 1)
-                  : dayPart.push(1);
-                setInfoDetail({ ...infoDetail, dayPart: dayPart });
-              }}
-            />
-          </div>
-          <div className="item">
-            <label htmlFor="" className="label">
-              Buổi tối
-            </label>
-            <Checkbox
-              checked={dayPart.indexOf(2) !== -1}
-              color="primary"
-              inputProps={{ "aria-label": "secondary checkbox" }}
-              className="input-check"
-              onChange={() => {
-                dayPart.indexOf(2) !== -1
-                  ? dayPart.splice(dayPart.indexOf(2), 1)
-                  : dayPart.push(2);
-                setInfoDetail({ ...infoDetail, dayPart: dayPart });
-              }}
-            />
-          </div>
-        </div>
-      </div>
       <div className="field-wrap ">
         <label htmlFor="" className="required-field">
           Số điện thoại
@@ -141,34 +85,69 @@ function Form3(props) {
         />
       </div>
       <div className="field-wrap">
-        <label htmlFor="">Khấu trừ</label>
-        <input type="text" readOnly value="10%" />
+        <label htmlFor="" className="required-field">
+          Khấu trừ %
+        </label>
+        <input
+          type="text"
+          value={deduct}
+          onChange={(e) =>
+            setInfoDetail({ ...infoDetail, deduct: e.target.value })
+          }
+        />
       </div>
-      <div>
+
+      <div
+        className="field-wrap"
+        style={{ borderTop: "1px solid gray", paddingTop: "1rem" }}
+      >
         <label htmlFor="" className="required-field">
           Ảnh đại diện
         </label>
-        {/* <ImageUploader
-          withPreview={true}
-          withIcon={false}
-          buttonText="Choose images"
-          onChange={(pic) => {
-            setInfoDetail({ ...infoDetail, avt: pic });
-          }}
-          imgExtension={[".jpg", ".gif", ".png", ".gif"]}
-          maxFileSize={5242880}
-        /> */}
         <input
           type="file"
-          placeholder="Upload an image"
+          placeholder="Image avatar"
           onChange={(e) => {
             const files = e.target.files;
             const data = new FormData();
             data.append("file", files[0]);
             data.append("upload_preset", "foodorder");
-            setDataImg(data);
+            uploadImg(data, setAvt);
           }}
         />
+      </div>
+      <div className="field-wrap">
+        <label style={{ flexBasis: "30%" }}>Preview ảnh đại diện</label>
+        {avt ? <img src={avt} alt="avt" width="256" /> : ""}
+      </div>
+
+      <div
+        className="field-wrap"
+        style={{ borderTop: "1px solid gray", paddingTop: "1rem" }}
+      >
+        <label htmlFor="" className="required-field">
+          Ảnh hợp đồng
+        </label>
+        <input
+          type="file"
+          placeholder="Image contract"
+          onChange={(e) => {
+            const files = e.target.files;
+            const data = new FormData();
+            data.append("file", files[0]);
+            data.append("upload_preset", "foodorder");
+            uploadImg(data, setContractImg);
+          }}
+        />
+      </div>
+
+      <div className="field-wrap">
+        <label style={{ flexBasis: "30%" }}>Preview ảnh hợp đồng</label>
+        {contractImg ? (
+          <img src={contractImg} alt="contractImg" width="256" />
+        ) : (
+          ""
+        )}
       </div>
     </form>
   );
