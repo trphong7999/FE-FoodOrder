@@ -124,6 +124,7 @@ export default function Brand({ merchant }) {
               }}
               callback={(response) => {
                 if (
+                  response &&
                   response["rows"][0] &&
                   response["rows"][0].elements[0].distance
                 )

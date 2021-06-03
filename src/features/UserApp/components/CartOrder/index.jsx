@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     outline: "none",
     borderRadius: "8px",
+    height: "100vh",
   },
 }));
 

@@ -97,7 +97,7 @@ function FootTab({ changeTabCallBack, footTabList }) {
           <IoWalletSharp className="tab-list__item-icon" />
           Ví tiền
         </li>
-        <li
+        {/* <li
           className={`tab-list__item ${
             footTabList === 4 ? "tab-list__item--active" : ""
           }`}
@@ -107,7 +107,7 @@ function FootTab({ changeTabCallBack, footTabList }) {
         >
           <BsFillChatDotsFill className="tab-list__item-icon" />
           Chat
-        </li>
+        </li> */}
         <li
           className={`tab-list__item ${
             footTabList === 5 ? "tab-list__item--active" : ""

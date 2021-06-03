@@ -25,6 +25,10 @@ const merchantApi = {
     const url = `/orders/getchatdata?id=${id}`;
     return axiosClient.get(url);
   },
+  getOrderInWeekByTime: (time) => {
+    const url = `/orders/ordersinweek?time=${time}`;
+    return axiosClient.get(url);
+  },
 };
 
 export default merchantApi;
