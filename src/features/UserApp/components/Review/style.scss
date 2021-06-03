@@ -1,0 +1,111 @@
+@import "App.scss";
+.review {
+  .review-item {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border: 1px solid #ebebeb;
+    border-radius: 16px;
+
+    @include mobile {
+      display: flex;
+    }
+  }
+
+  .review-pc {
+    display: block;
+    padding: 0.2rem 0;
+    margin-bottom: 0.5rem;
+    border: 1px solid #ebebeb;
+    border-radius: 16px;
+    @include mobile {
+      display: none;
+    }
+  }
+}
+
+.review-modal {
+  font-size: 1.6rem;
+
+  .review-modal__title {
+    padding: 1.5rem;
+    text-align: center;
+    background-color: var(--primary-color);
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+    color: white;
+    font-weight: bold;
+  }
+  .review-modal__content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 1px solid #ebebeb;
+      margin: 1.5rem 0;
+    }
+    span {
+      color: #64657a;
+    }
+    .name {
+      font-weight: bold;
+      color: #312f44;
+      margin-bottom: 1.5rem;
+    }
+
+    .review-star {
+      margin: 2rem 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+
+      .review-star__wrap {
+        padding: 1.2rem;
+        .icon-star {
+          font-size: 2.6rem;
+          transition: 200ms;
+          cursor: pointer;
+        }
+
+        input[type="radio"] {
+          display: none;
+        }
+      }
+    }
+
+    textarea {
+      background: #eeeeee;
+      color: #a5a5a5;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.6rem;
+      font-family: Roboto;
+      width: 100%;
+    }
+  }
+
+  .review-modal__action {
+    padding: 1rem;
+    button {
+      width: 100%;
+      background-color: var(--primary-color);
+      border: none;
+      padding: 1.2rem;
+      font-size: 1.6rem;
+      border-radius: 6px;
+      color: white;
+      font-weight: 500;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}

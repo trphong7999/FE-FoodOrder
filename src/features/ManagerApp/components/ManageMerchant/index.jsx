@@ -33,7 +33,7 @@ const columns = [
     width: 130,
     renderCell: (params) => {
       return (
-        <Link to={{ pathname: `/manager/merchant/${params.getValue("id")}` }}>
+        <Link to={{ pathname: `/manager/merchant/${params.getValue("_id")}` }}>
           {"Chi tiết"}
         </Link>
       );
@@ -80,6 +80,7 @@ function ManageMerchant(props) {
           email: merchant.email,
           address: merchant.location.address,
           deduct: merchant.deduct,
+          _id: merchant._id,
         }));
         setMerchantList(data);
         setAllDataMerchant(data);

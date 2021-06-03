@@ -140,6 +140,7 @@
   flex-direction: column;
   @include mobile {
     width: 100%;
+    height: 100vh;
   }
   .Toastify__toast {
     min-height: 10rem;
@@ -155,6 +156,14 @@
     font-weight: bold;
     line-height: 4rem;
     padding-left: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .header-icon {
+      margin-right: 1rem;
+      font-size: 2.4rem;
+    }
   }
   .checkout--detail-order {
     display: flex;

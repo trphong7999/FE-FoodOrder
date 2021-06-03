@@ -24,6 +24,9 @@ import shopIcon from "assets/image/icons/shop-icon.png";
 import { DistanceMatrixService } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
 import FormAddressSearch from "../GlobalAddress/FormAddressSearch/FormAddressSearch";
+
+import { MdClear } from "react-icons/md";
+
 import voucherApi from "api/voucherApi";
 
 const useStyles = makeStyles((theme) => ({
@@ -415,8 +418,14 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
 
   return (
     <div className="checkout">
+      <div className="checkout--header">
+        Xác nhận đơn hàng
+        <MdClear className="header-icon" onClick={() => handleClose()} />
+      </div>
+
       <ToastContainer />
       <div className="checkout--header">Xác nhận đơn hàng</div>
+
       <div className="checkout--detail-order">
         <div className="checkout--detail-order--profile">
           <div className="checkout--detail-order--map">
