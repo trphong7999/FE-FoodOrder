@@ -166,6 +166,7 @@ function MakingAction({ setOrder, order }) {
               <div
                 style={{ "&::before": { content: "30'" } }}
                 onClick={() => PickupOrder()}
+                disabled={order.status === "waitConfirm"}
               >
                 Đã lấy hàng
               </div>

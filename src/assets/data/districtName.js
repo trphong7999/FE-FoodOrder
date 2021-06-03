@@ -21,35 +21,39 @@ const area = [
   },
   {
     key: 6,
-    value: "An Dương",
+    value: "Quận Kiến An",
   },
   {
     key: 7,
-    value: "An Lão",
+    value: "Huyện An Dương",
   },
   {
     key: 8,
-    value: "Bạch Long Vĩ",
+    value: "Huyện An Lão",
   },
   {
     key: 9,
-    value: "Cát Hải",
+    value: "Huyện Bạch Long Vĩ",
   },
   {
     key: 10,
-    value: "Kiến Thụy",
+    value: "Huyện Cát Hải",
   },
   {
     key: 11,
-    value: "Tiên Lãng",
+    value: "Huyện Kiến Thụy",
   },
   {
     key: 12,
-    value: "Vĩnh Bảo",
+    value: "Huyện Tiên Lãng",
   },
   {
     key: 13,
-    value: "Thủy Nguyên",
+    value: "Huyện Vĩnh Bảo",
+  },
+  {
+    key: 14,
+    value: "Huyện Thủy Nguyên",
   },
 ];
 export default area;

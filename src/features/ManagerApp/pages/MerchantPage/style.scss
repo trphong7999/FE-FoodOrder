@@ -1,0 +1,60 @@
+.manager-merchant-page {
+  overflow: hidden;
+  background-color: #f3f2ff;
+  .task-bar {
+    padding: 1rem;
+    background: linear-gradient(0deg, #7897ff, #b47aff);
+    color: #faf7fe;
+    height: 100vh;
+
+    .task-bar__item {
+      font-size: 1.4rem;
+      padding: 1rem;
+      font-weight: 500;
+      margin: 1rem 0 2rem;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      right: 0;
+      transition: right linear 0.2s;
+
+      &:hover {
+        right: -6px;
+      }
+
+      .task-bar__icon {
+        font-size: 2rem;
+        margin-right: 1rem;
+      }
+    }
+  }
+
+  .content-task {
+    height: 100vh;
+
+    .task-shop {
+      padding: 1rem;
+      .task-shop__item {
+        width: 50%;
+        padding: 2rem;
+        color: #e4edff;
+
+        margin-bottom: 1rem;
+        margin-right: 1rem;
+        border-radius: 8px;
+        background: linear-gradient(-45deg, #7897ff, #b47aff);
+
+        .item-title {
+          font-weight: 500;
+          font-size: 1.5rem;
+          margin-bottom: 1.5rem;
+        }
+        .item-content {
+          font-weight: bold;
+          font-size: 1.8rem;
+        }
+      }
+    }
+  }
+}
