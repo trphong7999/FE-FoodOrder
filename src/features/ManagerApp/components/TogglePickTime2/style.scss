@@ -1,0 +1,32 @@
+.field-wrap__list-item {
+  padding: 1rem 1rem 1rem 0;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  background: linear-gradient(45deg, #7897ff, #b47aff);
+
+  .label-title {
+    flex-basis: 20%;
+    font-weight: 500;
+    color: #faf7fe;
+  }
+
+  .label-space {
+    flex-basis: 10%;
+    text-align: center;
+  }
+
+  input {
+    padding: 1rem 0;
+    border-radius: 12px;
+    border: 1px solid #ebebeb;
+    font-size: 1.6rem;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    font-weight: 500;
+  }
+}

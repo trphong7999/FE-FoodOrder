@@ -34,7 +34,7 @@ const columns = [
     width: 130,
     renderCell: (params) => {
       return (
-        <Link to={{ pathname: `/manager/merchant/${params.getValue("id")}` }}>
+        <Link to={{ pathname: `/manager/partner/${params.getValue("_id")}` }}>
           {"Chi tiết"}
         </Link>
       );
@@ -70,6 +70,7 @@ function ManagePartner(props) {
           gender: partner.gender === "male" ? "Nam" : "Nữ",
           address: partner.address,
           phone: partner.phone,
+          _id: partner._id,
         }));
         console.log(res.username);
         setPartnerList(data);

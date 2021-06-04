@@ -30,6 +30,7 @@ export default function Newfeed({ keyFind, refreshNewFeed }) {
   const user = useSelector((state) => state.loginUserApp.profile);
   const numPerPage = 20;
   let pageCount = Math.ceil(merchantFiltered.length / numPerPage);
+
   function removeAccents(str) {
     return str
       .normalize("NFD")
