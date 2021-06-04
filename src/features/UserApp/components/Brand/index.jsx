@@ -283,14 +283,14 @@ export default function Brand({ merchant }) {
                     <div className="item-head__left">
                       <img
                         src={
-                          review.reviewer.avt === ""
+                          review.reviewer.info.avt === ""
                             ? avtDefault
-                            : review.reviewer.avt
+                            : review.reviewer.info.avt
                         }
                         alt="avt-user-review"
                       />
                       <div className="user">
-                        <span>{review.reviewer.name}</span>
+                        <span>{review.reviewer.info.name}</span>
                         <span>
                           {formatDatetimeToString(
                             new Date(parseInt(review.timeReview))

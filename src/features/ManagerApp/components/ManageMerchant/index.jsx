@@ -42,19 +42,19 @@ const columns = [
 ];
 
 function ManageMerchant(props) {
-  const history = useHistory();
   const [open, setOpen] = useState(false);
   const [merchantList, setMerchantList] = useState([]);
   const [allDataMerchant, setAllDataMerchant] = useState([]);
+  const [findNameMer, setFindNameMer] = useState("");
+  const [findNameRep, setFindNameRep] = useState("");
 
-  const changeLinkToDetailMer = (data) => {
-    let location = {
-      pathname: `/manager/merchant/${data._id}`,
-      state: { merchantDetail: data },
-    };
-    history.push(location);
-    history.replace(location);
-  };
+  function removeAccents(str) {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D");
+  }
 
   const handleOpen = () => {
     setOpen(true);
@@ -62,6 +62,19 @@ function ManageMerchant(props) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const fetchData = (listMer) => {
+    const final = listMer.map((merchant, index) => ({
+      id: index + 1,
+      name: merchant.name,
+      representative: merchant.representative.name,
+      email: merchant.email,
+      address: merchant.location.address,
+      deduct: merchant.deduct,
+      _id: merchant._id,
+    }));
+    return final;
   };
 
   useEffect(() => {
@@ -73,17 +86,9 @@ function ManageMerchant(props) {
 
         // };
         const res = await merchantApi.getAll();
-        const data = res.map((merchant, index) => ({
-          id: index + 1,
-          name: merchant.name,
-          representative: merchant.representative.name,
-          email: merchant.email,
-          address: merchant.location.address,
-          deduct: merchant.deduct,
-          _id: merchant._id,
-        }));
+        const data = fetchData(res);
         setMerchantList(data);
-        setAllDataMerchant(data);
+        setAllDataMerchant(res);
       } catch (error) {
         console.log("Failed to fetch product list: ", error);
       }
@@ -92,11 +97,45 @@ function ManageMerchant(props) {
     fetchMerchantsList();
   }, []);
 
+  useEffect(() => {
+    const listMer = allDataMerchant;
+    const filterMerchant = listMer.filter((mer) =>
+      removeAccents(mer.representative.name)
+        .toLowerCase()
+        .match(removeAccents(findNameRep).toLowerCase())
+    );
+
+    const data = fetchData(filterMerchant);
+
+    setMerchantList(data);
+  }, [findNameRep]);
+
+  useEffect(() => {
+    const listMer = allDataMerchant;
+    const filterMerchant = listMer.filter((mer) =>
+      removeAccents(mer.name)
+        .toLowerCase()
+        .match(removeAccents(findNameMer).toLowerCase())
+    );
+
+    const data = fetchData(filterMerchant);
+
+    setMerchantList(data);
+  }, [findNameMer]);
+
   return (
     <>
       <div className="find-group">
-        <input type="text" placeholder="Tên cơ sở" />
-        <input type="text" placeholder="Tên người đại diện" />
+        <input
+          type="text"
+          placeholder="Tên cơ sở"
+          onChange={(e) => setFindNameMer(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Tên người đại diện"
+          onChange={(e) => setFindNameRep(e.target.value)}
+        />
         <Button variant="contained" className="btn">
           Tìm kiếm
         </Button>
