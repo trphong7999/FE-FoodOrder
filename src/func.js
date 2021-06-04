@@ -62,8 +62,15 @@ const formatDatetimeToString = (now) => {
   ).slice(-2)}/${("0" + now.getFullYear()).slice(-2)}`;
 };
 
+const formatDatetimeToStringDate = (now) => {
+  return `${("0" + now.getDate()).slice(-2)}/${(
+    "0" + parseInt(now.getMonth() + 1)
+  ).slice(-2)}/${("0" + now.getFullYear()).slice(-2)}`;
+};
+
 export {
   formatDatetimeToString,
+  formatDatetimeToStringDate,
   datetimeFromTimestamp,
   validatePrice,
   getLocationUser,

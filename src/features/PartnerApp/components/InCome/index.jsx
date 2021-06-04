@@ -6,7 +6,7 @@ import {
   FaSmile,
   FaAngry,
   FaTimesCircle,
-  FaSadCry,
+  FaMeh,
   FaSadTear,
   FaChevronLeft,
 } from "react-icons/fa";
@@ -18,16 +18,18 @@ import {
 import { BsClockFill } from "react-icons/bs";
 import "./style.scss";
 import orderApi from "api/orderApi";
+import { formatDatetimeToStringDate } from "func";
 
 export default function InCome() {
-  const [orders, setOrders] = useState([]);
-
+  const [ordersWeek, setOrderWeek] = useState([]);
+  console.log(ordersWeek);
   useEffect(() => {
     const fetchOrdersInWeekByTime = async (date) => {
-      const res = await orderApi.getOrderInWeekByTime({ time: date });
-      console.log(res);
+      const res = await orderApi.getOrderInWeekByTime(date);
+      setOrderWeek([...ordersWeek, res]);
     };
-    fetchOrdersInWeekByTime(new Date().setDate(new Date().getDate() - 7));
+    // fetchOrdersInWeekByTime(new Date().setDate(new Date().getDate() - 7));
+    fetchOrdersInWeekByTime(Date.now());
   }, []);
 
   return (
@@ -41,33 +43,46 @@ export default function InCome() {
         <div className="debt-action">Thanh toán</div>
       </div>
       <div className="in-come__list">
-        <InComeWeek />
-        <InComeWeek />
+        {ordersWeek && ordersWeek.length > 0
+          ? ordersWeek.map((infos) => <InComeWeek infos={infos} />)
+          : ""}
+        {/* <InComeWeek />
+        <InComeWeek /> */}
       </div>
     </div>
   );
 }
 
-function InComeWeek() {
+function InComeWeek({ infos }) {
   const [showWeekContent, setshowWeekContent] = useState(false);
 
   const handleChangeShowWeekContent = () => {
     setshowWeekContent(!showWeekContent);
   };
+  const { monday, sunday, orders, ordersCanceled } = infos;
+  console.log(monday, sunday, orders, ordersCanceled);
+
   return (
     <div className="in-come__week">
       <div className="week-time" onClick={handleChangeShowWeekContent}>
         <FaRegCalendarAlt className="week-time__icon-calendar" />
-        <span>Tuần 11/02 - 17/02</span>
+        <span>
+          Tuần {formatDatetimeToStringDate(new Date(+monday))} -{" "}
+          {formatDatetimeToStringDate(new Date(+sunday))}
+        </span>
         <FaCaretDown className="week-time__icon-down" />
       </div>
 
-      <WeekContent showWeekContent={showWeekContent} />
+      <WeekContent
+        showWeekContent={showWeekContent}
+        orders={orders}
+        ordersCanceled={ordersCanceled}
+      />
     </div>
   );
 }
 
-function WeekContent({ showWeekContent }) {
+function WeekContent({ showWeekContent, orders, ordersCanceled }) {
   const [showDayContent, setShowDayContent] = useState(false);
 
   const handleOpenDayContent = () => {
@@ -106,14 +121,14 @@ function WeekContent({ showWeekContent }) {
             <div>K.Tốt</div>
             <div>0 đơn</div>
           </div>
-          <div className="work-body__colum work-body__colum--deny">
-            <FaSadCry />
-            <div>Từ chối</div>
+          <div className="work-body__colum work-body__colum--not">
+            <FaMeh />
+            <div>Chưa đánh giá</div>
             <div>0 đơn</div>
           </div>
           <div className="work-body__colum work-body__colum--miss">
             <FaSadTear />
-            <div>Bỏ qua</div>
+            <div>Khách hủy</div>
             <div>0 đơn</div>
           </div>
           <div className="work-body__colum work-body__colum--quit">

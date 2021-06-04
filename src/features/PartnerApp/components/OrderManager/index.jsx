@@ -111,7 +111,6 @@ export default function OrderManager() {
   const [refresh, setRefresh] = useState(false);
   const classes = useStyles();
   const partner = useSelector((state) => state.partner.profile);
-  console.log(partner, "asdasd");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -131,7 +130,6 @@ export default function OrderManager() {
     };
     fetchData();
   }, [refresh]);
-  console.log(orderDone);
 
   socket.on("changeStatus", ({ orderId, status }) => {
     const ods = orderProcessing;
@@ -364,6 +362,7 @@ function MapPick({ partner, setRefresh, refresh }) {
 
   const handleChooseOrder = (order) => {
     setOrderDelivering({ ...order });
+    setRefresh({});
   };
 
   return (
@@ -472,7 +471,6 @@ function MakingFood({ orderProcessing }) {
 }
 
 function FinishedDelivery({ orderDone }) {
-  console.log("asdas", orderDone);
   return (
     <div className="finish-delivery-list">
       {orderDone.length > 0
@@ -494,7 +492,6 @@ function Detail({ orderDetail }) {
     history.push(location);
     history.replace(location);
   };
-  console.log("oddetail", orderDetail);
   return (
     <div
       className="making-food"
@@ -710,7 +707,6 @@ function CurrentOrder({
     socket.emit("chooseOrder", order_id);
     handleChooseOrder(order);
     removeOrderPicked(order_id);
-    setRefresh({});
     handleClose();
   };
 
