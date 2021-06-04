@@ -40,12 +40,25 @@ const loginUserAppSlice = createSlice({
       localStorage.setItem("type", "user");
     },
     logout: (state) => {
-      state.username = null;
-      localStorage.removeItem("username");
-      localStorage.removeItem("token");
-      localStorage.removeItem("profile");
-      localStorage.removeItem("userId");
-      localStorage.removeItem("type");
+      state = {
+        username: localStorage.getItem("username") || null,
+        pos: {},
+        profile: JSON.parse(localStorage.getItem("profile")) || {
+          info: {
+            name: "",
+            gender: "",
+            avt: "",
+            phone: "",
+            email: "",
+            location: {
+              address: "",
+              lat: null,
+              lng: null,
+            },
+          },
+        },
+      };
+      localStorage.clear();
     },
     getPos: (state, action) => {
       state.pos = action.payload;

@@ -2,7 +2,7 @@ const { createSlice } = require("@reduxjs/toolkit");
 
 const tabNavigation = [
   { id: 1, head: "Đơn hàng của bạn", active: true },
-  { id: 2, head: "Cửa hàng yêu thích", active: false },
+  // { id: 2, head: "Cửa hàng yêu thích", active: false },
   { id: 3, head: "Quản lý thẻ", active: false },
 ];
 const tabNavSlice = createSlice({

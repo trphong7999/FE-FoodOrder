@@ -111,6 +111,7 @@ export default function OrderManager() {
   const [refresh, setRefresh] = useState(false);
   const classes = useStyles();
   const partner = useSelector((state) => state.partner.profile);
+  console.log(partner, "asdasd");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -207,7 +208,7 @@ export default function OrderManager() {
       </div>
 
       <div className="order-manager__content">
-        {tab === 0 ? (
+        {tab === 0 && partner ? (
           <MapPick
             partner={partner}
             setRefresh={setRefresh}
@@ -271,6 +272,7 @@ function MapPick({ partner, setRefresh, refresh }) {
           geo.lng
         )
       ) < parseFloat(partner.setting.radiusWorking / 1000 || 2)
+      // !order.cancelPartner.includes(partner._id)
     );
   });
 
@@ -301,7 +303,7 @@ function MapPick({ partner, setRefresh, refresh }) {
     socket.on("orderDelivering", (od) => {
       setOrderDelivering(od);
     });
-  }, [refresh]);
+  }, []);
 
   useEffect(() => {
     const fetchPickingOrder = async () => {
@@ -358,6 +360,10 @@ function MapPick({ partner, setRefresh, refresh }) {
       newList.splice(index, 1);
     }
     setPickingOrder(newList);
+  };
+
+  const handleChooseOrder = (order) => {
+    setOrderDelivering({ ...order });
   };
 
   return (
@@ -443,7 +449,7 @@ function MapPick({ partner, setRefresh, refresh }) {
                     order={order}
                     removeOrderPicked={removeOrderPicked}
                     setRefresh={setRefresh}
-                    setOrderDelivering={setOrderDelivering}
+                    handleChooseOrder={handleChooseOrder}
                   />
                 </Modal>
               </Marker>
@@ -505,7 +511,11 @@ function Detail({ orderDetail }) {
           }`}
         >
           <AiFillShop className="head-status__icon" />
-          {orderDetail.status !== "complete" ? "Delivery" : "Finished"}
+          {orderDetail.status === "complete"
+            ? "Finished"
+            : orderDetail.status === "cancel"
+            ? "Cancel"
+            : "Delivery"}
         </div>
       </div>
 
@@ -694,11 +704,11 @@ function CurrentOrder({
   order,
   removeOrderPicked,
   setRefresh,
-  setOrderDelivering,
+  handleChooseOrder,
 }) {
   const chooseOrder = (order_id) => {
     socket.emit("chooseOrder", order_id);
-    setOrderDelivering({ ...order });
+    handleChooseOrder(order);
     removeOrderPicked(order_id);
     setRefresh({});
     handleClose();

@@ -18,7 +18,7 @@ const merchantSlice = createSlice({
       localStorage.setItem("type", "merchant");
     },
     logoutMerchant: (state) => {
-      state.email = null;
+      state = null;
       localStorage.clear();
     },
   },

@@ -90,14 +90,17 @@ function ModalRegisterMerchant({ handleClose }) {
         time: "09:00-22:00",
       },
     },
-    dayPart: [],
-    avt: {},
     deduct: 10,
   });
-  const [dataImg, setDataImg] = useState();
+  const [number, setNumber] = useState();
+  const [avt, setAvt] = useState(null);
+  const [identFontImg, setIdentFontImg] = useState(null);
+  const [identBackImg, setIdentBackImg] = useState(null);
+  const [contractImg, setContractImg] = useState(null);
   const [error, setError] = useState("");
   const classes = useStyles();
-  const onSubmitForm = async () => {
+
+  const uploadImg = async (dataImg, setMethod) => {
     const resUploadImg = await fetch(
       "https://api.cloudinary.com/v1_1/vmu/image/upload",
       {
@@ -105,23 +108,37 @@ function ModalRegisterMerchant({ handleClose }) {
         body: dataImg,
       }
     );
-    const img = await resUploadImg.json();
+    const res = await resUploadImg.json();
+    setMethod(res.secure_url);
+  };
+
+  const onSubmitForm = async () => {
+    if (!avt) return setError("Chưa thêm ảnh cho quán");
+
     const merchantObj = {
       name: name,
       ...infoDetail,
-      representative: representative,
+      representative: {
+        ...representative,
+        identity: {
+          number,
+          fontImg: identFontImg,
+          backImg: identBackImg,
+        },
+      },
       location: {
         ...location,
         lat: geo.lat.toString(),
         lng: geo.lng.toString(),
       },
-      avt: img.secure_url,
+      avt,
+      contract: contractImg,
     };
     const res = await managerApi.registerMerchant(merchantObj);
-    if (res.status === "200" || !res.status) handleClose();
+    console.log("rés", res);
+    if (!res.errors && (res.status === "200" || !res.status)) handleClose();
     else if (res.data) setError(res.data);
-    else if (img.error) setError("Chưa thêm ảnh cho quán");
-    else setError("");
+    else setError("Email đã được đăng ký từ trước");
   };
 
   const steps = [
@@ -144,6 +161,13 @@ function ModalRegisterMerchant({ handleClose }) {
         <Form2
           representative={representative}
           setRepresentative={setRepresentative}
+          uploadImg={uploadImg}
+          identFontImg={identFontImg}
+          setIdentFontImg={setIdentFontImg}
+          identBackImg={identBackImg}
+          setIdentBackImg={setIdentBackImg}
+          number={number}
+          setNumber={setNumber}
         />
       ),
     },
@@ -151,8 +175,11 @@ function ModalRegisterMerchant({ handleClose }) {
       name: "Thông tin quán - Chi tiết",
       component: (
         <Form3
-          dataImg={dataImg}
-          setDataImg={setDataImg}
+          avt={avt}
+          setAvt={setAvt}
+          contractImg={contractImg}
+          setContractImg={setContractImg}
+          uploadImg={uploadImg}
           infoDetail={infoDetail}
           setInfoDetail={setInfoDetail}
         />

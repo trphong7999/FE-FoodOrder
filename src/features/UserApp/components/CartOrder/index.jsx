@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { GrLocation } from "react-icons/gr";
-import { AiOutlineClockCircle } from "react-icons/ai";
+import { AiOutlineClockCircle, AiOutlineFieldTime } from "react-icons/ai";
 import { IoIosArrowForward, IoIosLogIn } from "react-icons/io";
 import { TiTimesOutline } from "react-icons/ti";
 import { RiCheckboxBlankCircleFill } from "react-icons/ri";
+import { FcClock } from "react-icons/fc";
 import novat from "assets/image/icons/novat.gif";
 
 import "./style.scss";
@@ -24,10 +25,8 @@ import shopIcon from "assets/image/icons/shop-icon.png";
 import { DistanceMatrixService } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
 import FormAddressSearch from "../GlobalAddress/FormAddressSearch/FormAddressSearch";
-
-import { MdClear } from "react-icons/md";
-
 import voucherApi from "api/voucherApi";
+import TimeInput from "react-input-time";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -299,6 +298,7 @@ export default function CartOrder({ merchant }) {
 function CheckOut({ userId, user, items, merchant, handleClose }) {
   const [applyVoucher, setApplyVoucher] = useState({});
   const [voucher, setVoucher] = useState("");
+  const [note, setNote] = useState("");
   const [open, setOpen] = useState(false);
   console.log(open);
   const {
@@ -324,6 +324,9 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
   } = merchant;
 
   const distance = computeDistant(tempLat, tempLng, merchantLat, merchantLng);
+  const [predict, setPredict] = useState(
+    Date.now() + (distance * 5 + 10) * 60000
+  );
 
   const orderSuccess = () =>
     toast.success(
@@ -345,7 +348,12 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
 
   const codeUsed = () => toast.error("🤔Bạn chỉ được sử dụng mã này một lần!");
 
-  const applySuccess = () => toast.success("😍Áp mã thành công!");
+  const applySuccess = () => toast.error("😍Áp mã thành công!");
+
+  const predictFail = () =>
+    toast.success(
+      "🤔Thời gian dự kiến nhận hàng không được nhỏ hơn thời gian tối thiểu!"
+    );
 
   const totalPrice = items.reduce(
     (value, item) => value + item.price * item.quantity,
@@ -366,13 +374,13 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
   };
 
   const getTimeExpect = () => {
-    const diffTime = distance * 5 + 10;
-    const now = new Date();
-    now.setMinutes(now.getMinutes() + diffTime);
-    return formatDatetimeToString(now);
+    return formatDatetimeToString(new Date(predict));
   };
 
   const handleOrder = () => {
+    console.log(predict);
+    if (!predict || predict < Date.now() + (distance * 5 + 9) * 60000)
+      return predictFail();
     const order = {
       userOrderId: userId,
       merchantId: merchant._id,
@@ -392,9 +400,9 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
           lng: tempLng,
         },
       },
-      distance: distance,
-      note: "Đây là note",
-      timeDeliverDone: Date.now() + (distance * 5 + 10) * 60000,
+      distance,
+      note,
+      timeDeliverDone: predict,
       code: applyVoucher.code,
     };
     socket.emit("startOrder", order);
@@ -415,16 +423,17 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
     setOpen(false);
   };
 
+  const onTimeChangeHandle = (val) => {
+    let hour = new Date().setHours(parseInt(val.split(":")[0]));
+    let time = new Date(hour).setMinutes(parseInt(val.split(":")[1]));
+    console.log("new", time, val.split(":"));
+    setPredict(time);
+  };
+
   return (
     <div className="checkout">
-      <div className="checkout--header">
-        Xác nhận đơn hàng
-        <MdClear className="header-icon" onClick={() => handleClose()} />
-      </div>
-
       <ToastContainer />
       <div className="checkout--header">Xác nhận đơn hàng</div>
-
       <div className="checkout--detail-order">
         <div className="checkout--detail-order--profile">
           <div className="checkout--detail-order--map">
@@ -471,6 +480,24 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
               Dự kiến: {getTimeExpect()} -
               <span style={{ color: "red" }}> {distance}km</span>
             </span>
+            <FcClock
+              style={{ fontSize: "2rem", margin: "0 0.3rem 0 1.5rem" }}
+            />
+            <TimeInput
+              className="input-time"
+              initialTime={
+                `0${new Date(parseInt(predict)).getHours()}`.slice(-2) +
+                ":" +
+                `0${new Date(parseInt(predict)).getMinutes()}`.slice(-2)
+              }
+              onChange={(e) => onTimeChangeHandle(e.target.value)}
+              style={{
+                width: "4.5rem",
+                height: "3rem",
+                borderRadius: "12px",
+                outline: "none",
+              }}
+            />
             <div className="checkout--change" onClick={() => setOpen(true)}>
               <p>Thay đổi thông tin nhận hàng</p>
 
@@ -556,6 +583,18 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
                   ""
                 )}
                 <button onClick={() => handleApplyVoucher()}>Áp dụng</button>
+              </div>
+            </div>
+            <div className="checkout-voucher">
+              <div className="title">Ghi chú</div>
+
+              <div className="voucher-group">
+                <textarea
+                  type="text"
+                  onChange={(e) => setNote(e.target.value)}
+                  value={note}
+                  style={{ width: "100%" }}
+                />
               </div>
             </div>
             <div className="checkout-total">

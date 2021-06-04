@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaRegCalendarAlt,
   FaCaretDown,
@@ -17,8 +17,19 @@ import {
 } from "react-icons/ri";
 import { BsClockFill } from "react-icons/bs";
 import "./style.scss";
+import orderApi from "api/orderApi";
 
 export default function InCome() {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchOrdersInWeekByTime = async (date) => {
+      const res = await orderApi.getOrderInWeekByTime({ time: date });
+      console.log(res);
+    };
+    fetchOrdersInWeekByTime(new Date().setDate(new Date().getDate() - 7));
+  }, []);
+
   return (
     <div className="in-come">
       <div className="in-come__title">thu nhập</div>

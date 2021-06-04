@@ -53,10 +53,10 @@ export default function RightColAccount() {
         {numericalOrder === 1 ? (
           <YourOrder historyOrders={historyOrders} />
         ) : null}
-        {numericalOrder === 2 ? (
-          <FavoriteStore favorites={user.favoriteMerchant} />
-        ) : null}
-        {numericalOrder === 3 ? <CardManagement /> : null}
+        {/* {numericalOrder === 2 ? (
+          <FavoriteStore favorites={user.favoriteMerchant} /> */}
+        {/* ) : null} */}
+        {numericalOrder === 2 ? <CardManagement /> : null}
       </div>
     </div>
   );

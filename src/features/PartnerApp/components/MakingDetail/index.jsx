@@ -12,6 +12,7 @@ import { sumQuantity, validatePrice } from "func";
 import { useHistory, useLocation, useRouteMatch } from "react-router";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function MakingDetail() {
   const history = useHistory();
@@ -100,8 +101,16 @@ export default function MakingDetail() {
 function MakingAction({ setOrder, order }) {
   const history = useHistory();
   const match = useRouteMatch();
+  const pịckupFail = () =>
+    toast.error(
+      <div>
+        <span style={{ fontSize: "2.5rem" }}>🤚</span>Chờ quán xác nhận và chuẩn
+        bị món ăn
+      </div>
+    );
 
   const PickupOrder = () => {
+    if (order.status == "waitConfirm") return pịckupFail();
     socket.emit("DeliveringOrder", order._id);
     const od = order;
     od.status = "delivering";
@@ -136,11 +145,11 @@ function MakingAction({ setOrder, order }) {
     history.replace(location);
   };
   console.log(order.status in ["complete", "cancel"], order.status);
-
   return (
     <div className="action-pending">
       {!["complete", "cancel"].includes(order.status) ? (
         <React.Fragment>
+          <ToastContainer style={{ top: "10%" }} />
           <div className="action-row">
             <div
               className="action-row__item"
@@ -149,7 +158,11 @@ function MakingAction({ setOrder, order }) {
               <AiFillPhone className="action-row__item-icon" />
               Gọi
             </div>
-            <div className="action-row__item" onClick={() => handleOpenChat()}>
+            <div
+              className="action-row__item"
+              onClick={() => handleOpenChat()}
+              disabled={order.status === "waitConfirm"}
+            >
               <AiFillWechat className="action-row__item-icon" />
               Chat
             </div>

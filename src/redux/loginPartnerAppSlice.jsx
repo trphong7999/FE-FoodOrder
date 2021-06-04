@@ -21,19 +21,19 @@ const partnerSlice = createSlice({
       const email = action.payload.email;
       const token = action.payload.token;
       const partnerId = action.payload.partnerId;
-      state.email = email;
-      localStorage.clear();
       localStorage.setItem("email", email);
       localStorage.setItem("token", token.token);
       localStorage.setItem("partnerId", partnerId);
       localStorage.setItem("type", "partner");
     },
     logoutPartner: (state) => {
-      state.username = null;
+      state = null;
       localStorage.clear();
     },
     getProfile: (state, action) => {
+      console.log(action.payload, "profile partner");
       state.profile = action.payload;
+      state.email = localStorage.email;
       localStorage.setItem("profile", JSON.stringify(action.payload));
     },
   },

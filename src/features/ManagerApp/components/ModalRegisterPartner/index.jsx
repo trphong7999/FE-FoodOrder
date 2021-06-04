@@ -74,14 +74,18 @@ function ModalRegisterPartner({ handleClose }) {
         fontImg: idenFont.secure_url,
         backImg: idenBack.secure_url,
       },
+      setting: {
+        radiusWorking: 2000,
+      },
     };
     const res = await managerApi.registerPartner(partnerObj);
-    if (res.status === "200" || !res.status) handleClose();
+    console.log(partnerObj);
+    if (!res.errors && (res.status === "200" || !res.status)) handleClose();
     else if (res.data) setError(res.data);
     else if (avt.error) setError("Chưa thêm ảnh đại diện");
     else if (idenFont.error) setError("Chưa thêm ảnh CMND mặt trước");
     else if (idenBack.error) setError("Chưa thêm ảnh CMND mặt sau");
-    else setError("");
+    else setError("Email đã được đăng ký từ trước");
   };
 
   return (

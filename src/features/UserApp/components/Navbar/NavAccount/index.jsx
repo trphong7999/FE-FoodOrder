@@ -1,6 +1,6 @@
 import React from "react";
 import { AiFillCaretDown } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import avtDefault from "assets/image/avartar/slide1.jpg";
 import "./style.scss";
 import { logout } from "redux/loginUserAppSlice";
@@ -8,11 +8,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function NavAccount({ avt }) {
   const user = useSelector((state) => state.loginUserApp);
+  const history = useHistory();
   const dispatch = useDispatch();
   const handleLogout = (e) => {
     e.preventDefault();
-
     dispatch(logout());
+    window.location.reload();
   };
   return (
     <div className="account">

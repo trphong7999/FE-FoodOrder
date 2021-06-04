@@ -14,7 +14,7 @@ const managerApi = {
     return axiosClient.post(url, merchantObj);
   },
   registerPartner: (partnerObj) => {
-    const url = `partner/register`;
+    const url = `partners/register`;
     return axiosClient.post(url, partnerObj);
   },
 };
