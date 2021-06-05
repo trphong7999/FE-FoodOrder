@@ -436,6 +436,7 @@ function OpenTime() {
   const handleUpdateOpenTime = async () => {
     const newRes = await merchantApi.updateOpenTime(openTime);
     delete newRes["_id"];
+    alert("Cập nhật thành công");
     setOpenTime(newRes);
   };
 

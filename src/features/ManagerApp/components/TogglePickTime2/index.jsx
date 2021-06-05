@@ -24,7 +24,7 @@ function TogglePickTime({ item, openTime, setOpenTime }) {
   };
 
   return (
-    <div className="field-wrap__list-item">
+    <div className="time__list-item">
       <Switch
         checked={openTime[item].enable}
         onChange={toggleChecked}
