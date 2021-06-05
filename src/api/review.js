@@ -9,9 +9,9 @@ const reviewApi = {
     const url = `/reviews/getreview`;
     return axiosClient.post(url, params);
   },
-  getReviewByMerId: (id) => {
-    const url = `/reviews/getreviewbymerchantid?id=${id}`;
-    return axiosClient.post(url);
+  getReviewByMerId: (params) => {
+    const url = `/reviews/getreviewbyid`;
+    return axiosClient.post(url, params);
   },
 };
 

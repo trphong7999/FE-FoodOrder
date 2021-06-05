@@ -5,7 +5,10 @@ import { RiAccountPinCircleFill } from "react-icons/ri";
 import { useParams } from "react-router";
 import partnerApi from "api/partnerApi";
 import { FaStar } from "react-icons/fa";
+import avtDefault from "assets/image/avartar/slide1.jpg";
+import reviewApi from "api/review";
 import "./style.scss";
+import merchantApi from "api/orderApi";
 
 export default function PartnerPage() {
   let { id } = useParams();
@@ -66,10 +69,10 @@ export default function PartnerPage() {
               <div className="content-task">
                 {taskBar === 1 ? (
                   <Profile partner={partner} />
-                ) : taskBar === 2 ? (
-                  "đơn"
+                ) : taskBar === 3 ? (
+                  <Review partner={partner}/>
                 ) : (
-                  "review"
+                  <HistoryOrder partner={partner}/>
                 )}
               </div>
             </div>
@@ -149,4 +152,82 @@ function Profile({ partner }) {
       )}
     </div>
   );
+}
+
+function Review({ partner }) {
+  const [allReview, setAllReview] = useState([]);
+
+  useEffect(() => {
+    const getAllReviewByMer = async () => {
+      const res = await reviewApi.getReviewByMerId({id: partner._id, type: 2});
+      res.reverse();
+      setAllReview(res);
+      console.log(res)
+    };
+    getAllReviewByMer();
+  }, []);
+
+  
+
+  return (
+    <div className="task-shop">
+      <div className="brand-review">
+        {allReview.map((review, idx) => (
+          <div key={idx} className="brand-reviewm__item">
+            <div className="item-head">
+              <div className="item-head__left">
+                <img
+                  src={
+                    review.reviewer.info.avt === ""
+                      ? avtDefault
+                      : review.reviewer.info.avt
+                  }
+                  alt="avt-user-review"
+                />
+                <div className="user">
+                  <span>{review.reviewer.info.name}</span>
+                  <span>
+                    {formatDatetimeToString(
+                      new Date(parseInt(review.timeReview))
+                    )}
+                  </span>
+                </div>
+              </div>
+              <div className="item-head__right">
+                {[...Array(review.rate)].map((star, i) => {
+                  return (
+                    <label className="review-star__wrap" key={i}>
+                      <FaStar
+                        className="icon-star"
+                        color={"#ffc107"}
+                        size={12}
+                      />
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="item-body">
+              <span>{review.text}</span>
+              
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HistoryOrder({partner}) {
+  const [historyOrder, setHistoryOrder] = useState([])
+
+  useEffect(() => {
+    const getHistoryOrder = async () => {
+      const res = await merchantApi.getOrderByPartner(partner._id)
+      setHistoryOrder(res)
+    }
+    getHistoryOrder()
+  }, [])
+  console.log(historyOrder)
+  return(<div>hello</div>)
 }
