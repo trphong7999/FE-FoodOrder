@@ -111,5 +111,176 @@
         }
       }
     }
+
+    .brand-review {
+      padding-right: 2rem;
+      .brand-reviewm__item {
+        padding: 1rem;
+        background-color: white;
+        border-radius: 6px;
+        box-shadow: var(--box-shadow);
+        margin-bottom: 1.5rem;
+        .item-head {
+          display: flex;
+          justify-content: space-between;
+          border-bottom: 1px solid #ebebeb;
+          padding-bottom: 1rem;
+
+          .item-head__left {
+            display: flex;
+            img {
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              border: 1px solid #ebebeb;
+            }
+            .user {
+              display: flex;
+              flex-direction: column;
+              margin-left: 1rem;
+
+              span {
+                &:first-child {
+                  font-size: 1.6rem;
+                  font-weight: bold;
+                  margin-bottom: 1rem;
+                }
+
+                &:last-child {
+                  font-size: 1.3rem;
+                  color: #808080;
+                }
+              }
+            }
+          }
+        }
+        .item-body {
+          margin-top: 1rem;
+          font-size: 1.5rem;
+          span {
+            white-space: pre-line;
+            line-height: 1.4em;
+            word-wrap: break-word;
+          }
+          .item-body__action {
+            margin: 1rem 0;
+            display: flex;
+            span {
+              display: flex;
+              align-items: center;
+              margin-right: 1rem;
+              cursor: pointer;
+
+              &:hover {
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .history-order__list {
+      margin-right: 1rem;
+      table,
+      th,
+      td {
+        // border: 1px solid black;
+        font-size: 1.3rem;
+        text-align: center;
+      }
+
+      th,
+      td {
+        padding: 1rem 0;
+        background-color: white;
+      }
+
+      .table-order {
+        width: 100%;
+      }
+
+      .item__chat {
+        margin-bottom: 1rem;
+        cursor: pointer;
+
+        &:hover {
+          color: var(--primary-color);
+        }
+      }
+
+      .item__dishes {
+        cursor: pointer;
+
+        &:hover {
+          color: var(--primary-color);
+        }
+      }
+    }
+  }
+}
+
+.content-parter {
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  img {
+    border-radius: 50%;
+  }
+  .content-parter__text {
+    padding: 0.6rem;
+    margin-left: 1rem;
+    color: white;
+    background-color: var(--primary-color);
+    border-radius: 16px;
+    border-top-left-radius: 4px;
+  }
+}
+
+.content-user {
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  img {
+    border-radius: 50%;
+  }
+  .content-user__text {
+    padding: 0.6rem;
+    margin-right: 1rem;
+    color: var(--text-color);
+    background-color: #faf7fe;
+    border-radius: 16px;
+    border-top-left-radius: 4px;
+  }
+}
+
+.dishes-detail__manager {
+  font-size: 1.4rem;
+  width: 400px;
+  .list-dishes {
+    .dish {
+      display: flex;
+      padding: 1rem;
+      font-weight: 500;
+      .dish-name {
+        flex-basis: 70%;
+        text-transform: capitalize;
+      }
+      .dish-quantity {
+        flex-basis: 10%;
+        text-align: center;
+      }
+      .dish-total {
+        flex-basis: 20%;
+        text-align: right;
+      }
+    }
+  }
+  .amount {
+    display: flex;
+    padding: 0 1rem;
+    margin-bottom: 0.6rem;
+    font-weight: 500;
+    justify-content: space-between;
   }
 }
