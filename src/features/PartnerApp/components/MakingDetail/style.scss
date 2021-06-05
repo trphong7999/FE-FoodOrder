@@ -79,6 +79,9 @@
         .head-bot__address {
           padding: 0 1rem 1rem;
           border-bottom: 1px solid #323341;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
         }
         .head-bot__tool {
           font-size: 1.5rem;

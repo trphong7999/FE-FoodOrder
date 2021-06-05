@@ -85,11 +85,11 @@
               text-align: center;
               padding: 0.8rem 0;
               &:first-child {
-                flex-basis: 60%;
+                flex-basis: 66.6666666%;
                 background-color: #0280d6;
               }
               &:last-child {
-                flex-basis: 40%;
+                flex-basis: 33.3333334%;
                 background-color: #de3129;
               }
             }
@@ -119,8 +119,11 @@
             .work-body__colum--bad {
               color: #a51501;
             }
+            .work-body__colum--normal {
+              color: #eb8334;
+            }
             .work-body__colum--not {
-              color: #faa81e;
+              color: #ebd034;
             }
             .work-body__colum--miss {
               color: #985e03;
@@ -135,6 +138,9 @@
           display: flex;
           justify-content: space-between;
           padding: 1rem;
+          // .green {
+          //   color: green;
+          // }
 
           .must-turn__item {
             display: flex;
@@ -269,6 +275,7 @@
                 margin: 1rem 0;
 
                 .list-item__left {
+                  // max-width: 20rem;
                   .left-time {
                   }
                   .left-code {
@@ -279,6 +286,8 @@
                       &:first-child {
                         margin-right: 1rem;
                       }
+                    }
+                    .order-id {
                     }
                   }
                 }

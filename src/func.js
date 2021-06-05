@@ -68,9 +68,16 @@ const formatDatetimeToStringDate = (now) => {
   ).slice(-2)}/${("0" + now.getFullYear()).slice(-2)}`;
 };
 
+const formatDatetimeToStringDateWithoutYear = (now) => {
+  return `${("0" + now.getDate()).slice(-2)}/${(
+    "0" + parseInt(now.getMonth() + 1)
+  ).slice(-2)}`;
+};
+
 export {
   formatDatetimeToString,
   formatDatetimeToStringDate,
+  formatDatetimeToStringDateWithoutYear,
   datetimeFromTimestamp,
   validatePrice,
   getLocationUser,

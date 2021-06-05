@@ -35,7 +35,7 @@ export default function Profile() {
   const handleLogout = async (e) => {
     e.preventDefault();
     dispatch(logoutPartner());
-    history.push("/partner/login");
+    window.location.reload();
   };
 
   const handleOpenFunction = (string) => {
