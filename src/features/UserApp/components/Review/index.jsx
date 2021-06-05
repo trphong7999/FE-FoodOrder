@@ -57,6 +57,7 @@ function Review({ orderId, data, type }) {
       alert("Bạn chưa đánh sao");
     } else {
       console.log(res);
+      alert("Bạn đã đánh giá thành công");
       setOpen(false);
     }
   };
