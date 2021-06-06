@@ -76,6 +76,7 @@ export default function Newfeed({ keyFind, refreshNewFeed }) {
 
         // };
         let res = await merchantApi.getAll();
+        res = res.filter((mer) => mer.status !== "suspend");
         var userLat, userLng;
         if (localStorage.getItem("lat") && localStorage.getItem("lng")) {
           userLat = localStorage.getItem("lat");
@@ -93,6 +94,7 @@ export default function Newfeed({ keyFind, refreshNewFeed }) {
             merchant.location.lng
           ),
         }));
+
         res = res.sort((pre, next) => pre.distance - next.distance);
         setMerchant(res);
         setMerchantFiltered(res);

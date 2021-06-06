@@ -86,7 +86,10 @@ export default function Brand({ merchant }) {
 
   useEffect(() => {
     const getAllReviewByMer = async () => {
-      const res = await reviewApi.getReviewByMerId(merchant._id);
+      const res = await reviewApi.getReviewByMerId({
+        id: merchant._id,
+        type: 2,
+      });
       res.reverse();
       setAllReview(res);
     };
@@ -277,6 +280,7 @@ export default function Brand({ merchant }) {
             </div>
           ) : (
             <div className="brand-review">
+              {allReview.length < 1 ? <h1>Hiện chưa có đánh giá nào</h1> : ""}
               {allReview.map((review, idx) => (
                 <div key={idx} className="brand-reviewm__item">
                   <div className="item-head">
