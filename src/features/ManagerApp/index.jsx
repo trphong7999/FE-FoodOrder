@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Manager from "./pages/Manager";
 import MerchantPage from "./pages/MerchantPage";
 import PartnerPage from "./pages/PartnerPage";
+import UserPage from "./pages/UserPage";
 
 function ManagerApp(props) {
   const match = useRouteMatch();
@@ -24,6 +25,7 @@ function ManagerApp(props) {
         component={MerchantPage}
       />
       <Route exact path={`${match.url}/partner/:id`} component={PartnerPage} />
+      <Route exact path={`${match.url}/user/:id`} component={UserPage} />
 
       {/* <Route path={`${match.url}/add`} component={AddEditPage} />
       <Route path={`${match.url}/:photoId`} component={AddEditPage} /> */}

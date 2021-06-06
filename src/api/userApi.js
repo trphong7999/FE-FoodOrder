@@ -1,6 +1,6 @@
 import axiosClient from "./axiosClient";
 
-const userAPi = {
+const userApi = {
   login: (params) => {
     const url = `/users/login`;
     return axiosClient.post(url, params);
@@ -29,6 +29,14 @@ const userAPi = {
     const url = `users/changeavt`;
     return axiosClient.post(url, params);
   },
+  getAllUser: () => {
+    const url = `/users/`;
+    return axiosClient.get(url);
+  },
+  getUserById: (id) => {
+    const url = `/users/${id}`;
+    return axiosClient.get(url);
+  },
 };
 
-export default userAPi;
+export default userApi;

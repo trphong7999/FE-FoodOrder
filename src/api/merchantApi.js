@@ -62,6 +62,10 @@ const merchantApi = {
     const url = `/merchants/updatestatus`;
     return axiosClient.post(url, params);
   },
+  blockMerchant: (params) => {
+    const url = `/merchants/blockmerchant`;
+    return axiosClient.post(url, params);
+  },
   //------------------------------------------------
 };
 

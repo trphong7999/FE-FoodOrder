@@ -24,7 +24,7 @@ import Setting from "./components/Setting";
 function MerchantApp() {
   const match = useRouteMatch();
   const merchant = useSelector((state) => state.merchant);
-
+  const token = localStorage.token;
   // const [infoMerchant, setInfoMerchant] = useState(1);
   // useEffect(() => {
   //   const fetchMerchant = async () => {
@@ -50,7 +50,9 @@ function MerchantApp() {
       <Route
         exact
         path={`${match.url}`}
-        component={() => (merchant.email ? <Manager /> : <Login />)}
+        component={() =>
+          typeof token === "undefined" ? <Login /> : <Manager />
+        }
         // component={Manager}
       />
       <Route path={`${match.url}/moi-tu-choi/:id`} component={ReasonRefusal} />
