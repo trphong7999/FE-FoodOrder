@@ -7,8 +7,30 @@ import ModalForm from "../ModalRegisterMerchantForm";
 import { useEffect } from "react";
 import merchantApi from "api/merchantApi";
 
+const style = {
+  textDecoration: "none",
+  border: "1px solid #ccc",
+  padding: "1rem",
+  lineHeight: "1.4rem",
+  borderRadius: "6px",
+  color: "var(--text-color)",
+  marginRight: "1rem",
+  cursor: "pointer",
+  ":hover": {
+    color: "white",
+    backgroundColor: "red",
+  },
+};
+
+const block = async (id, status) => {
+  const res = await merchantApi.blockMerchant({ id, status });
+  if (res.status !== 400) alert("Thành công");
+  else alert("Không thành công");
+  window.location.reload();
+};
+
 const columns = [
-  { field: "id", headerName: "STT", width: 80 },
+  { field: "id", headerName: "STT", width: 80, align: "center" },
   { field: "name", headerName: "Tên cơ sở", width: 230 },
   { field: "representative", headerName: "Người đại diện", width: 220 },
   {
@@ -21,21 +43,35 @@ const columns = [
     headerName: "Địa chỉ",
     width: 320,
   },
-  // {
-  //   field: "deduct",
-  //   headerName: "Chiết khấu",
-  //   width: 100,
-  // },
+  {
+    field: "deduct",
+    headerName: "Chiết khấu",
+    width: 130,
+    align: "center",
+  },
   {
     field: "action",
     headerName: "Hành động",
     id: "links",
-    width: 130,
+    width: 185,
     renderCell: (params) => {
       return (
-        <Link to={{ pathname: `/manager/merchant/${params.getValue("_id")}` }}>
-          {"Chi tiết"}
-        </Link>
+        <div>
+          <Link
+            to={{ pathname: `/manager/merchant/${params.getValue("_id")}` }}
+            style={style}
+          >
+            {"Chi tiết"}
+          </Link>
+          <span
+            style={style}
+            onClick={() =>
+              block(params.getValue("_id"), params.getValue("status"))
+            }
+          >
+            {params.getValue("status") === "suspend" ? "Bỏ chặn" : "Chặn"}
+          </span>
+        </div>
       );
     },
   },
@@ -73,6 +109,7 @@ function ManageMerchant(props) {
       address: merchant.location.address,
       deduct: merchant.deduct,
       _id: merchant._id,
+      status: merchant.status,
     }));
     return final;
   };
@@ -80,11 +117,6 @@ function ManageMerchant(props) {
   useEffect(() => {
     const fetchMerchantsList = async () => {
       try {
-        // const params = {
-        //   _page: 1,
-        //   _limit: 10,
-
-        // };
         const res = await merchantApi.getAll();
         const data = fetchData(res);
         setMerchantList(data);

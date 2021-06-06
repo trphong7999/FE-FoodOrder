@@ -3,7 +3,6 @@ import { formatDatetimeToString, validatePrice } from "func";
 import { AiFillProfile } from "react-icons/ai";
 import { RiAccountPinCircleFill } from "react-icons/ri";
 import { useParams } from "react-router";
-import partnerApi from "api/partnerApi";
 import { FaStar } from "react-icons/fa";
 import avtDefault from "assets/image/avartar/slide1.jpg";
 import reviewApi from "api/review";
@@ -13,31 +12,36 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
+import userApi from "api/userApi";
+import loading from "assets/image/avartar/slide1.jpg";
 
-export default function PartnerPage() {
+export default function UserPage() {
   let { id } = useParams();
   const [taskBar, setTaskBar] = useState(1);
-  const [partner, setPartner] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const getPartnerById = async () => {
-      const res = await partnerApi.get(id);
-      setPartner(res);
+    const getUserById = async () => {
+      const res = await userApi.getUserById(id);
+      setUser(res);
     };
 
-    getPartnerById();
+    getUserById();
   }, []);
-  console.log(partner);
+  console.log(user);
   return (
     <div className="grid__full-width">
-      {partner ? (
+      {user ? (
         <div className="manager-partner-page">
           <div className="row">
-            <div className="col l-2" style={{ height: "150vh" }}>
+            <div className="col l-2">
               <div className="task-bar">
                 <div className="task-bar__item">
                   <div className="task-bar__img">
-                    <img src={partner.avt ? partner.avt : ""} alt="" />
+                    <img
+                      src={user.info.avt === "" ? loading : user.info.avt}
+                      alt=""
+                    />
                   </div>
                 </div>
                 <div
@@ -47,7 +51,7 @@ export default function PartnerPage() {
                   }}
                 >
                   <RiAccountPinCircleFill className="task-bar__icon" />
-                  Thông tin tài xế
+                  Thông tin khách hàng
                 </div>
                 <div
                   className="task-bar__item"
@@ -72,11 +76,11 @@ export default function PartnerPage() {
             <div className="col l-10">
               <div className="content-task">
                 {taskBar === 1 ? (
-                  <Profile partner={partner} />
+                  <Profile user={user} />
                 ) : taskBar === 3 ? (
-                  <Review partner={partner} />
+                  <Review user={user} />
                 ) : (
-                  <HistoryOrder partner={partner} />
+                  <HistoryOrder user={user} />
                 )}
               </div>
             </div>
@@ -89,48 +93,67 @@ export default function PartnerPage() {
   );
 }
 
-function Profile({ partner }) {
+function Profile({ user }) {
   return (
     <div className="partner-profile">
-      {partner ? (
+      {user ? (
         <div className="row">
           <div className="col l-6">
             <div className="profile-item">
               <div className="item-title">họ và tên</div>
-              <div className="item-content">{partner.name}</div>
+              <div
+                className="item-content"
+                style={{ textTransform: "capitalize" }}
+              >
+                {user.info.name}
+              </div>
             </div>
           </div>
           <div className="col l-6">
             <div className="profile-item">
               <div className="item-title">địa chỉ</div>
-              <div className="item-content">{partner.address}</div>
+              <div className="item-content">
+                {user.info.location.address === ""
+                  ? "Chưa bổ sung"
+                  : user.info.location.address}
+              </div>
             </div>
           </div>
           <div className="col l-6">
             <div className="profile-item">
               <div className="item-title">email</div>
-              <div className="item-content">{partner.email}</div>
+              <div className="item-content">
+                {user.info.email === "" ? "Chưa bổ sung" : user.info.email}
+              </div>
             </div>
           </div>
           <div className="col l-6">
             <div className="profile-item">
               <div className="item-title">điện thoại</div>
-              <div className="item-content">{partner.phone}</div>
+              <div className="item-content">
+                {user.info.phone === "" ? "Chưa bổ sung" : user.info.phone}
+              </div>
             </div>
           </div>
           <div className="col l-6">
             <div className="profile-item">
               <div className="item-title">giới tính</div>
               <div className="item-content">
-                {partner.gender === "male"
+                {user.info.gender === "male"
                   ? "Nam"
-                  : partner.gender === "female"
+                  : user.info.gender === "female"
                   ? "Nữ"
-                  : "Khác"}
+                  : "Chưa bổ sung"}
               </div>
             </div>
           </div>
           <div className="col l-6">
+            <div className="profile-item">
+              <div className="item-title">username</div>
+              <div className="item-content">{user.username}</div>
+            </div>
+          </div>
+          {/* <div className="col l-6">
             <div className="profile-item">
               <div className="item-title">ngày đăng ký</div>
               <div className="item-content">
@@ -149,13 +172,7 @@ function Profile({ partner }) {
                 <img src={partner.identity.backImg} alt="" />
               </div>
             </div>
-          </div>
-          <div className="col l-12">
-            <div className="profile-item" style={{ textAlign: "center" }}>
-              <div className="item-title">Hợp đồng</div>
-              <img src={partner.contract} width="512" alt="contract" />
-            </div>
-          </div>
+          </div> */}
         </div>
       ) : (
         ""
@@ -230,12 +247,12 @@ function Review({ partner }) {
   );
 }
 
-function HistoryOrder({ partner }) {
+function HistoryOrder({ user }) {
   const [historyOrder, setHistoryOrder] = useState([]);
 
   useEffect(() => {
     const getHistoryOrder = async () => {
-      const res = await merchantApi.getOrderByPartner(partner._id);
+      const res = await merchantApi.getOrderByPartner(user._id);
       setHistoryOrder(res);
     };
     getHistoryOrder();

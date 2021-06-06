@@ -8,6 +8,10 @@ import area from "assets/data/districtName";
 import loading from "assets/image/icons/loading.png";
 import "./style.scss";
 import TogglePickTime from "features/ManagerApp/components/TogglePickTime2";
+import { FaStar } from "react-icons/fa";
+import { MdRateReview } from "react-icons/md";
+import avtDefault from "assets/image/avartar/slide1.jpg";
+import reviewApi from "api/review";
 
 function MerchantPage() {
   let { id } = useParams();
@@ -67,6 +71,15 @@ function MerchantPage() {
                   setTaskBar(4);
                 }}
               >
+                <MdRateReview className="task-bar__icon" />
+                Đánh giá
+              </div>
+              <div
+                className="task-bar__item"
+                onClick={() => {
+                  setTaskBar(5);
+                }}
+              >
                 <RiTimeFill className="task-bar__icon" />
                 Thời gian mở cửa
               </div>
@@ -80,6 +93,8 @@ function MerchantPage() {
                 <Shop merchant={merchant} />
               ) : taskBar === 3 ? (
                 <Categories merchant={merchant} />
+              ) : taskBar === 4 ? (
+                <Review merchant={merchant} />
               ) : (
                 <OpenTime newtime={openTime} />
               )}
@@ -262,6 +277,70 @@ function OpenTime({ newtime }) {
       {/* <div className="main-time__button">
         <button className="button-time">Cập nhật thời gian mở cửa</button>
       </div> */}
+    </div>
+  );
+}
+
+function Review({ merchant }) {
+  const [allReview, setAllReview] = useState([]);
+
+  useEffect(() => {
+    const getAllReviewByMer = async () => {
+      const res = await reviewApi.getReviewByMerId({id: merchant._id, type: 1});
+      res.reverse();
+      setAllReview(res);
+      console.log(res)
+    };
+    getAllReviewByMer();
+  }, []);
+
+  
+
+  return (
+    <div className="task-shop">
+      <div className="brand-review">
+        {allReview.map((review, idx) => (
+          <div key={idx} className="brand-reviewm__item">
+            <div className="item-head">
+              <div className="item-head__left">
+                <img
+                  src={
+                    review.reviewer.info.avt === ""
+                      ? avtDefault
+                      : review.reviewer.info.avt
+                  }
+                  alt="avt-user-review"
+                />
+                <div className="user">
+                  <span>{review.reviewer.info.name}</span>
+                  <span>
+                    {formatDatetimeToString(
+                      new Date(parseInt(review.timeReview))
+                    )}
+                  </span>
+                </div>
+              </div>
+              <div className="item-head__right">
+                {[...Array(review.rate)].map((star, i) => {
+                  return (
+                    <label className="review-star__wrap" key={i}>
+                      <FaStar
+                        className="icon-star"
+                        color={"#ffc107"}
+                        size={12}
+                      />
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="item-body">
+              <span>{review.text}</span>
+              
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

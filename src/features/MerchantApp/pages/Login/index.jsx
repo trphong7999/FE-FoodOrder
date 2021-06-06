@@ -18,6 +18,20 @@ function LoginMerchant() {
   const Login = async (event) => {
     event.preventDefault();
     let res = await merchantApi.login({ email: email, password });
+    if (res === "Account not exist!") {
+      alert("Tài khoản này không tồn tại!");
+      return;
+    }
+    if (res === "Password is wrong!") {
+      alert("Mật khẩu sai!");
+      return;
+    }
+    if (res === "Account is block!") {
+      console.log("hello", res.send);
+      alert("Tài khoản của bạn đã bị chặn!");
+      return;
+    }
+
     if (typeof res === "object") {
       const action = loginMerchant({
         email: email,

@@ -5,7 +5,6 @@ import { Button } from "@material-ui/core";
 import Modal from "@material-ui/core/Modal";
 import ModalForm from "../ModalRegisterPartner";
 import { useEffect } from "react";
-import merchantApi from "api/merchantApi";
 import partnerApi from "api/partnerApi";
 
 const columns = [
@@ -45,6 +44,17 @@ const columns = [
 function ManagePartner(props) {
   const [open, setOpen] = useState(false);
   const [partnerList, setPartnerList] = useState([]);
+  const [allPartner, setAllPartner] = useState([]);
+  const [findName, setFindName] = useState("");
+  const [findAddress, setFindAddress] = useState("");
+
+  function removeAccents(str) {
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d")
+      .replace(/Đ/g, "D");
+  }
 
   const handleOpen = () => {
     setOpen(true);
@@ -54,25 +64,25 @@ function ManagePartner(props) {
     setOpen(false);
   };
 
+  const fetchData = (listPartner) => {
+    const final = listPartner.map((partner, index) => ({
+      id: index + 1,
+      name: partner.name,
+      email: partner.email,
+      gender: partner.gender === "male" ? "Nam" : "Nữ",
+      address: partner.address,
+      phone: partner.phone,
+      _id: partner._id,
+    }));
+    return final;
+  };
+
   useEffect(() => {
     const fetchPartnerList = async () => {
       try {
-        // const params = {
-        //   _page: 1,
-        //   _limit: 10,
-
-        // };
         const res = await partnerApi.getAll();
-        const data = res.map((partner, index) => ({
-          id: index + 1,
-          name: partner.name,
-          email: partner.email,
-          gender: partner.gender === "male" ? "Nam" : "Nữ",
-          address: partner.address,
-          phone: partner.phone,
-          _id: partner._id,
-        }));
-        console.log(res.username);
+        const data = fetchData(res);
+        setAllPartner(res);
         setPartnerList(data);
       } catch (error) {
         console.log("Failed to fetch product list: ", error);
@@ -82,11 +92,46 @@ function ManagePartner(props) {
     fetchPartnerList();
   }, []);
 
+  useEffect(() => {
+    const listMer = allPartner;
+    const filterMerchant = listMer.filter((part) =>
+      removeAccents(part.name)
+        .toLowerCase()
+        .match(removeAccents(findName).toLowerCase())
+    );
+
+    const data = fetchData(filterMerchant);
+
+    setPartnerList(data);
+  }, [findName]);
+
+  useEffect(() => {
+    console.log(findAddress);
+    const listMer = allPartner;
+    const filterMerchant = listMer.filter((part) =>
+      removeAccents(part.address)
+        .toLowerCase()
+        .match(removeAccents(findAddress).toLowerCase())
+    );
+
+    const data = fetchData(filterMerchant);
+
+    setPartnerList(data);
+  }, [findAddress]);
+
   return (
     <div>
       <div className="find-group">
-        <input type="text" placeholder="Tên cơ sở" />
-        <input type="text" placeholder="Tên người đại diện" />
+        <input
+          type="text"
+          placeholder="Tên đối tác"
+          onChange={(e) => setFindName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Địa chỉ"
+          onChange={(e) => setFindAddress(e.target.value)}
+        />
         <Button variant="contained" className="btn">
           Tìm kiếm
         </Button>
