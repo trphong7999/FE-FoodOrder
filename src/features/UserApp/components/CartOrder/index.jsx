@@ -95,14 +95,12 @@ export default function CartOrder({ merchant }) {
     const [hourOpen, minuteOpen] = timeOpen.split(":");
     const [hourClose, minuteClose] = timeClose.split(":");
     let now = new Date(+time);
-    console.log(hourOpen, now.getHours(), hourClose);
     if (
-      (hourOpen < now.getHours() && now.getHours() < hourClose) ||
-      (hourOpen === now.getHours() && minuteOpen <= now.getMinutes()) ||
-      (now.getHours() === hourClose && now.getMinutes() < minuteClose)
+      (+hourOpen < now.getHours() && now.getHours() < +hourClose) ||
+      (+hourOpen === now.getHours() && +minuteOpen <= now.getMinutes()) ||
+      (now.getHours() === +hourClose && now.getMinutes() < +minuteClose)
     )
       return true;
-
     return false;
   };
 
@@ -332,8 +330,13 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
         </div>
       </Link>
     );
-  console.log(applyVoucher);
+
   const wrongCode = () => toast.error("🤔Mã không hợp lệ!");
+
+  const orderFail = () =>
+    toast.error(
+      "❌Tài khoản của bạn đã bị khóa, vui lòng liên hệ CSKH để biết thêm thông tin chi tiết!"
+    );
 
   const applyFail = () => toast.error("🤔Đơn hàng không đạt điều kiện!");
 
@@ -398,9 +401,16 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
       timeDeliverDone: predict,
       code: applyVoucher.code,
     };
-    socket.emit("startOrder", order);
-    handleClose();
-    orderSuccess();
+    socket.emit("startOrder", order, (data) => {
+      console.log(data);
+      if (data) {
+        handleClose();
+        orderSuccess();
+      } else {
+        handleClose();
+        orderFail();
+      }
+    });
   };
 
   var myIcon = new L.icon({

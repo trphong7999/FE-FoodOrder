@@ -41,6 +41,7 @@ function GlobalAddress({ setRefreshNewFeed }) {
     lng: localStorage.lng,
   });
 
+  console.log("lc", location);
   useEffect(() => {
     setTimeout(() => {
       setLocation({

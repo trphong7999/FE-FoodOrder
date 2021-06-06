@@ -178,8 +178,13 @@ export default function Brand({ merchant }) {
             )}
             <div className="brand-info__text">
               <BiTimeFive className="brand-info__text-icon" />
-              {merchant.openTime[getStrDayOfWeek()].label}{" "}
-              {merchant.openTime[getStrDayOfWeek()].time.split("-").join(" - ")}
+              {merchant.openTime[getStrDayOfWeek()].label}
+              {merchant.openTime[getStrDayOfWeek()].enable
+                ? ` ${merchant.openTime[getStrDayOfWeek()].time
+                    .split("-")
+                    .join(" - ")}`
+                : " Không mở"}
+              {} {}
             </div>
           </div>
 

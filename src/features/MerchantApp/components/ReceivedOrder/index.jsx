@@ -137,8 +137,8 @@ function ReceivedOrder() {
       if (Array.isArray(ordersWaitConfirm))
         ordersWaitConfirm.sort((a, b) => a.timeOrder - b.timeOrder);
       else ordersWaitConfirm = [];
-
-      setListReceived([...ordersWaitConfirm, ...ordersFinding]);
+      if (!ordersFinding.status && !ordersWaitConfirm.status)
+        setListReceived([...ordersWaitConfirm, ...ordersFinding]);
     };
 
     getReceivedList();
@@ -147,8 +147,8 @@ function ReceivedOrder() {
   useEffect(() => {
     const getPrepareList = async () => {
       const ordersFinding = await orderApi.getOrderByStatus("picking");
-      console.log(ordersFinding);
-      setListPrepare(ordersFinding);
+      if (!ordersFinding.status || ordersFinding.status === 200)
+        setListPrepare(ordersFinding);
     };
     getPrepareList();
   }, []);

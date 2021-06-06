@@ -29,11 +29,31 @@ const StylesModal = {
 
 function Sidebar({ setSidebar }) {
   const [menubar, setMenubar] = useState([
-    { Icon: FaClipboardList, content: "Dashboard", active: true },
-    { Icon: FaStore, content: "Merchant", active: false },
-    { Icon: FaMotorcycle, content: "Partner", active: false },
-    { Icon: FaUserAlt, content: "Customer", active: false },
-    { Icon: RiCoupon3Line, content: "Voucher", active: false },
+    {
+      Icon: FaClipboardList,
+      content: "Dashboard",
+      active: +localStorage.navManager === 0,
+    },
+    {
+      Icon: FaStore,
+      content: "Merchant",
+      active: +localStorage.navManager === 1,
+    },
+    {
+      Icon: FaMotorcycle,
+      content: "Partner",
+      active: +localStorage.navManager === 2,
+    },
+    {
+      Icon: FaUserAlt,
+      content: "Customer",
+      active: +localStorage.navManager === 3,
+    },
+    {
+      Icon: RiCoupon3Line,
+      content: "Voucher",
+      active: +localStorage.navManager === 4,
+    },
   ]);
   const [orderId, setOrderId] = useState("");
   const [open, setOpen] = useState(true);
@@ -53,6 +73,7 @@ function Sidebar({ setSidebar }) {
     });
     setMenubar(bar);
     setSidebar(index + 1);
+    localStorage.navManager = index;
   };
 
   const findOrder = async () => {

@@ -510,9 +510,9 @@ function Status({ data }) {
   useEffect(() => {
     let getStatusMer = async () => {
       const res = await merchantApi.getStatus();
-      setOriginStatus(res);
       if (res === "close") setStatusMer(false);
       else setStatusMer(true);
+      setOriginStatus(res);
     };
     getStatusMer();
   }, []);
