@@ -26,7 +26,7 @@ export default function PartnerPage() {
       {partner ? (
         <div className="manager-partner-page">
           <div className="row">
-            <div className="col l-2">
+            <div className="col l-2" style={{ height: "150vh" }}>
               <div className="task-bar">
                 <div className="task-bar__item">
                   <div className="task-bar__img">
@@ -141,6 +141,12 @@ function Profile({ partner }) {
                 <img src={partner.identity.fontImg} alt="" />
                 <img src={partner.identity.backImg} alt="" />
               </div>
+            </div>
+          </div>
+          <div className="col l-12">
+            <div className="profile-item" style={{ textAlign: "center" }}>
+              <div className="item-title">Hợp đồng</div>
+              <img src={partner.contract} width="512" alt="contract" />
             </div>
           </div>
         </div>

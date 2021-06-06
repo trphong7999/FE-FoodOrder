@@ -32,7 +32,7 @@ function MerchantPage() {
     <div className="grid__full-width">
       <div className="manager-merchant-page">
         <div className="row">
-          <div className="col l-2">
+          <div className="col l-2" style={{ height: "150vh" }}>
             <div className="task-bar">
               <div
                 className="task-bar__item"

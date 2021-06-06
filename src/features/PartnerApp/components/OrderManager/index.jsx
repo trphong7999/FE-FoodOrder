@@ -40,6 +40,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logoutPartner } from "redux/loginPartnerAppSlice";
 import partnerApi from "api/partnerApi";
+import userAPi from "api/userApi";
 
 let DefaultIcon = L.icon({
   iconUrl: icon,
@@ -269,7 +270,7 @@ function MapPick({ partner, setRefresh, refresh }) {
           geo.lat,
           geo.lng
         )
-      ) < parseFloat(partner.setting.radiusWorking / 1000 || 2)
+      ) < parseFloat(partner.setting.radiusWorking / 1000 || 2) || true
       // !order.cancelPartner.includes(partner._id)
     );
   });
@@ -703,12 +704,28 @@ function CurrentOrder({
   setRefresh,
   handleChooseOrder,
 }) {
+  const [historyOrder, setHistoryOrder] = useState([]);
+  const percent =
+    historyOrder.filter((od) => od.status === "complete").length /
+      historyOrder.length || 0;
+  const lastOrder = historyOrder.slice(-1).pop() || {};
+
   const chooseOrder = (order_id) => {
     socket.emit("chooseOrder", order_id);
     handleChooseOrder(order);
     removeOrderPicked(order_id);
     handleClose();
   };
+
+  useEffect(() => {
+    const fetchPrestige = async () => {
+      const res = await userAPi.getPrestige(order.userOrderId._id);
+      if (!res.status || res.status == 200) {
+        setHistoryOrder(res);
+      }
+    };
+    fetchPrestige();
+  }, [order]);
 
   return (
     <div className="current-order">
@@ -760,6 +777,16 @@ function CurrentOrder({
             </div>
           </div>
           <div className="cus-address">{order.detail.location.address}</div>
+          <div
+            className="cus-address"
+            style={{ marginTop: "0.8rem", color: "#888" }}
+          >
+            Đã đặt: {historyOrder.length} đơn | Tỉ lệ thành công:
+            {percent.toFixed(2)}% | Đơn gần nhất:
+            {lastOrder.status && lastOrder.status === "complete"
+              ? "Thành công"
+              : "Thất bại" || ""}
+          </div>
         </div>
 
         <div className="content-action">

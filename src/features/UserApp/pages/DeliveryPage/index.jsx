@@ -29,6 +29,7 @@ export default function DeliveryPage() {
   const [geoPartner, setGeoPartner] = useState(null);
   const [open, setOpen] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [cancelByUser, setCancelByUser] = useState(false);
 
   const changeOpen = () => {
     setOpen(!open);
@@ -66,6 +67,10 @@ export default function DeliveryPage() {
 
   socket.on("DeliveringOrder", () => {
     setRefresh({});
+  });
+
+  socket.on("userNotReceiveFoods", () => {
+    setCancelByUser(true);
   });
 
   var userIcon = new L.icon({
@@ -107,6 +112,7 @@ export default function DeliveryPage() {
           order={haveOrder}
           setHaveOrder={setHaveOrder}
           setOpen={setOpen}
+          cancelByUser={cancelByUser}
         />
       ) : (
         ""
@@ -177,7 +183,7 @@ export default function DeliveryPage() {
   );
 }
 
-function OrderInfo({ order, setHaveOrder, setOpen }) {
+function OrderInfo({ order, setHaveOrder, setOpen, cancelByUser }) {
   const [numShow, setNumShow] = useState(true);
 
   return (
@@ -206,6 +212,7 @@ function OrderInfo({ order, setHaveOrder, setOpen }) {
             order={order}
             setOpen={setOpen}
             setHaveOrder={setHaveOrder}
+            cancelByUser={cancelByUser}
           />
         ) : (
           <Chat order={order} setOrder={setHaveOrder} />
@@ -215,7 +222,7 @@ function OrderInfo({ order, setHaveOrder, setOpen }) {
   );
 }
 
-function DetailOrder({ order, setOpen, setHaveOrder }) {
+function DetailOrder({ order, setOpen, setHaveOrder, cancelByUser }) {
   const handleCancelOrder = () => {
     confirmAlert({
       title: "Xác nhận trước khi gửi",
@@ -259,7 +266,9 @@ function DetailOrder({ order, setOpen, setHaveOrder }) {
           <div className="detail-item">
             <span>Trạng thái</span>
             <span className="status">
-              {order.status === "new"
+              {cancelByUser
+                ? "Đơn đã bị hủy do khách không nhận hàng"
+                : order.status === "new"
                 ? "Chờ quán chấp nhận"
                 : order.status === "finding" || !order.deliverId
                 ? "Đang tìm tài xế"

@@ -93,7 +93,13 @@ export default function Newfeed({ keyFind, refreshNewFeed }) {
             merchant.location.lng
           ),
         }));
-        res = res.sort((pre, next) => pre.distance - next.distance);
+        res = res
+          .filter((mer) => mer.status != "suspend")
+          .sort(
+            (pre, next) =>
+              ("" + next.status).localeCompare(pre.status) ||
+              pre.distance - next.distance
+          );
         setMerchant(res);
         setMerchantFiltered(res);
       } catch (error) {
@@ -130,18 +136,14 @@ export default function Newfeed({ keyFind, refreshNewFeed }) {
       );
     });
     filteredMerchant = filteredMerchant.sort(
-      (pre, next) => pre.distance - next.distance
+      (pre, next) =>
+        ("" + next.status).localeCompare(pre.status) ||
+        pre.distance - next.distance
     );
     setMerchantFiltered(filteredMerchant);
   }, [keyFind, checkDistrict, refreshNewFeed]);
 
   const classes = useStyles();
-  console.log(
-    "filted",
-    page,
-    pageCount,
-    merchantFiltered.slice((page - 1) * numPerPage, page * numPerPage)
-  );
 
   return (
     <div className="newfeed-wrap">

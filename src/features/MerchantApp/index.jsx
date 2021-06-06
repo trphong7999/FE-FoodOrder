@@ -53,7 +53,7 @@ function MerchantApp() {
         component={() => (merchant.email ? <Manager /> : <Login />)}
         // component={Manager}
       />
-      <Route path={`${match.url}/moi-tu-choi/:id`} component={ReasonRefusal} />
+      <Route path={`${match.url}/moi-tu-choi`} component={ReasonRefusal} />
       <Route path={`${match.url}/da-nhan`} exact component={ReceivedOrder} />
       <Route
         path={`${match.url}/da-nhan/xac-nhan/:id`}

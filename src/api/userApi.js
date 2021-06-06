@@ -29,6 +29,14 @@ const userAPi = {
     const url = `users/changeavt`;
     return axiosClient.post(url, params);
   },
+  checkUniquePhone: (params) => {
+    const url = `users/checkuniquephone?phone=${params}`;
+    return axiosClient.get(url);
+  },
+  getPrestige: (userId) => {
+    const url = `users/checkprestige?userid=${userId}`;
+    return axiosClient.get(url);
+  },
 };
 
 export default userAPi;

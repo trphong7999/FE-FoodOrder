@@ -3,6 +3,7 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 import { BsChevronLeft } from "react-icons/bs";
 import "./style.scss";
 import socket from "socket-io";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function ReasonRefusal() {
   const history = useHistory();
@@ -30,16 +31,22 @@ export default function ReasonRefusal() {
       checked: false,
     },
   ]);
-  console.log(reasons);
+
+  const changeFail = (message) => toast.error("🤔" + message);
 
   const handleConfirmRemove = () => {
-    socket.emit("merchantCancelOrder", {
-      order_id: orderNeedCancel._id,
-      reasons: reasons
-        .filter((rs) => rs.checked === true)
-        .map((rs) => rs.title),
-    });
-    history.goBack();
+    const wasChoose = reasons.reduce((val, item) => {
+      return val ? val : item.checked;
+    }, false);
+    if (wasChoose) {
+      socket.emit("merchantCancelOrder", {
+        order_id: orderNeedCancel._id,
+        reasons: reasons
+          .filter((rs) => rs.checked === true)
+          .map((rs) => rs.title),
+      });
+      history.goBack();
+    } else return changeFail("Vui lòng chọn ít nhất một lý do");
   };
 
   const handleChooseReason = (e) => {
@@ -53,6 +60,7 @@ export default function ReasonRefusal() {
 
   return (
     <div className="reason-refusal">
+      <ToastContainer />
       <div className="reason-refusal__head">
         <div
           className="reason-refusal__link"

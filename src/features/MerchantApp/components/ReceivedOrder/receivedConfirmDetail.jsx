@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./styleDetail.scss";
 import { FaPhoneAlt } from "react-icons/fa";
 import { BsChevronLeft } from "react-icons/bs";
@@ -15,12 +15,18 @@ import socket from "socket-io";
 import taixe1 from "assets/image/avartar/taixe1.jpg";
 import TimeInput from "react-input-time";
 import { toast, ToastContainer } from "react-toastify";
+import userAPi from "api/userApi";
 
 function ReceivedConfirmDetail() {
   const history = useHistory();
   const location = useLocation();
   const orderDetail = location.state.orderDetail;
-  const quantityOrdered = orderDetail.userOrderId.quantityOrderedSuccess;
+  const [historyOrder, setHistoryOrder] = useState([]);
+  const percent =
+    historyOrder.filter((od) => od.status === "complete").length /
+      historyOrder.length || 0;
+  const lastOrder = historyOrder.slice(-1).pop() || {};
+
   const [timePartnerGetFood, setTimePartnerGetFood] = useState(
     orderDetail.timeOrder
   );
@@ -31,20 +37,16 @@ function ReceivedConfirmDetail() {
         lệ
       </div>
     );
-  // const totalNumberOfDishes = orderDetail.listFood.reduce(sumQuantity, 0);
-  // const totalAmountOfDishes = orderDetail.listFood.reduce(sumTotal, 0);
-  // const commissionMoney = totalAmountOfDishes * 0.1;
-  // const finalAmount = totalAmountOfDishes - commissionMoney;
 
-  // const orderPrepare = {
-  //   ...orderDetail,
-  //   totalNumberOfDishes: totalNumberOfDishes,
-  //   totalAmountOfDishes: totalAmountOfDishes,
-  //   discountMoney: 0,
-  //   commissionMoney: commissionMoney,
-  //   finalAmount: finalAmount,
-  //   infoPartner: { name: null, phone: null, status: 0, avatar: "" },
-  // };
+  useEffect(() => {
+    const fetchPrestige = async () => {
+      const res = await userAPi.getPrestige(orderDetail.userOrderId._id);
+      if (!res.status || res.status == 200) {
+        setHistoryOrder(res);
+      }
+    };
+    fetchPrestige();
+  }, [orderDetail]);
 
   const onTimeChangeHandle = (val) => {
     let hour = new Date().setHours(parseInt(val.split(":")[0]));
@@ -93,9 +95,11 @@ function ReceivedConfirmDetail() {
         <div className="partner-info">
           <span>{orderDetail.userOrderId.info.name}</span>
           <span>
-            {quantityOrdered < 1
-              ? "Lần đầu đặt"
-              : `Đã đặt thành công: ${quantityOrdered} đơn`}
+            Đã đặt: {historyOrder.length} đơn | Tỉ lệ thành công:
+            {percent.toFixed(2)}% | Đơn gần nhất:
+            {lastOrder.status && lastOrder.status === "complete"
+              ? "Thành công"
+              : "Thất bại" || ""}
           </span>
         </div>
         <div className="partner-action">

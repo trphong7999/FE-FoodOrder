@@ -4,16 +4,19 @@ import "./style.scss";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { validatePrice, datetimeFromTimestamp, sumQuantity } from "func";
 import socket from "socket-io.js";
+import userAPi from "api/userApi";
 
 function NewOrder({ newListOrder }) {
   const match = useRouteMatch();
   const history = useHistory();
   const [serialOrder, setSerialOrder] = useState(0);
-
+  const [historyOrder, setHistoryOrder] = useState([]);
   const detailOrder = newListOrder[serialOrder];
   const userInfo = detailOrder.userOrderId.info;
-  const id = detailOrder.id;
-
+  const percent =
+    historyOrder.filter((od) => od.status === "complete").length /
+      historyOrder.length || 0;
+  const lastOrder = historyOrder.slice(-1).pop() || {};
   const handleChangeOrderDetail = (index) => {
     setSerialOrder(index);
   };
@@ -24,12 +27,25 @@ function NewOrder({ newListOrder }) {
   // ------------------------------------------------------------
   const changeUrlToRefusal = () => {
     const location = {
-      pathname: `${match.url}/moi-tu-choi}`,
+      pathname: `${match.url}/moi-tu-choi`,
       state: { detailOrderNeedCancel: detailOrder },
     };
+    console.log(location);
     history.push(location);
     history.replace(location);
   };
+
+  useEffect(() => {
+    const fetchPrestige = async () => {
+      const res = await userAPi.getPrestige(
+        newListOrder[serialOrder].userOrderId._id
+      );
+      if (!res.status || res.status == 200) {
+        setHistoryOrder(res);
+      }
+    };
+    fetchPrestige();
+  }, [serialOrder]);
 
   return (
     <div className="content">
@@ -57,7 +73,11 @@ function NewOrder({ newListOrder }) {
         <div className="content-title">
           <span className="title-name">{userInfo.name}</span>
           <span className="title-quantity">
-            Đã đặt: 0{/* {detailOrder.customer.quantityOrdered} */}
+            Đã đặt: {historyOrder.length} đơn | Tỉ lệ thành công:
+            {percent.toFixed(2)}% | Đơn gần nhất:
+            {lastOrder.status && lastOrder.status === "complete"
+              ? "Thành công"
+              : "Thất bại" || ""}
           </span>
         </div>
 
@@ -74,9 +94,6 @@ function NewOrder({ newListOrder }) {
             <span className="time-left__space">
               cách: {detailOrder.distance} km
             </span>
-          </div>
-          <div className="time-right">
-            <button className="time-right__button">Trì hoãn</button>
           </div>
         </div>
 

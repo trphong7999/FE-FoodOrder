@@ -57,6 +57,9 @@ export default function CartOrder({ merchant }) {
   const loginWarning = () =>
     toast.warn("😮 Bạn cần đăng nhập để tiếp tục đặt hàng!");
 
+  const statusWarning = () =>
+    toast.warn("😮 Quán đã đóng cửa, hãy quay lại vào ngày mai!");
+
   const infoWarning = () =>
     toast.error(
       <Link to="/user/tai-khoan">
@@ -85,40 +88,25 @@ export default function CartOrder({ merchant }) {
     return dayOfWeek.toLowerCase();
   };
 
-  const statusOrder = () => {
-    const { lat: userLat, lng: userLng } = userProfile.location;
-    const {
-      openTime,
-      location: { lat: merchantLat, lng: merchantLng },
-    } = merchant;
-    const distance = computeDistant(userLat, userLng, merchantLat, merchantLng);
-    const diffTime = distance * 7;
+  const statusOrder = (time) => {
+    const { openTime } = merchant;
     const openTimeToDay = openTime[getStrDayOfWeek()];
     const [timeOpen, timeClose] = openTimeToDay.time.split("-");
     const [hourOpen, minuteOpen] = timeOpen.split(":");
     const [hourClose, minuteClose] = timeClose.split(":");
-    const now = new Date();
-    const timeExpect = new Date();
-    timeExpect.setMinutes(now.getMinutes() + diffTime);
-    console.log(openTimeToDay, timeExpect);
+    let now = new Date(+time);
+    console.log(hourOpen, now.getHours(), hourClose);
     if (
-      hourOpen <= now.getHours() <= hourClose &&
-      minuteOpen <= now.getMinutes() <= minuteClose &&
-      (hourOpen >= timeExpect.getHours() ||
-        timeExpect.getHours() >= hourClose) &&
-      (minuteOpen > timeExpect.getMinutes() ||
-        timeExpect.getMinutes() > minuteClose)
+      (hourOpen < now.getHours() && now.getHours() < hourClose) ||
+      (hourOpen === now.getHours() && minuteOpen <= now.getMinutes()) ||
+      (now.getHours() === hourClose && now.getMinutes() < minuteClose)
     )
-      return 1;
-    else if (
-      (hourOpen >= timeExpect.getHours() ||
-        timeExpect.getHours() >= hourClose) &&
-      (minuteOpen > timeExpect.getMinutes() ||
-        timeExpect.getMinutes() > minuteClose)
-    )
-      return 2;
-    return 3;
+      return true;
+
+    return false;
   };
+
+  console.log("status", statusOrder(Date.now()));
 
   const handleOpen = () => {
     setOpen(true);
@@ -141,9 +129,14 @@ export default function CartOrder({ merchant }) {
     } else if (!name || !phone || !address || !lat || !lng) {
       infoWarning();
       return;
-    } else if (listCartOrder.length < 1) {
+    } else if (listItem.length < 1) {
       cartWarning();
       return;
+    } else if (merchant.status !== "open") {
+      return statusWarning();
+    } else if (merchant.status === "open" && !statusOrder(Date.now())) {
+      socket.emit("closeMerchant", merchantId);
+      return statusWarning();
     }
     socket.emit("haveOrderProcessing", user.profile._id);
   };
@@ -348,7 +341,7 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
 
   const codeUsed = () => toast.error("🤔Bạn chỉ được sử dụng mã này một lần!");
 
-  const applySuccess = () => toast.error("😍Áp mã thành công!");
+  const applySuccess = () => toast.success("😍Áp mã thành công!");
 
   const predictFail = () =>
     toast.success(

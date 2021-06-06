@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaAngleLeft } from "react-icons/fa";
 import { BsBoxArrowInUp, BsBoxArrowInDown } from "react-icons/bs";
 import { IoReloadCircleOutline } from "react-icons/io5";
 import "./style.scss";
+import apiOrder from "api/orderApi";
 
 export default function Wallet() {
+  const [orders, setOrders] = useState([]);
+  useState(() => {
+    const fetAllOrder = async () => {
+      const orders = apiOrder.getAllMyOrder();
+      setOrders(orders);
+    };
+    fetAllOrder();
+  }, []);
+  console.log(orders);
+
   return (
     <div className="wallet">
       <div className="wallet-head">

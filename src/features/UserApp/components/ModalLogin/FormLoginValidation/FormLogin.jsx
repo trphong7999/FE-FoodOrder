@@ -14,10 +14,10 @@ export default function FormLoginValidation({ clickSwitchForm }) {
     validationSchema: Yup.object({
       username: Yup.string()
         .max(10, "Login must be shorter than 10 characters")
-        .required(),
+        .required("Tên tài khoản không được để trống"),
       password: Yup.string()
         .min(6, "Password should be longer than 6 characters")
-        .required(),
+        .required("Mật khẩu không được để trống"),
     }),
   });
 
@@ -35,7 +35,11 @@ export default function FormLoginValidation({ clickSwitchForm }) {
     e.preventDefault();
 
     let res = await userApi.login({ username: userName, password });
-    if (typeof res === "object" && res.status !== 400) {
+    console.log(res);
+    const noti = document.querySelector("#notify");
+    if (res.status && res.status !== 200) {
+      noti.textContent = res.data;
+    } else if (typeof res === "object" && res.status !== 400) {
       const action = login({
         username: userName,
         token: res.token,
@@ -55,7 +59,7 @@ export default function FormLoginValidation({ clickSwitchForm }) {
       <img src={logo} alt="logo" />
 
       <h1>Chào mừng đến với FoodLovers</h1>
-
+      <p id="notify" style={{ color: "red" }}></p>
       <label htmlFor="username">Tên tài khoản</label>
       <input
         type="text"

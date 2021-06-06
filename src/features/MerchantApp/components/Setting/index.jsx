@@ -172,7 +172,7 @@ function ChildContent({ data, changeShow, title, numberShow, callBackData }) {
         ) : numberShow === 3 ? (
           <OpenTime />
         ) : numberShow === 4 ? (
-          <Status />
+          <Status data={data} />
         ) : (
           ""
         )}
@@ -472,8 +472,26 @@ function OpenTime() {
   );
 }
 
-function Status() {
+function Status({ data }) {
   const [statusMer, setStatusMer] = useState(false);
+  const [originStatus, setOriginStatus] = useState(null);
+  // const statusOrder = (time) => {
+  //   const { openTime } = merchant;
+  //   const openTimeToDay = openTime[getStrDayOfWeek()];
+  //   const [timeOpen, timeClose] = openTimeToDay.time.split("-");
+  //   const [hourOpen, minuteOpen] = timeOpen.split(":");
+  //   const [hourClose, minuteClose] = timeClose.split(":");
+  //   let now = new Date(+time);
+  //   console.log(hourOpen, now.getHours(), hourClose);
+  //   if (
+  //     (hourOpen < now.getHours() && now.getHours() < hourClose) ||
+  //     (hourOpen === now.getHours() && minuteOpen <= now.getMinutes()) ||
+  //     (now.getHours() === hourClose && now.getMinutes() < minuteClose)
+  //   )
+  //     return true;
+
+  //   return false;
+  // };
 
   const handleToggleSwitchStatus = () => {
     setStatusMer(!statusMer);
@@ -491,6 +509,7 @@ function Status() {
   useEffect(() => {
     let getStatusMer = async () => {
       const res = await merchantApi.getStatus();
+      setOriginStatus(res);
       if (res === "close") setStatusMer(false);
       else setStatusMer(true);
     };
@@ -504,16 +523,23 @@ function Status() {
       </div>
       <div className="title">Trạng thái cửa hàng:</div>
       <div className="main">
-        <span style={{ color: `${statusMer ? "green" : "red"}` }}>
-          {statusMer ? "Mở cửa" : "Đóng cửa"}
-        </span>
-        <Switch
-          checked={statusMer}
-          onChange={handleToggleSwitchStatus}
-          color="primary"
-          name="statusMer"
-          inputProps={{ "aria-label": "primary checkbox" }}
-        />
+        {originStatus !== "suspend" ? (
+          <React.Fragment>
+            {" "}
+            <span style={{ color: `${statusMer ? "green" : "red"}` }}>
+              {statusMer ? "Mở cửa" : "Đóng cửa"}
+            </span>
+            <Switch
+              checked={statusMer}
+              onChange={handleToggleSwitchStatus}
+              color="primary"
+              name="statusMer"
+              inputProps={{ "aria-label": "primary checkbox" }}
+            />
+          </React.Fragment>
+        ) : (
+          <span style={{ color: `red` }}>Đình chỉ</span>
+        )}
       </div>
       <div className="main-status__btn">
         <button onClick={handleChangeStatus}>Xác nhận</button>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./styleDetail.scss";
 import { FaPhoneAlt } from "react-icons/fa";
 import { BsChevronLeft } from "react-icons/bs";
@@ -10,17 +10,32 @@ import { useHistory, useLocation } from "react-router-dom";
 import { sumQuantity, validatePrice } from "func";
 import socket from "socket-io.js";
 import { Rating } from "@material-ui/lab";
+import userAPi from "api/userApi";
 
 function ReceivedPrepareDetail() {
   const history = useHistory();
   const location = useLocation();
   const prepareDetail = location.state.prepareDetail;
-  const quantityOrdered = prepareDetail.userOrderId.quantityOrderedSuccess;
+  const [historyOrder, setHistoryOrder] = useState([]);
+  const percent =
+    historyOrder.filter((od) => od.status === "complete").length /
+      historyOrder.length || 0;
+  const lastOrder = historyOrder.slice(-1).pop() || {};
 
   const addReceivedWait = () => {
     socket.emit("prepareDone", prepareDetail._id);
     history.goBack();
   };
+
+  useEffect(() => {
+    const fetchPrestige = async () => {
+      const res = await userAPi.getPrestige(prepareDetail.userOrderId._id);
+      if (!res.status || res.status == 200) {
+        setHistoryOrder(res);
+      }
+    };
+    fetchPrestige();
+  }, [prepareDetail]);
 
   return (
     <div className="received-confirm-detail">
@@ -51,9 +66,11 @@ function ReceivedPrepareDetail() {
         <div className="partner-info">
           <span>{prepareDetail.userOrderId.info.name}</span>
           <span>
-            {quantityOrdered < 1
-              ? "Lần đầu đặt"
-              : `Đã đặt: ${quantityOrdered} đơn`}
+            Đã đặt: {historyOrder.length} đơn | Tỉ lệ thành công:
+            {percent.toFixed(2)}% | Đơn gần nhất:
+            {lastOrder.status && lastOrder.status === "complete"
+              ? "Thành công"
+              : "Thất bại" || ""}
           </span>
         </div>
         <div className="partner-action">

@@ -18,7 +18,6 @@ export default function MakingDetail() {
   const history = useHistory();
   const [order, setOrder] = useState(useLocation().state.orderDetail);
   const [show, setShow] = useState(true);
-  console.log(order);
 
   const handleChangeShowHead = (data) => {
     setShow(data);
@@ -211,7 +210,6 @@ function MakingAction({ setOrder, order }) {
 function FinishedAction({ history, order }) {
   const completeOrder = () => {
     socket.emit("completeOrder", order._id);
-    console.log("asd", history);
     history.goBack();
   };
   return (
@@ -225,8 +223,30 @@ function FinishedAction({ history, order }) {
 }
 
 function Infomation({ order, info }) {
+  const [userCancel, setUserCancel] = useState(false);
+  const [code, setCode] = useState("");
+  const history = useHistory();
+  const codeWrong = () =>
+    toast.error(
+      <div>
+        <span style={{ fontSize: "2.5rem" }}>🤚</span>Mã xác thực sai, vui lòng
+        liên hệ đại lý H2P để được hỗ trợ
+      </div>
+    );
+
+  const handleUserCancel = () => {
+    setUserCancel(true);
+  };
+  const submitUserCancel = () => {
+    if (code == "1111") {
+      socket.emit("userNotReceiveFoods", order._id);
+      history.goBack();
+    } else codeWrong();
+  };
+
   return (
     <div className="head-bot">
+      <ToastContainer style={{ top: "10%" }} />
       <div className="head-bot__name">{info.name}</div>
       <div className="head-bot__address">{info.location.address}</div>
       <div className="head-bot__tool">
@@ -263,6 +283,47 @@ function Infomation({ order, info }) {
         <div className="tool-item">
           {info.representative ? "Quán tools" : "ASAP"}
         </div>
+        {!info.representative && order.status == "delivering" && !userCancel ? (
+          <button
+            style={{ marginLeft: "auto", borderRadius: "8px", outline: "none" }}
+            onClick={() => handleUserCancel()}
+          >
+            Khách hủy
+          </button>
+        ) : (
+          ""
+        )}
+        {userCancel ? (
+          <div style={{ marginLeft: "auto" }}>
+            <input
+              style={{
+                width: "8rem",
+                outline: "none",
+                letterSpacing: "1.1rem",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+              }}
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              maxLength="4"
+              placeholder="____"
+              type="text"
+            />
+            <button
+              style={{
+                padding: "0.2rem 1.3rem",
+                marginLeft: "0.5rem",
+                borderRadius: "4px",
+                outline: "none",
+              }}
+              onClick={() => submitUserCancel()}
+            >
+              Gửi
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
