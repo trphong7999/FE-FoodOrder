@@ -87,6 +87,7 @@ function InComeWeek({ infos }) {
     else setShowWeekContent(!showWeekContent);
   };
   const { monday, sunday, orders, ordersCanceled } = infos;
+  console.log(monday, sunday);
 
   return (
     <div className="in-come__week">
@@ -116,6 +117,7 @@ function WeekContent({ showWeekContent, orders, monday }) {
     setShowDayContent(true);
     const start = +getTimeStartDay(time);
     const end = +getTimeEndDay(time);
+    console.log(start, end);
     const ordersInDay = orders.filter(
       (od) => end > +od.timeOrder && +od.timeOrder > start
     );
@@ -132,9 +134,7 @@ function WeekContent({ showWeekContent, orders, monday }) {
     return new Date(new Date(new Date(date).setHours(0)).setMinutes(1));
   };
   const getTimeEndDay = (date) => {
-    return new Date(
-      new Date(new Date(date - minisecondOfHour).setHours(23)).setMinutes(59)
-    );
+    return new Date(new Date(new Date(date).setHours(23)).setMinutes(59));
   };
 
   const getIncomeOfDayByDatetime = (time) => {
