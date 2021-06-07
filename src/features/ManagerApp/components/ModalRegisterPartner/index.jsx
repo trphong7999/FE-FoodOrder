@@ -8,6 +8,7 @@ function ModalRegisterPartner({ handleClose }) {
   const [img, setImg] = useState({ 0: null });
   const [identityFont, setIdentityFont] = useState({ 0: null });
   const [identityBack, setIdentityBack] = useState({ 0: null });
+  const [contract, setContract] = useState({ 0: null });
   const [partner, setPartner] = useState({
     name: "",
     gender: "male",
@@ -42,6 +43,10 @@ function ModalRegisterPartner({ handleClose }) {
     backData.append("file", identityBack[0]);
     backData.append("upload_preset", "foodorder");
 
+    const contractData = new FormData();
+    backData.append("file", contract[0]);
+    backData.append("upload_preset", "foodorder");
+
     const resUploadAvt = await fetch(
       "https://api.cloudinary.com/v1_1/vmu/image/upload",
       {
@@ -63,9 +68,17 @@ function ModalRegisterPartner({ handleClose }) {
         body: backData,
       }
     );
+    const resUploadContract = await fetch(
+      "https://api.cloudinary.com/v1_1/vmu/image/upload",
+      {
+        method: "POST",
+        body: contractData,
+      }
+    );
     const avt = await resUploadAvt.json();
     const idenFont = await resUploadIdenFont.json();
     const idenBack = await resUploadIdenBack.json();
+    const contractImg = await resUploadContract.json();
     const partnerObj = {
       ...partner,
       avt: avt.secure_url,
@@ -77,6 +90,7 @@ function ModalRegisterPartner({ handleClose }) {
       setting: {
         radiusWorking: 2000,
       },
+      contract: contractImg.secure_url,
     };
     const res = await managerApi.registerPartner(partnerObj);
     if (!res.errors && (res.status === "200" || !res.status)) handleClose();
@@ -84,6 +98,7 @@ function ModalRegisterPartner({ handleClose }) {
     else if (avt.error) setError("Chưa thêm ảnh đại diện");
     else if (idenFont.error) setError("Chưa thêm ảnh CMND mặt trước");
     else if (idenBack.error) setError("Chưa thêm ảnh CMND mặt sau");
+    else if (contract.error) setError("Chưa thêm hợp đồng");
     else setError("Email đã được đăng ký từ trước");
   };
 
@@ -213,6 +228,25 @@ function ModalRegisterPartner({ handleClose }) {
               maxFileSize={5242880}
             />
           </div>
+          <div style={{ alignItems: "center" }}>
+            <label>Hợp đồng</label>
+            {/* <MultiImageInput
+            images={identityBack}
+            setImages={setIdentityBack}
+            cropConfig={{ crop, ruleOfThirds: true }}
+            max={1}
+            theme="light"
+          /> */}
+            <ImageUploader
+              singleImage={true}
+              withIcon={true}
+              withPreview={true}
+              buttonText="Choose images"
+              onChange={(e) => setContract(e)}
+              imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+              maxFileSize={5242880}
+            />
+          </div>
         </div>
       </div>
       <button
@@ -249,7 +283,9 @@ function ModalRegisterPartner({ handleClose }) {
         style={{
           position: "absolute",
           bottom: "calc((100vh - 68rem) / 2)",
-          right: "calc((100vw - 50rem) / 2)",
+          right: "calc((100vw - 40rem) / 2)",
+          fontSize: "1.2rem",
+          color: "red",
         }}
       >
         {error}
