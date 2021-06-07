@@ -94,7 +94,7 @@ function InComeWeek({ infos }) {
         <FaRegCalendarAlt className="week-time__icon-calendar" />
         <span>
           Tuần {formatDatetimeToStringDate(new Date(+monday))} -{" "}
-          {formatDatetimeToStringDate(new Date(+sunday))}
+          {formatDatetimeToStringDate(new Date(+sunday - 86400000))}
         </span>
         <FaCaretDown className="week-time__icon-down" />
       </div>
