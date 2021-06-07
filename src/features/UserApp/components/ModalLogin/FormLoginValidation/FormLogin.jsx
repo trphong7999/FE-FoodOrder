@@ -35,7 +35,6 @@ export default function FormLoginValidation({ clickSwitchForm }) {
     e.preventDefault();
 
     let res = await userApi.login({ username: userName, password });
-    console.log(res);
     const noti = document.querySelector("#notify");
     if (res.status && res.status !== 200) {
       noti.textContent = res.data;

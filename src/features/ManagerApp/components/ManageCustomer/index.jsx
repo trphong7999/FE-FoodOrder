@@ -127,7 +127,6 @@ function ManageCustomer(props) {
     const fetchUserList = async () => {
       try {
         const res = await userApi.getAllUser();
-        console.log("cc", res);
         const data = fetchData(res);
         setAllUser(res);
         setUserList(data);

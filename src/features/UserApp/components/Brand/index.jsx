@@ -90,7 +90,6 @@ export default function Brand({ merchant }) {
         id: merchant._id,
         type: 1,
       });
-      console.log(res);
       res.reverse();
       setAllReview(res);
     };

@@ -15,16 +15,15 @@ function MainPageMerchant() {
   const [newListOrder, setNewListOrder] = useState([]);
 
   // Check login is the manager
-  merchantApi.checkAuth().then((res) => {
-    try {
-      if (res.status === 400) {
-        dispatch(logoutMerchant());
-      }
-    } catch {
-      console.log("ok");
-      return;
-    }
-  });
+  // merchantApi.checkAuth().then((res) => {
+  //   try {
+  //     if (res.status === 400) {
+  //       dispatch(logoutMerchant());
+  //     }
+  //   } catch {
+  //     return;
+  //   }
+  // });
 
   socket.off("newOrder");
   socket.on("newOrder", (data) => {
@@ -34,7 +33,6 @@ function MainPageMerchant() {
 
   socket.off("userCancelOrder");
   socket.on("userCancelOrder", (orderId) => {
-    console.log(orderId, newListOrder);
     const idx = newListOrder.findIndex((order) => {
       return String(order._id) == orderId;
     });

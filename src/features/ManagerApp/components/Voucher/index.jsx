@@ -49,7 +49,6 @@ const columns = [
       // const [open, setOpen] = useState(false);
       const removeVoucher = async (params) => {
         const res = await voucherApi.remove({ id: params.row._id });
-        console.log(res);
       };
       const modifyVoucher = (params) => {
         params.row.setVoucherModify(params.row);
@@ -236,7 +235,6 @@ function ModalCreateVoucher({
       handleClose();
     }
   };
-  console.log(voucherModify);
 
   return (
     <div className="modal-voucher">

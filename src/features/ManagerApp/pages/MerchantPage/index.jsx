@@ -195,7 +195,7 @@ function Shop({ merchant }) {
         </div>
         <div className="col l-6">
           <div className="task-shop__item ">
-            <div className="item-title">Triết khấu</div>
+            <div className="item-title">Chiết khấu</div>
             <div className="item-content">{merchant.deduct} %</div>
           </div>
         </div>
@@ -226,7 +226,6 @@ function Categories({ merchant }) {
   useEffect(() => {
     getDishes();
   }, []);
-  console.log(merchant.category);
 
   return (
     <div className="task-shop">
@@ -286,15 +285,15 @@ function Review({ merchant }) {
 
   useEffect(() => {
     const getAllReviewByMer = async () => {
-      const res = await reviewApi.getReviewByMerId({id: merchant._id, type: 1});
+      const res = await reviewApi.getReviewByMerId({
+        id: merchant._id,
+        type: 1,
+      });
       res.reverse();
       setAllReview(res);
-      console.log(res)
     };
     getAllReviewByMer();
   }, []);
-
-  
 
   return (
     <div className="task-shop">
@@ -336,7 +335,6 @@ function Review({ merchant }) {
             </div>
             <div className="item-body">
               <span>{review.text}</span>
-              
             </div>
           </div>
         ))}

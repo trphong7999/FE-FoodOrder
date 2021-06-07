@@ -29,7 +29,6 @@ export default function FormAddressSearch({
     map.setView(center, zoom);
     return null;
   }
-  console.log("asd", location);
 
   function handleChangeCurrentAddress() {
     if (location.address) {
@@ -45,23 +44,6 @@ export default function FormAddressSearch({
     }
   }
 
-  //--------GET ADDRESS FROM LAT LNG--------------
-  // function ChangeAddress(lat, lng) {
-  //   Geocode.setApiKey("AIzaSyDsb7F-VyBJn7r4LilYH_lRHBpPfgyUga8");
-  //   Geocode.enableDebug();
-
-  //   Geocode.fromLatLng(lat, lng).then(
-  //     (response) => {
-  //       const address = response.results[0].formatted_address;
-  //       setLocation({ ...location, address: address });
-  //       console.log(address);
-  //     },
-  //     (error) => {
-  //       console.error(error);
-  //     }
-  //   );
-  // }
-
   return (
     <div className="">
       <MapContainer
@@ -72,7 +54,6 @@ export default function FormAddressSearch({
         whenReady={(map) => {
           map.target.on("click", function (e) {
             const { lat, lng } = e.latlng;
-            console.log(location);
             setLocation({ ...location, lat: lat, lng: lng });
           });
         }}

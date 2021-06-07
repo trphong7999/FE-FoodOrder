@@ -129,7 +129,6 @@ function Sidebar({ setSidebar }) {
 export default Sidebar;
 
 function OrderDetail({ order }) {
-  console.log(order);
   const { userOrderId: user, merchantId: merchant, deliverId: partner } = order;
   return (
     <div className="received-order-detail">

@@ -32,7 +32,6 @@ function Review({ orderId, data, type }) {
   const [hover, setHover] = useState(null);
   const [textReview, setTextReview] = useState("");
   const [review, setReview] = useState(null);
-  console.log(orderId, data);
   const handleOpen = () => {
     setOpen(true);
     getReview();
@@ -56,7 +55,6 @@ function Review({ orderId, data, type }) {
     if (res === "NotRate") {
       alert("Bạn chưa đánh sao");
     } else {
-      console.log(res);
       alert("Bạn đã đánh giá thành công");
       setOpen(false);
     }
@@ -69,7 +67,6 @@ function Review({ orderId, data, type }) {
     } else {
       setReview(review);
     }
-    console.log(review);
   };
 
   //   useEffect(() => {

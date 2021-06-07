@@ -24,11 +24,8 @@ function Login() {
         token: res,
         partnerId: res.id,
       });
-      console.log("start dispatch login");
       dispatch(action);
-      console.log("start call getprofile login");
       const profile = await partnerApi.getProfile();
-      console.log("get profile api", profile);
       const actionGetProfile = getProfile(profile);
       dispatch(actionGetProfile);
       socket.emit("storeClientInfo", { id: res.id, type: "partner" });

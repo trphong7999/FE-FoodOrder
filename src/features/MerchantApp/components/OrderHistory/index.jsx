@@ -12,7 +12,6 @@ function OrderHistory() {
   const history = useHistory();
   const match = useRouteMatch();
   const [historyList, setHistoryList] = useState([]);
-  console.log(historyList);
   const handleToOrderHistoryDetail = (order) => {
     const location = {
       pathname: `${match.url}/chi-tiet`,

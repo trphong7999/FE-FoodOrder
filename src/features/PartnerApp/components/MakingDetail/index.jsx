@@ -143,7 +143,6 @@ function MakingAction({ setOrder, order }) {
     history.push(location);
     history.replace(location);
   };
-  console.log(order.status in ["complete", "cancel"], order.status);
   return (
     <div className="action-pending">
       {!["complete", "cancel"].includes(order.status) ? (

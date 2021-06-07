@@ -476,24 +476,6 @@ function OpenTime() {
 function Status({ data }) {
   const [statusMer, setStatusMer] = useState(false);
   const [originStatus, setOriginStatus] = useState(null);
-  // const statusOrder = (time) => {
-  //   const { openTime } = merchant;
-  //   const openTimeToDay = openTime[getStrDayOfWeek()];
-  //   const [timeOpen, timeClose] = openTimeToDay.time.split("-");
-  //   const [hourOpen, minuteOpen] = timeOpen.split(":");
-  //   const [hourClose, minuteClose] = timeClose.split(":");
-  //   let now = new Date(+time);
-  //   console.log(hourOpen, now.getHours(), hourClose);
-  //   if (
-  //     (hourOpen < now.getHours() && now.getHours() < hourClose) ||
-  //     (hourOpen === now.getHours() && minuteOpen <= now.getMinutes()) ||
-  //     (now.getHours() === hourClose && now.getMinutes() < minuteClose)
-  //   )
-  //     return true;
-
-  //   return false;
-  // };
-
   const handleToggleSwitchStatus = () => {
     setStatusMer(!statusMer);
   };
@@ -504,7 +486,6 @@ function Status({ data }) {
     if (res === "close") setStatusMer(false);
     else setStatusMer(true);
     alert(`Bạn đã ${statusMer ? "mở" : "đóng"} cửa hàng`);
-    console.log();
   };
 
   useEffect(() => {

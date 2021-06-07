@@ -28,7 +28,6 @@ export default function UserPage() {
 
     getUserById();
   }, []);
-  console.log(user);
   return (
     <div className="grid__full-width">
       {user ? (
@@ -161,7 +160,6 @@ function Review({ partner }) {
       });
       res.reverse();
       setAllReview(res);
-      console.log(res);
     };
     getAllReviewByMer();
   }, []);
@@ -227,7 +225,6 @@ function HistoryOrder({ user }) {
     getHistoryOrder();
   }, []);
 
-  console.log(historyOrder);
   return (
     <div className="history-order__list">
       {historyOrder.length > 0 ? (

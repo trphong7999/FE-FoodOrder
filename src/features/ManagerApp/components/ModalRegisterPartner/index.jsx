@@ -79,7 +79,6 @@ function ModalRegisterPartner({ handleClose }) {
       },
     };
     const res = await managerApi.registerPartner(partnerObj);
-    console.log(partnerObj);
     if (!res.errors && (res.status === "200" || !res.status)) handleClose();
     else if (res.data) setError(res.data);
     else if (avt.error) setError("Chưa thêm ảnh đại diện");

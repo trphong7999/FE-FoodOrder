@@ -9,6 +9,10 @@ const partnerApi = {
     const url = "/partners";
     return axiosClient.get(url);
   },
+  getAllInMonth: (time) => {
+    const url = `/orders/partnerinmonth?time=${time}`;
+    return axiosClient.get(url);
+  },
 
   get: (id) => {
     const url = `/partners/${id}`;

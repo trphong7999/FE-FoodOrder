@@ -33,7 +33,6 @@ export default function ModalFormChangePhone({ changeShowModalPhone }) {
       const res = await userApi.changePhone(newPhone);
       if (typeof res !== "undefined" && res.info) {
         const actionGetProfile = getProfile(res);
-        console.log(res);
         dispatch(actionGetProfile);
       } else changeFail("Mật khẩu hiện tại không đúng!");
     } else changeFail("Mã code xác thực sai, vui lòng kiểm tra lại");
@@ -44,7 +43,6 @@ export default function ModalFormChangePhone({ changeShowModalPhone }) {
       changeFail();
       return;
     } else {
-      console.log("asdasd", phone);
       const res = await userApi.checkUniquePhone(phone);
       if (res.status == 200 || !res.status) {
         setMessage("Vui lòng kiểm tra tin nhắn!");

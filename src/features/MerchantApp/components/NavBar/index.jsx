@@ -4,15 +4,18 @@ import { TiThMenu } from "react-icons/ti";
 import { IoWallet } from "react-icons/io5";
 import { HiClipboardList, HiDocumentReport } from "react-icons/hi";
 import { MdClear, MdRestaurantMenu } from "react-icons/md";
-import { AiFillSetting } from "react-icons/ai";
+import { AiFillSetting, AiOutlineLogout } from "react-icons/ai";
 import { Link, useHistory, NavLink } from "react-router-dom";
 import merchantApi from "api/merchantApi";
+import { useDispatch } from "react-redux";
+import { logoutMerchant } from "redux/loginMerchantAppSlice";
 
 export default function NavBar() {
   const [openMenu, setOpenMenu] = useState(false);
   const [name, setName] = useState("");
   const history = useHistory();
   const merchantId = localStorage.merchantId;
+  const dispatch = useDispatch();
 
   const createNewPlace = (place) => {
     history.push(place);
@@ -89,7 +92,10 @@ export default function NavBar() {
                 <HiClipboardList className="menu-content__item-icon menu-content__item-icon--blue" />
                 <span>Đơn hàng</span>
               </div>
-              <div className="menu-content__item">
+              <div
+                className="menu-content__item"
+                onClick={() => createNewPlace(`/merchant/bao-cao`)}
+              >
                 <HiDocumentReport className="menu-content__item-icon menu-content__item-icon--purple" />
                 <span>Báo cáo</span>
               </div>
@@ -110,6 +116,16 @@ export default function NavBar() {
               >
                 <AiFillSetting className="menu-content__item-icon menu-content__item-icon--gray" />
                 <span>Cài đặt</span>
+              </div>
+              <div
+                className="menu-content__item"
+                onClick={() => {
+                  dispatch(logoutMerchant());
+                  history.push("/merchant");
+                }}
+              >
+                <AiOutlineLogout className="menu-content__item-icon menu-content__item-icon--gray" />
+                <span>Đăng xuất</span>
               </div>
               {/* <div className="menu-content__item">
                 <HiClipboardList className="menu-content__item-icon menu-content__item-icon--yellow" />

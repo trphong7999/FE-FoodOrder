@@ -104,8 +104,6 @@ export default function CartOrder({ merchant }) {
     return false;
   };
 
-  console.log("status", statusOrder(Date.now()));
-
   const handleOpen = () => {
     setOpen(true);
   };
@@ -141,7 +139,6 @@ export default function CartOrder({ merchant }) {
 
   useEffect(() => {
     const myFunc = (data) => {
-      console.log("call");
       if (!data) {
         const status = statusOrder();
         // if (status === 1) {
@@ -291,7 +288,6 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
   const [voucher, setVoucher] = useState("");
   const [note, setNote] = useState("");
   const [open, setOpen] = useState(false);
-  console.log(open);
   const {
     name: userName,
     location: { address: userAddress, lat: userLat, lng: userLng },
@@ -374,7 +370,6 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
   };
 
   const handleOrder = () => {
-    console.log(predict);
     if (!predict || predict < Date.now() + (distance * 5 + 9) * 60000)
       return predictFail();
     const order = {
@@ -402,7 +397,6 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
       code: applyVoucher.code,
     };
     socket.emit("startOrder", order, (data) => {
-      console.log(data);
       if (data) {
         handleClose();
         orderSuccess();
@@ -429,7 +423,6 @@ function CheckOut({ userId, user, items, merchant, handleClose }) {
   const onTimeChangeHandle = (val) => {
     let hour = new Date().setHours(parseInt(val.split(":")[0]));
     let time = new Date(hour).setMinutes(parseInt(val.split(":")[1]));
-    console.log("new", time, val.split(":"));
     setPredict(time);
   };
 

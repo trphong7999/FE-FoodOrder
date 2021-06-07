@@ -27,7 +27,6 @@ export default function PartnerPage() {
 
     getPartnerById();
   }, []);
-  console.log(partner);
   return (
     <div className="grid__full-width">
       {partner ? (
@@ -175,7 +174,6 @@ function Review({ partner }) {
       });
       res.reverse();
       setAllReview(res);
-      console.log(res);
     };
     getAllReviewByMer();
   }, []);
@@ -241,7 +239,6 @@ function HistoryOrder({ partner }) {
     getHistoryOrder();
   }, []);
 
-  console.log(historyOrder);
   return (
     <div className="history-order__list">
       {historyOrder.length > 0 ? (

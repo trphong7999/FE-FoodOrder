@@ -13,8 +13,6 @@ export default function MainPage() {
   const [keyFind, setKeyFind] = useState("");
   const [refreshNewFeed, setRefreshNewFeed] = useState(false);
 
-  console.log(keyFind);
-
   return (
     <div className="main-page">
       <Navbar />

@@ -1,4 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useHistory, useLocation, useParams } from "react-router-dom";
+import { BsChevronLeft } from "react-icons/bs";
+import "./style.scss";
+import socket from "socket-io";
+import NavBar from "../NavBar";
+import TabMenu from "../TabMenu";
+
 import {
   FaRegCalendarAlt,
   FaCaretDown,
@@ -27,32 +34,36 @@ import {
 } from "func";
 import { toast, ToastContainer } from "react-toastify";
 
-export default function InCome() {
+export default function Report() {
+  return (
+    <div className="grid">
+      <NavBar />
+      <div className="received-order">
+        <InCome />
+      </div>
+    </div>
+  );
+}
+
+function InCome() {
   const [ordersWeek, setOrderWeek] = useState([]);
   const [currentFetch, setCurrentFetch] = useState(0);
   useEffect(() => {
     const fetchOrdersInWeekByTime = async (date) => {
       const res = await orderApi.getOrderInWeekByTime(date);
-      // if (res.orders.length !== 0 || res.orders.length !== 0)
-      setOrderWeek([...ordersWeek, res]);
+      if (!res.status) setOrderWeek([...ordersWeek, res]);
     };
     fetchOrdersInWeekByTime(Date.now() - 604800000 * currentFetch);
   }, [currentFetch]);
 
   return (
     <div className="in-come">
-      <div className="in-come__title">thu nhập</div>
-
-      <div className="in-come__debt">
-        <div className="debt-text">Bạn đang nợ công ty 360,972đ</div>
-        <div className="debt-action">Thanh toán</div>
-      </div>
       <div className="in-come__list">
         {ordersWeek && ordersWeek.length > 0
-          ? ordersWeek.map((infos) => <InComeWeek infos={infos} />)
+          ? ordersWeek.map((infos, idx) => (
+              <InComeWeek infos={infos} key={idx} />
+            ))
           : ""}
-        {/* <InComeWeek />
-        <InComeWeek /> */}
       </div>
       <div style={{ textAlign: "center" }}>
         <button
@@ -67,13 +78,13 @@ export default function InCome() {
 }
 
 function InComeWeek({ infos }) {
-  const [showWeekContent, setshowWeekContent] = useState(false);
+  const [showWeekContent, setShowWeekContent] = useState(false);
 
   const warningOpen = () => toast.warn("😮 Không có dữ liệu đơn hàng!");
 
   const handleChangeShowWeekContent = () => {
     if (infos.orders.length === 0) warningOpen();
-    else setshowWeekContent(!showWeekContent);
+    else setShowWeekContent(!showWeekContent);
   };
   const { monday, sunday, orders, ordersCanceled } = infos;
 
@@ -91,18 +102,16 @@ function InComeWeek({ infos }) {
       <WeekContent
         showWeekContent={showWeekContent}
         orders={orders}
-        ordersCanceled={ordersCanceled}
         monday={monday}
       />
     </div>
   );
 }
 
-function WeekContent({ showWeekContent, orders, ordersCanceled, monday }) {
+function WeekContent({ showWeekContent, orders, monday }) {
   const [showDayContent, setShowDayContent] = useState(false);
   const [currentDayContent, setCurrentDayContent] = useState(null);
   const [currentDay, setCurrentDay] = useState(null);
-
   const handleOpenDayContent = (time) => {
     setShowDayContent(true);
     const start = +getTimeStartDay(time);
@@ -130,36 +139,28 @@ function WeekContent({ showWeekContent, orders, ordersCanceled, monday }) {
     const start = +getTimeStartDay(time);
     const end = +getTimeEndDay(time);
     return orders.reduce((val, od) => {
-      if (end > +od.timeOrder && +od.timeOrder > start) {
-        return val + (od.detail.fee * 90) / 100;
+      if (
+        end > +od.timeOrder &&
+        +od.timeOrder > start &&
+        od.timePartnerGetFood
+      ) {
+        return (
+          val + od.detail.total * ((100 - parseInt(od.merchantId.deduct)) / 100)
+        );
       }
       return val;
     }, 0);
   };
-
   const totalReturn = orders.reduce((val, od) => {
-    if (od.status == "complete")
+    if (od.timePartnerGetFood) {
       return (
-        val + od.detail.total * 0.2 + od.detail.fee * 0.1 - od.detail.discount
-      );
-    return val;
-  }, 0);
-
-  const totalTime = orders.reduce((val, od) => {
-    if (od.status === "complete") {
-      return (
-        val + parseInt(od.timeDeliverDone) - parseInt(od.timePartnerReceive)
+        val +
+        parseInt(od.detail.total) * (1 - parseInt(od.merchantId.deduct) / 100)
       );
     }
     return val;
   }, 0);
 
-  const totalDistance = orders.reduce((val, od) => {
-    if (od.status === "complete") {
-      return val + od.distance;
-    }
-    return val;
-  }, 0);
   return (
     <div
       className="week-content"
@@ -168,11 +169,12 @@ function WeekContent({ showWeekContent, orders, ordersCanceled, monday }) {
       <div className="week-content__percent">
         <div className="percent-text">
           <FaClipboardList className="percent-text__icon" />
-          <span>Tỷ lệ hoàn thành</span>
+          <span>Tỷ lệ giao cho đối tác</span>
         </div>
         <div className="percent-number">
           {(
-            (orders.length / (orders.length + ordersCanceled.length)) *
+            (orders.filter((od) => !!od.timePartnerGetFood).length /
+              orders.length) *
             100
           ).toFixed(2)}{" "}
           %
@@ -191,7 +193,10 @@ function WeekContent({ showWeekContent, orders, ordersCanceled, monday }) {
             <div>
               {
                 orders.filter(
-                  (od) => od.reviewPartner && od.reviewPartner.rate > 3
+                  (od) =>
+                    od.timePartnerReceive &&
+                    od.reviewMerchant &&
+                    od.reviewMerchant.rate > 3
                 ).length
               }{" "}
               đơn
@@ -203,7 +208,10 @@ function WeekContent({ showWeekContent, orders, ordersCanceled, monday }) {
             <div>
               {
                 orders.filter(
-                  (od) => od.reviewPartner && od.reviewPartner.rate === 3
+                  (od) =>
+                    od.timePartnerReceive &&
+                    od.reviewMerchant &&
+                    od.reviewMerchant.rate === 3
                 ).length
               }{" "}
               đơn
@@ -215,7 +223,10 @@ function WeekContent({ showWeekContent, orders, ordersCanceled, monday }) {
             <div>
               {
                 orders.filter(
-                  (od) => od.reviewPartner && od.reviewPartner.rate < 3
+                  (od) =>
+                    od.timePartnerReceive &&
+                    od.reviewMerchant &&
+                    od.reviewMerchant.rate < 3
                 ).length
               }{" "}
               đơn
@@ -227,7 +238,7 @@ function WeekContent({ showWeekContent, orders, ordersCanceled, monday }) {
             <div>
               {
                 orders.filter(
-                  (od) => od.status == "complete" && !od.reviewPartner
+                  (od) => od.timePartnerReceive && !od.reviewMerchant
                 ).length
               }{" "}
               đơn
@@ -249,8 +260,15 @@ function WeekContent({ showWeekContent, orders, ordersCanceled, monday }) {
           </div>
           <div className="work-body__colum work-body__colum--quit">
             <FaTimesCircle />
-            <div>Quit</div>
-            <div>{ordersCanceled.length} đơn</div>
+            <div>Từ chối</div>
+            {
+              orders.filter(
+                (od) =>
+                  od.status === "cancel" &&
+                  od.reasonCancel !== "Khách không nhận đồ"
+              ).length
+            }{" "}
+            đơn
           </div>
         </div>
       </div>
@@ -258,7 +276,7 @@ function WeekContent({ showWeekContent, orders, ordersCanceled, monday }) {
       <div className="week-content__must-turn">
         <div className="must-turn__item">
           <RiMoneyDollarCircleFill className="must-turn__item-icon" />
-          <span>Phải nộp</span>
+          <span>Doanh thu</span>
         </div>
         <div className="must-turn__item">
           <span style={{ color: totalReturn < 0 ? "green" : "" }}>
@@ -303,31 +321,23 @@ function WeekContent({ showWeekContent, orders, ordersCanceled, monday }) {
           <BsClockFill className="average-item__icon" />
           <span>Thời gian trung bình</span>
           <span>
-            {totalTime
-              ? (
-                  totalTime /
-                  60000 /
-                  orders.filter((od) => od.status === "complete").length
-                ).toFixed(2)
-              : 0}
+            {(
+              orders.reduce((val, od) => {
+                if (od.timePartnerGetFood)
+                  return (
+                    val +
+                    parseInt(od.timePartnerGetFood) -
+                    parseInt(od.timePartnerReceive)
+                  );
+                return val;
+              }, 0) /
+              60000 /
+              orders.filter((od) => od.timePartnerGetFood).length
+            ).toFixed(2)}
             '
           </span>
         </div>
-        <div className="average-item">
-          <RiUserLocationFill className="average-item__icon" />
-          <span>Khoảng cách trung bình</span>
-          <span>
-            {totalDistance
-              ? (
-                  totalDistance /
-                  orders.filter((od) => od.status === "complete").length
-                ).toFixed(2)
-              : 0}
-            km
-          </span>
-        </div>
       </div>
-
       {currentDayContent ? (
         <DayContent
           showDayContent={showDayContent}
@@ -348,6 +358,7 @@ function DayContent({
   currentDayContent,
   currentDay,
 }) {
+  currentDayContent = currentDayContent.filter((od) => od.timePartnerReceive);
   const sendDataShowDayContent = () => {
     callBackCloseDayContent();
   };
@@ -373,7 +384,7 @@ function DayContent({
               <div className="list-item">
                 <div className="list-item__left">
                   <div className="left-time">
-                    {datetimeFromTimestamp(od.timeDeliverDone)}
+                    {datetimeFromTimestamp(od.timePartnerGetFood)}
                   </div>
                   <div className="left-code">
                     <div>Đơn hàng</div>
@@ -381,7 +392,12 @@ function DayContent({
                   </div>
                 </div>
                 <div className="list-item__amount--green">
-                  + {validatePrice((od.detail.fee * 90) / 100)}đ
+                  +{" "}
+                  {validatePrice(
+                    (od.detail.total * (100 - parseInt(od.merchantId.deduct))) /
+                      100
+                  )}
+                  đ
                 </div>
               </div>
             </li>
