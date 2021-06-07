@@ -7,6 +7,28 @@ import ModalForm from "../ModalRegisterPartner";
 import { useEffect } from "react";
 import partnerApi from "api/partnerApi";
 
+const style = {
+  textDecoration: "none",
+  border: "1px solid #ccc",
+  padding: "1rem",
+  lineHeight: "1.4rem",
+  borderRadius: "6px",
+  color: "var(--text-color)",
+  marginRight: "1rem",
+  cursor: "pointer",
+  ":hover": {
+    color: "white",
+    backgroundColor: "red",
+  },
+};
+
+// const block = async (id, status) => {
+//   const res = await merchantApi.blockMerchant({ id, status });
+//   if (res.status !== 400) alert("Thành công");
+//   else alert("Không thành công");
+//   window.location.reload();
+// };
+
 const columns = [
   { field: "id", headerName: "STT", width: 80 },
   { field: "name", headerName: "Họ và tên", width: 230 },
@@ -33,7 +55,10 @@ const columns = [
     width: 130,
     renderCell: (params) => {
       return (
-        <Link to={{ pathname: `/manager/partner/${params.getValue("_id")}` }}>
+        <Link
+          style={style}
+          to={{ pathname: `/manager/partner/${params.getValue("_id")}` }}
+        >
           {"Chi tiết"}
         </Link>
       );

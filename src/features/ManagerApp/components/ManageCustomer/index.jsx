@@ -5,6 +5,35 @@ import { Button } from "@material-ui/core";
 import { useEffect } from "react";
 import userApi from "api/userApi";
 
+const style = {
+  textDecoration: "none",
+  border: "1px solid #ccc",
+  padding: "1rem",
+  lineHeight: "1.4rem",
+  borderRadius: "6px",
+  color: "var(--text-color)",
+  marginRight: "1rem",
+  cursor: "pointer",
+  ":hover": {
+    color: "white",
+    backgroundColor: "red",
+  },
+};
+
+const block = async (id, blocked) => {
+  const res = await userApi.blockUser({ id, blocked });
+  if (res.status !== 400) {
+    alert(
+      `${
+        res === true
+          ? "Chặn người dùng thành công"
+          : "Bỏ chặn người dùng thành công"
+      }`
+    );
+    window.location.reload();
+  } else alert("Không thành công");
+};
+
 const columns = [
   { field: "id", headerName: "STT", width: 80 },
   { field: "name", headerName: "Họ và tên", width: 230 },
@@ -33,12 +62,25 @@ const columns = [
     field: "action",
     headerName: "Hành động",
     id: "links",
-    width: 130,
+    width: 185,
     renderCell: (params) => {
       return (
-        <Link to={{ pathname: `/manager/user/${params.getValue("_id")}` }}>
-          {"Chi tiết"}
-        </Link>
+        <div>
+          <Link
+            to={{ pathname: `/manager/user/${params.getValue("_id")}` }}
+            style={style}
+          >
+            {"Chi tiết"}
+          </Link>
+          <span
+            style={style}
+            onClick={() =>
+              block(params.getValue("_id"), params.getValue("block"))
+            }
+          >
+            {params.getValue("block") ? "Bỏ chặn" : "Chặn"}
+          </span>
+        </div>
       );
     },
   },
@@ -76,6 +118,7 @@ function ManageCustomer(props) {
       phone: User.info.phone === "" ? "Chưa bổ sung" : User.info.phone,
       username: User.username,
       _id: User._id,
+      block: User.blocked,
     }));
     return final;
   };

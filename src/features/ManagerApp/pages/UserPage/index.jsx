@@ -62,23 +62,12 @@ export default function UserPage() {
                   <AiFillProfile className="task-bar__icon" />
                   Lịch sử đơn hàng
                 </div>
-                <div
-                  className="task-bar__item"
-                  onClick={() => {
-                    setTaskBar(3);
-                  }}
-                >
-                  <FaStar className="task-bar__icon" />
-                  Review
-                </div>
               </div>
             </div>
             <div className="col l-10">
               <div className="content-task">
                 {taskBar === 1 ? (
                   <Profile user={user} />
-                ) : taskBar === 3 ? (
-                  <Review user={user} />
                 ) : (
                   <HistoryOrder user={user} />
                 )}
@@ -153,26 +142,6 @@ function Profile({ user }) {
               <div className="item-content">{user.username}</div>
             </div>
           </div>
-          {/* <div className="col l-6">
-            <div className="profile-item">
-              <div className="item-title">ngày đăng ký</div>
-              <div className="item-content">
-                {formatDatetimeToString(new Date(parseInt(partner.dateCreate)))}
-              </div>
-            </div>
-          </div>
-          <div className="col l-12">
-            <div className="profile-item">
-              <div className="item-title">CMND/CCCD</div>
-              <div className="item-content">
-                Mã số: {partner.identity.number}
-              </div>
-              <div className="item-img">
-                <img src={partner.identity.fontImg} alt="" />
-                <img src={partner.identity.backImg} alt="" />
-              </div>
-            </div>
-          </div> */}
         </div>
       ) : (
         ""
@@ -252,7 +221,7 @@ function HistoryOrder({ user }) {
 
   useEffect(() => {
     const getHistoryOrder = async () => {
-      const res = await merchantApi.getOrderByPartner(user._id);
+      const res = await merchantApi.getOrderByUser(user._id);
       setHistoryOrder(res);
     };
     getHistoryOrder();
@@ -269,9 +238,8 @@ function HistoryOrder({ user }) {
               <th>Mã đơn hàng</th>
               <th>Thời gian</th>
               <th>Cửa hàng</th>
-              <th>Khách hàng</th>
+              <th>Tài xế</th>
               <th>Tổng tiền</th>
-              <th>Thu nhập</th>
               <th>Trạng thái</th>
               <th>Chi tiết</th>
             </tr>
@@ -300,21 +268,26 @@ function HistoryOrder({ user }) {
                   <div>{o.merchantId.location.address}</div>
                 </td>
                 <td>
-                  <div
-                    style={{ marginBottom: "1rem", textTransform: "uppercase" }}
-                  >
-                    {o.userOrderId.info.name}
-                  </div>
-                  <div>{o.userOrderId.info.phone}</div>
+                  {o.deliverId ? (
+                    <div>
+                      <div
+                        style={{
+                          marginBottom: "1rem",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {o.deliverId.name}
+                      </div>
+                      <div>{o.deliverId.phone}</div>
+                    </div>
+                  ) : (
+                    "Không có"
+                  )}
                 </td>
                 <td>
                   <div>{validatePrice(o.detail.total + o.detail.fee)} đ</div>
                 </td>
-                <td>
-                  <div style={{ color: "green" }}>
-                    + {validatePrice(o.detail.fee * 0.9)} đ
-                  </div>
-                </td>
+
                 <td>
                   {o.status === "complete" ? (
                     <div

@@ -88,8 +88,9 @@ export default function Brand({ merchant }) {
     const getAllReviewByMer = async () => {
       const res = await reviewApi.getReviewByMerId({
         id: merchant._id,
-        type: 2,
+        type: 1,
       });
+      console.log(res);
       res.reverse();
       setAllReview(res);
     };

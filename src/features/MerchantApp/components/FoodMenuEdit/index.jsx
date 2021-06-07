@@ -27,6 +27,7 @@ export default function FoodMenuEdit() {
 
   const submitFormEdit = async (newData) => {
     let imgFood = infoFood.img;
+    console.log(newData);
 
     if (!newData.name || !newData.price) {
       alert("Bạn chưa điền đủ thông tin!");
@@ -59,6 +60,7 @@ export default function FoodMenuEdit() {
       img: imgFood,
     };
     let newDetail = { ...data, catIdCurrent: catOfFood._id };
+    // console.log(newData);
     const res = await merchantApi.foodEdit(newDetail);
 
     if (res.status !== 400) {
@@ -123,9 +125,7 @@ export default function FoodMenuEdit() {
               name="name"
               defaultValue={infoFood.name}
               {...register("name")}
-              onFocus={(e) => resetInput(e)}
-              onChange={(e) => setFoodName(e.target.value)}
-              onBlur={(e) => fillInput(e, foodName)}
+              style={{ textAlign: "center" }}
             />
           </div>
 
@@ -136,9 +136,7 @@ export default function FoodMenuEdit() {
               name="price"
               defaultValue={infoFood.price}
               {...register("price")}
-              onFocus={(e) => resetInput(e)}
-              onChange={(e) => setFoodPrice(e.target.value)}
-              onBlur={(e) => fillInput(e, foodPrice)}
+              style={{ textAlign: "center" }}
             />
           </div>
 
