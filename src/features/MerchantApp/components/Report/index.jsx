@@ -155,7 +155,8 @@ function WeekContent({ showWeekContent, orders, monday }) {
     if (od.timePartnerGetFood) {
       return (
         val +
-        parseInt(od.detail.total) * (1 - parseInt(od.merchantId.deduct) / 100)
+        parseInt(od.detail.total) *
+          ((100 - parseInt(od.merchantId.deduct)) / 100)
       );
     }
     return val;
@@ -194,7 +195,7 @@ function WeekContent({ showWeekContent, orders, monday }) {
               {
                 orders.filter(
                   (od) =>
-                    od.timePartnerReceive &&
+                    od.timePartnerGetFood &&
                     od.reviewMerchant &&
                     od.reviewMerchant.rate > 3
                 ).length
@@ -209,7 +210,7 @@ function WeekContent({ showWeekContent, orders, monday }) {
               {
                 orders.filter(
                   (od) =>
-                    od.timePartnerReceive &&
+                    od.timePartnerGetFood &&
                     od.reviewMerchant &&
                     od.reviewMerchant.rate === 3
                 ).length
@@ -224,7 +225,7 @@ function WeekContent({ showWeekContent, orders, monday }) {
               {
                 orders.filter(
                   (od) =>
-                    od.timePartnerReceive &&
+                    od.timePartnerGetFood &&
                     od.reviewMerchant &&
                     od.reviewMerchant.rate < 3
                 ).length
@@ -238,7 +239,7 @@ function WeekContent({ showWeekContent, orders, monday }) {
             <div>
               {
                 orders.filter(
-                  (od) => od.timePartnerReceive && !od.reviewMerchant
+                  (od) => od.timePartnerGetFood && !od.reviewMerchant
                 ).length
               }{" "}
               đơn
