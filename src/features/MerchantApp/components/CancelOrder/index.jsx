@@ -20,8 +20,10 @@ function TookOrder() {
   useEffect(() => {
     const getOrderCanceled = async () => {
       const ordersCanceled = await orderApi.getOrderByStatus("cancel");
-      ordersCanceled.reverse();
-      setOrderCancel([...ordersCanceled]);
+      if (!ordersCanceled.status) {
+        ordersCanceled.reverse();
+        setOrderCancel([...ordersCanceled]);
+      }
     };
     getOrderCanceled();
   }, []);

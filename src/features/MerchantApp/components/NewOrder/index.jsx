@@ -74,7 +74,7 @@ function NewOrder({ newListOrder }) {
           <span className="title-name">{userInfo.name}</span>
           <span className="title-quantity">
             Đã đặt: {historyOrder.length} đơn | Tỉ lệ thành công:
-            {percent.toFixed(2)}% | Đơn gần nhất:
+            {percent.toFixed(2) * 100}% | Đơn gần nhất:
             {lastOrder.status && lastOrder.status === "complete"
               ? "Thành công"
               : "Thất bại" || ""}

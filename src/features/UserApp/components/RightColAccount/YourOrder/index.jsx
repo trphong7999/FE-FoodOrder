@@ -148,7 +148,11 @@ export default function YourOrder({ historyOrders }) {
                   {currenOrder.status === "cancel" ? (
                     <div className="item-address">
                       <span>Lý do hủy</span>
-                      <div>hello</div>
+                      <div>
+                        {currenOrder.reasonCancel.map((rs) => (
+                          <div>{rs}</div>
+                        ))}
+                      </div>
                     </div>
                   ) : (
                     <div className="item-address">
@@ -178,7 +182,7 @@ export default function YourOrder({ historyOrders }) {
                   )}
                 </div>
 
-                {currenOrder.deliverId ? (
+                {currenOrder.status === "complete" && currenOrder.deliverId ? (
                   <div className="history-body__item">
                     <div className="item-infomation">
                       <span>{currenOrder.deliverId.name}</span>
@@ -331,7 +335,7 @@ function OrderLine({ order, idx }) {
         </strong>
         <br></br>
         <span className="review">
-          {order.deliverId ? (
+          {order.deliverId && order.status == "complete" ? (
             <Review orderId={order._id} data={order.deliverId} type={"2"} />
           ) : (
             ""

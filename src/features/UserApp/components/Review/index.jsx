@@ -32,7 +32,7 @@ function Review({ orderId, data, type }) {
   const [hover, setHover] = useState(null);
   const [textReview, setTextReview] = useState("");
   const [review, setReview] = useState(null);
-
+  console.log(orderId, data);
   const handleOpen = () => {
     setOpen(true);
     getReview();

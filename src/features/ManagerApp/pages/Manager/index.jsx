@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import Voucher from "../../components/Voucher";
 
 function Manager(props) {
-  const [sidebar, setSidebar] = useState(1);
+  const [sidebar, setSidebar] = useState(+localStorage.navManager + 1 || 1);
   const dispatch = useDispatch();
 
   // Check login is the manager

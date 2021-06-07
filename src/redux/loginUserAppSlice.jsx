@@ -58,7 +58,11 @@ const loginUserAppSlice = createSlice({
           },
         },
       };
+      const lat = localStorage.lat;
+      const lng = localStorage.lng;
       localStorage.clear();
+      localStorage.lat = lat;
+      localStorage.lng = lng;
     },
     getPos: (state, action) => {
       state.pos = action.payload;

@@ -25,11 +25,13 @@ function OrderHistory() {
   useEffect(() => {
     const getOrderHistoryList = async () => {
       const ordersDelivering = await orderApi.getOrderByStatus("delivering");
-      ordersDelivering.reverse();
+      if (!ordersDelivering.status || ordersDelivering.status !== 400)
+        ordersDelivering.reverse();
       const ordersComplete = await orderApi.getOrderByStatus("complete");
-      ordersComplete.reverse();
-      // const ordersfail = await orderApi.getOrderByStatus("fail");
-      setHistoryList([...ordersDelivering, ...ordersComplete]);
+      if (!ordersComplete.status || ordersDelivering.status !== 400)
+        ordersComplete.reverse();
+      if (!ordersComplete.status && !ordersDelivering.status)
+        setHistoryList([...ordersDelivering, ...ordersComplete]);
     };
     getOrderHistoryList();
   }, []);
