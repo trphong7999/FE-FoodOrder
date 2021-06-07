@@ -396,6 +396,10 @@ function OrderDetail({ order }) {
           <span>Khoảng cách</span>
           <span>{order.distance}km</span>
         </div>
+        <div className="detail-bot__space" style={{ color: "#888" }}>
+          <span>Trạng thái</span>
+          <span>{order.status}</span>
+        </div>
       </div>
     </div>
   );

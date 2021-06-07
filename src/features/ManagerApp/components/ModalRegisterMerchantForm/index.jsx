@@ -135,7 +135,7 @@ function ModalRegisterMerchant({ handleClose }) {
       contract: contractImg,
     };
     const res = await managerApi.registerMerchant(merchantObj);
-    if (!res.errors && (res.status === "200" || !res.status)) handleClose();
+    if (!res.status || res.status === 200) handleClose();
     else if (res.data) setError(res.data);
     else setError("Email đã được đăng ký từ trước");
   };

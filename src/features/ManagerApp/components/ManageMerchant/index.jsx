@@ -119,7 +119,9 @@ function ManageMerchant(props) {
       try {
         const res = await merchantApi.getAll();
         const data = fetchData(res);
-        setMerchantList(data);
+        setMerchantList(
+          data.sort((pre, next) => ("" + pre.status).localeCompare(next.status))
+        );
         setAllDataMerchant(res);
       } catch (error) {
         console.log("Failed to fetch product list: ", error);
@@ -139,7 +141,9 @@ function ManageMerchant(props) {
 
     const data = fetchData(filterMerchant);
 
-    setMerchantList(data);
+    setMerchantList(
+      data.sort((pre, next) => ("" + pre.status).localeCompare(next.status))
+    );
   }, [findNameRep]);
 
   useEffect(() => {

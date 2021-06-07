@@ -118,11 +118,20 @@ function Voucher() {
   return (
     <>
       <div className="find-group">
-        <input
-          type="checkbox"
-          checked={filterBanner}
-          onChange={(e) => setFilterBanner(e.target.checked)}
-        />
+        <div style={{ display: "flex", marginTop: "1.2rem" }}>
+          <span style={{ fontSize: "1.5rem" }}>Lọc hiện banner</span>
+          <input
+            style={{
+              width: "2rem",
+              height: "2rem",
+              marginTop: "-0.4rem",
+              marginLeft: "0.6rem",
+            }}
+            type="checkbox"
+            checked={filterBanner}
+            onChange={(e) => setFilterBanner(e.target.checked)}
+          />
+        </div>
 
         <input
           type="text"

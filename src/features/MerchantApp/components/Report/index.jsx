@@ -358,7 +358,7 @@ function DayContent({
   currentDayContent,
   currentDay,
 }) {
-  currentDayContent = currentDayContent.filter((od) => od.timePartnerReceive);
+  currentDayContent = currentDayContent.filter((od) => od.timePartnerGetFood);
   const sendDataShowDayContent = () => {
     callBackCloseDayContent();
   };

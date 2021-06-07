@@ -544,9 +544,7 @@ function Detail({ orderDetail }) {
           <div className="shop-take__time">
             <span>Lấy:</span>
             <span>
-              {datetimeFromTimestamp(
-                parseInt(orderDetail.timeOrder) + 15 * 60000
-              )}
+              {datetimeFromTimestamp(parseInt(orderDetail.timeOrder))}
             </span>
           </div>
         </div>
@@ -582,8 +580,7 @@ function Detail({ orderDetail }) {
             <span>Giao:</span>
             <span>
               {datetimeFromTimestamp(
-                parseInt(orderDetail.timeOrder) +
-                  (orderDetail.distance * 5 + 10) * 60000
+                parseInt(orderDetail.timeDeliverDone || 0)
               )}
             </span>
           </div>
