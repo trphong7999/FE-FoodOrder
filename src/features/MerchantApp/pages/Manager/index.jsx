@@ -15,15 +15,15 @@ function MainPageMerchant() {
   const [newListOrder, setNewListOrder] = useState([]);
 
   // Check login is the manager
-  // merchantApi.checkAuth().then((res) => {
-  //   try {
-  //     if (res.status === 400) {
-  //       dispatch(logoutMerchant());
-  //     }
-  //   } catch {
-  //     return;
-  //   }
-  // });
+  merchantApi.checkAuth().then((res) => {
+    try {
+      if (res.status === 400) {
+        dispatch(logoutMerchant());
+      }
+    } catch {
+      return;
+    }
+  });
 
   socket.off("newOrder");
   socket.on("newOrder", (data) => {
