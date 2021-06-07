@@ -31,7 +31,6 @@ function MainPageMerchant() {
     dispatch(haveUnread(0));
   });
 
-  socket.off("userCancelOrder");
   socket.on("userCancelOrder", (orderId) => {
     const idx = newListOrder.findIndex((order) => {
       return String(order._id) == orderId;

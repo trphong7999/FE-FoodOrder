@@ -132,7 +132,9 @@ function WeekContent({ showWeekContent, orders, monday }) {
     return new Date(new Date(new Date(date).setHours(0)).setMinutes(1));
   };
   const getTimeEndDay = (date) => {
-    return new Date(new Date(new Date(date).setHours(23)).setMinutes(59));
+    return new Date(
+      new Date(new Date(date - minisecondOfHour).setHours(23)).setMinutes(59)
+    );
   };
 
   const getIncomeOfDayByDatetime = (time) => {
