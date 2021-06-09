@@ -21,6 +21,7 @@ import merchantApi from "api/merchantApi";
 import FoodMenuEdit from "./components/FoodMenuEdit";
 import Setting from "./components/Setting";
 import Report from "./components/Report";
+import PrintReport from "./components/PrintReport";
 
 function MerchantApp() {
   const match = useRouteMatch();
@@ -59,6 +60,11 @@ function MerchantApp() {
 
       <Route path={`${match.url}/cai-dat`} exact component={Setting} />
       <Route path={`${match.url}/bao-cao`} exact component={Report} />
+      <Route
+        path={`${match.url}/bao-cao/report`}
+        exact
+        component={PrintReport}
+      />
     </Switch>
   );
 }

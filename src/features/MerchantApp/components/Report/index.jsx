@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import {
+  useHistory,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from "react-router-dom";
 import { BsChevronLeft } from "react-icons/bs";
 import "./style.scss";
 import socket from "socket-io";
@@ -163,6 +168,16 @@ function WeekContent({ showWeekContent, orders, monday }) {
     }
     return val;
   }, 0);
+  const history = useHistory();
+  const match = useRouteMatch();
+  const printReport = () => {
+    const location = {
+      pathname: `${match.url}/report`,
+      state: { orders, monday, totalReturn },
+    };
+    history.push(location);
+    history.replace(location);
+  };
 
   return (
     <div
@@ -341,6 +356,7 @@ function WeekContent({ showWeekContent, orders, monday }) {
           </span>
         </div>
       </div>
+      <button onClick={() => printReport()}>Xem báo cáo</button>
       {currentDayContent ? (
         <DayContent
           showDayContent={showDayContent}
