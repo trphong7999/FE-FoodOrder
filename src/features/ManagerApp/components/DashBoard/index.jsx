@@ -13,6 +13,7 @@ import userApi from "api/userApi";
 import { validatePrice } from "func";
 import merchantApi from "api/merchantApi";
 import partnerApi from "api/partnerApi";
+import { useHistory, useRouteMatch } from "react-router";
 
 function DashBoard(props) {
   const [ordersMonth, setOrdersMonth] = useState([]);
@@ -96,6 +97,23 @@ function DashBoard(props) {
     };
     fetchAllPartner();
   }, []);
+  const history = useHistory();
+  const match = useRouteMatch();
+
+  const reportWeek = () => {
+    const location = {
+      pathname: `${match.url}/report`,
+      state: {
+        ordersMonth,
+        userInMonth,
+        merchantMonth,
+        partnerMonth,
+        totalInMonth,
+      },
+    };
+    history.push(location);
+    history.replace(location);
+  };
 
   return (
     <div>
@@ -209,6 +227,7 @@ function DashBoard(props) {
           Icon={FcSportsMode}
         />
       </div>
+      <button onClick={() => reportWeek()}>Báo cáo doanh thu tháng</button>
     </div>
   );
 }

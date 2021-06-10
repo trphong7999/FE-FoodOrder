@@ -31,6 +31,18 @@ function PrintReport() {
     }, 0);
   };
 
+  const foods = orders.map((item) => item.detail.foods);
+  const food = [].concat.apply([], foods);
+  const rs = food.reduce((val, item) => {
+    console.log(val);
+    let index = val.findIndex((val) => val.name.includes(item.name));
+    if (index > -1) {
+      val[index].quantity = val[index].quantity + item.quantity;
+      val[index].total = val[index].total + item.total;
+    } else val.push(item);
+    return val;
+  }, []);
+
   const getCountByDay = (time) => {
     const start = +getTimeStartDay(time);
     const end = +getTimeEndDay(time);
@@ -80,6 +92,11 @@ function PrintReport() {
           <th>Tổng</th>
           <th></th>
           <th>{validatePrice(totalReturn)}</th>
+        </tr>
+        <tr>
+          <th>Sản phẩm</th>
+          <th>Lượng bán</th>
+          <th>Doanh thu</th>
         </tr>
       </table>
       <button class="hide-on-print" onClick={() => window.print()}>

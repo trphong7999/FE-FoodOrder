@@ -6,6 +6,7 @@ import Manager from "./pages/Manager";
 import MerchantPage from "./pages/MerchantPage";
 import PartnerPage from "./pages/PartnerPage";
 import UserPage from "./pages/UserPage";
+import ReportWeek from "./components/ReportWeek";
 
 function ManagerApp(props) {
   const match = useRouteMatch();
