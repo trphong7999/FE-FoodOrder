@@ -22,6 +22,7 @@ import FoodMenuEdit from "./components/FoodMenuEdit";
 import Setting from "./components/Setting";
 import Report from "./components/Report";
 import PrintReport from "./components/PrintReport";
+import Invoice from "./components/Invoice";
 
 function MerchantApp() {
   const match = useRouteMatch();
@@ -51,6 +52,7 @@ function MerchantApp() {
       <Route path={`${match.url}/da-huy`} exact component={CancelOrder} />
       {/* <Route path={`${match.url}/da-huy/:id`} component={CancelOrderDetail} /> */}
       <Route path={`${match.url}/lich-su`} exact component={OrderHistory} />
+      <Route path={`${match.url}/lich-su/invoice`} exact component={Invoice} />
       <Route
         path={`${match.url}/lich-su/chi-tiet`}
         component={OrderHistoryDetail}
