@@ -23,6 +23,7 @@ import loading from "assets/image/avartar/avatar-default.png";
 import { datetimeFromTimestamp, validatePrice } from "func.js";
 import ScrollToBottom from "react-scroll-to-bottom";
 import { confirmAlert } from "react-confirm-alert";
+import userAPi from "api/userApi";
 
 export default function DeliveryPage() {
   const [haveOrder, setHaveOrder] = useState(false);
@@ -223,10 +224,18 @@ function OrderInfo({ order, setHaveOrder, setOpen, cancelByUser }) {
 }
 
 function DetailOrder({ order, setOpen, setHaveOrder, cancelByUser }) {
+  const [historyOrder, setHistoryOrder] = useState([]);
+
+  const percent =
+    historyOrder.filter((od) => od.status === "complete").length /
+      (historyOrder.length + 1) || 0;
+
+  console.log(percent, historyOrder.length);
+
   const handleCancelOrder = () => {
     confirmAlert({
       title: "Xác nhận trước khi gửi",
-      message: "Bạn có chắc muốn hủy đơn.",
+      message: "Bạn có chắc muốn hủy đơn này?",
       buttons: [
         {
           label: "Có",
@@ -242,6 +251,16 @@ function DetailOrder({ order, setOpen, setHaveOrder, cancelByUser }) {
     });
     setOpen(false);
   };
+
+  useEffect(() => {
+    const fetchPrestige = async () => {
+      const res = await userAPi.getPrestige(order.userOrderId._id);
+      if (!res.status || res.status == 200) {
+        setHistoryOrder(res);
+      }
+    };
+    fetchPrestige();
+  }, []);
   return (
     <div className="main-info__item">
       {order ? (
@@ -298,6 +317,7 @@ function DetailOrder({ order, setOpen, setHaveOrder, cancelByUser }) {
           </ul>
           <div className="detail-item">
             <span>Tổng tiền</span>
+
             <span>
               {validatePrice(
                 order.detail.total + order.detail.fee - order.detail.discount
@@ -305,6 +325,11 @@ function DetailOrder({ order, setOpen, setHaveOrder, cancelByUser }) {
               đ
             </span>
           </div>
+          <i style={{ color: "red" }}>
+            {percent < 0.5 && historyOrder.length + 1 > 4
+              ? "Cảnh báo: Tài khoản sẽ bị khóa nếu tiếp tục không nhận hàng"
+              : ""}
+          </i>
           <button
             className="cancel-btn"
             onClick={() => handleCancelOrder()}

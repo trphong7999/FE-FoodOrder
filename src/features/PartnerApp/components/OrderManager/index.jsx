@@ -270,8 +270,8 @@ function MapPick({ partner, setRefresh, refresh }) {
           geo.lat,
           geo.lng
         )
-      ) < parseFloat(partner.setting.radiusWorking / 1000 || 2) || true
-      // !order.cancelPartner.includes(partner._id)
+      ) < parseFloat(partner.setting.radiusWorking / 1000 || 2) &&
+      !order.cancelPartner.includes(partner._id)
     );
   });
 
