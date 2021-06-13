@@ -20,6 +20,7 @@ export default function Brand({ merchant }) {
   const [distance, setDistance] = useState(0);
   const [switchh, setSwitchh] = useState(1);
   const [allReview, setAllReview] = useState([]);
+  const [averageStar, setAverageStar] = useState(0)
   const [reviewClone, setReviewClone] = useState([]);
   const [showStar, setShowStar] = useState(0);
   const dispatch = useDispatch();
@@ -28,9 +29,8 @@ export default function Brand({ merchant }) {
   const latUser = localStorage.getItem("lat") || user.info.location.lat;
   const lngUser = localStorage.getItem("lng") || user.info.location.lng;
 
-  const averageStar =
-    allReview.reduce((val, item) => val + item.rate, 0) / allReview.length || 0;
-  console.log(averageStar);
+  console.log(averageStar)
+
   const cartWarning = () =>
     toast.error(
       <div>
@@ -85,7 +85,6 @@ export default function Brand({ merchant }) {
       setAllReview(reviews);
     }
   };
-  console.log(allReview);
 
   const getTagNameReview = (num) => {
     let name = tagNameReviewMerchant.find((item) => item.value === num);
@@ -114,6 +113,9 @@ export default function Brand({ merchant }) {
         type: 1,
       });
       res.reverse();
+      const averageStar =
+      res.reduce((val, item) => val + item.rate, 0) / res.length || 0;
+      setAverageStar(averageStar)
       setAllReview(res);
       setReviewClone(res);
     };
@@ -196,10 +198,13 @@ export default function Brand({ merchant }) {
             >
               Rate
             </span>
-            {[...Array(parseInt(averageStar))].map((star, i) => {
+            {[...Array(parseInt(5))].map((star, i) => {
               return (
+                i+1<averageStar?
                 <label className="review-star__wrap" key={i}>
                   <FaStar className="icon-star" color={"#ffc107"} size={17} />
+                </label>: <label className="review-star__wrap" key={i}>
+                  <FaStar className="icon-star" color={"gray"} size={17} />
                 </label>
               );
             })}

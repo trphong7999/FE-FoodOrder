@@ -286,6 +286,7 @@ function Review({ merchant }) {
   const [showStar, setShowStar] = useState(0);
   const [reviewClone, setReviewClone] = useState([]);
   const [tagReview, setTagReview] = useState(0);
+  const [averageStar, setAverageStar] = useState(0)
 
   const handleChangeListReview = (idx) => {
     setShowStar(idx);
@@ -318,8 +319,10 @@ function Review({ merchant }) {
         type: 1,
       });
       res.reverse();
+      const averageStar =
+      res.reduce((val, item) => val + item.rate, 0) / res.length || 0;
+      setAverageStar(averageStar)
       setAllReview(res);
-
       setReviewClone(res);
     };
     setShowStar(0);
@@ -340,7 +343,11 @@ function Review({ merchant }) {
               key={idx}
               onClick={() => handleChangeListReview(idx)}
             >
-              Tất cả
+               Tất cả {averageStar.toFixed(1)} <FaStar
+                          className="icon-star"
+                          color={"#ffc107"}
+                          size={12}
+                        />
             </div>
           ) : (
             <div
