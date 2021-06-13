@@ -13,7 +13,10 @@ const merchantApi = {
     const url = "/merchants";
     return axiosClient.get(url);
   },
-
+  getInMonth: (date) => {
+    const url = `/orders/getinmonth?time=${date}`;
+    return axiosClient.get(url);
+  },
   get: (id) => {
     const url = `/merchants/${id}`;
     return axiosClient.get(url);

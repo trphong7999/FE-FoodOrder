@@ -51,7 +51,6 @@ function ReceivedConfirmDetail() {
   const onTimeChangeHandle = (val) => {
     let hour = new Date().setHours(parseInt(val.split(":")[0]));
     let time = new Date(hour).setMinutes(parseInt(val.split(":")[1]));
-    console.log("new", time, val.split(":"));
     setTimePartnerGetFood(time);
   };
 

@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import logo from "assets/image/logo.png";
 
 import "./style.scss";
-import axios from "axios";
+import userApi from "api/userApi";
 
 export default function FormLoginValidation({ clickSwitchForm }) {
   const { register, handleSubmit, errors } = useForm({
@@ -30,8 +30,8 @@ export default function FormLoginValidation({ clickSwitchForm }) {
   const handleSubmitRegister = (e) => {
     e.preventDefault();
 
-    axios
-      .post("http://localhost:4000/api/users/signup", {
+    userApi
+      .register({
         username: userName,
         password: password,
       })

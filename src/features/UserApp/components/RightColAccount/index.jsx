@@ -30,7 +30,6 @@ export default function RightColAccount() {
     };
     fetchHistoryOrder();
   }, []);
-  console.log(historyOrders);
 
   return (
     <div className="account-right">

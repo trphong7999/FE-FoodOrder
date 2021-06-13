@@ -33,6 +33,14 @@ const merchantApi = {
     const url = `/orders/ordersinweek?time=${time}`;
     return axiosClient.get(url);
   },
+  getOrderMonthByTime: (time) => {
+    const url = `/orders/ordersinmonth?time=${time}`;
+    return axiosClient.get(url);
+  },
+  getOrderYearByTime: (time) => {
+    const url = `/orders/ordersinyear?time=${time}`;
+    return axiosClient.get(url);
+  },
 };
 
 export default merchantApi;

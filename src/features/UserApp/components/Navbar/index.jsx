@@ -24,7 +24,6 @@ function Navbar(props) {
   const handleShowMenuMobile = () => {
     setShowMenu(!showMenu);
   };
-  console.log(user);
   // --------------------------------
   return (
     <nav className="navbar">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
   Switch,
@@ -20,30 +20,14 @@ import FoodMenu from "./components/FoodMenu";
 import merchantApi from "api/merchantApi";
 import FoodMenuEdit from "./components/FoodMenuEdit";
 import Setting from "./components/Setting";
+import Report from "./components/Report";
+import PrintReport from "./components/PrintReport";
+import Invoice from "./components/Invoice";
 
 function MerchantApp() {
   const match = useRouteMatch();
   const merchant = useSelector((state) => state.merchant);
   const token = localStorage.token;
-  // const [infoMerchant, setInfoMerchant] = useState(1);
-  // useEffect(() => {
-  //   const fetchMerchant = async () => {
-  //     try {
-  //       // const params = {
-  //       //   _page: 1,
-  //       //   _limit: 10,
-
-  //       // };
-  //       const res = await merchantApi.get(merchantId);
-  //       if (res.status !== 400) setInfoMerchant(res);
-  //       else setInfoMerchant(false);
-  //     } catch (error) {
-  //       console.log("Failed to fetch merchant info: ", error);
-  //     }
-  //   };
-
-  //   fetchMerchant();
-  // }, []);
 
   return (
     <Switch>
@@ -68,6 +52,7 @@ function MerchantApp() {
       <Route path={`${match.url}/da-huy`} exact component={CancelOrder} />
       {/* <Route path={`${match.url}/da-huy/:id`} component={CancelOrderDetail} /> */}
       <Route path={`${match.url}/lich-su`} exact component={OrderHistory} />
+      <Route path={`${match.url}/lich-su/invoice`} exact component={Invoice} />
       <Route
         path={`${match.url}/lich-su/chi-tiet`}
         component={OrderHistoryDetail}
@@ -76,6 +61,12 @@ function MerchantApp() {
       <Route path={`${match.url}/thuc-don/:id`} component={FoodMenuEdit} />
 
       <Route path={`${match.url}/cai-dat`} exact component={Setting} />
+      <Route path={`${match.url}/bao-cao`} exact component={Report} />
+      <Route
+        path={`${match.url}/bao-cao/report`}
+        exact
+        component={PrintReport}
+      />
     </Switch>
   );
 }

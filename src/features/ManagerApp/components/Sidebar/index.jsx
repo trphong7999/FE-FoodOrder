@@ -129,7 +129,6 @@ function Sidebar({ setSidebar }) {
 export default Sidebar;
 
 function OrderDetail({ order }) {
-  console.log(order);
   const { userOrderId: user, merchantId: merchant, deliverId: partner } = order;
   return (
     <div className="received-order-detail">
@@ -396,6 +395,10 @@ function OrderDetail({ order }) {
         <div className="detail-bot__space">
           <span>Khoảng cách</span>
           <span>{order.distance}km</span>
+        </div>
+        <div className="detail-bot__space" style={{ color: "#888" }}>
+          <span>Trạng thái</span>
+          <span>{order.status}</span>
         </div>
       </div>
     </div>

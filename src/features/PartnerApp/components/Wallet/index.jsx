@@ -9,12 +9,18 @@ export default function Wallet() {
   const [orders, setOrders] = useState([]);
   useState(() => {
     const fetAllOrder = async () => {
-      const orders = apiOrder.getAllMyOrder();
-      setOrders(orders);
+      const orders = await apiOrder.getAllMyOrder();
+      if (!orders.status) setOrders(orders);
     };
     fetAllOrder();
   }, []);
-  console.log(orders);
+  const total = orders.reduce((val, od) => {
+    if (od.status == "complete")
+      return (
+        val + od.detail.total * 0.2 + od.detail.fee * 0.1 - od.detail.discount
+      );
+    return val;
+  }, 0);
 
   return (
     <div className="wallet">
@@ -27,7 +33,7 @@ export default function Wallet() {
           <div className="card-head">
             <div className="card-head__title">Tài khoản chính</div>
             <div className="card-head__number" style={{ color: "#b82632" }}>
-              -360,972đ
+              -{total}đ
             </div>
           </div>
           <div className="card-action">

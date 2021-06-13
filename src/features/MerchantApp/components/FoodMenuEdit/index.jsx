@@ -27,7 +27,6 @@ export default function FoodMenuEdit() {
 
   const submitFormEdit = async (newData) => {
     let imgFood = infoFood.img;
-    console.log(newData);
 
     if (!newData.name || !newData.price) {
       alert("Bạn chưa điền đủ thông tin!");

@@ -196,7 +196,7 @@ function Shop({ merchant }) {
         </div>
         <div className="col l-6">
           <div className="task-shop__item ">
-            <div className="item-title">Triết khấu</div>
+            <div className="item-title">Chiết khấu</div>
             <div className="item-content">{merchant.deduct} %</div>
           </div>
         </div>
@@ -227,7 +227,6 @@ function Categories({ merchant }) {
   useEffect(() => {
     getDishes();
   }, []);
-  console.log(merchant.category);
 
   return (
     <div className="task-shop">
@@ -320,6 +319,7 @@ function Review({ merchant }) {
       });
       res.reverse();
       setAllReview(res);
+
       setReviewClone(res);
     };
     setShowStar(0);

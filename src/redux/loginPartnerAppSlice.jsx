@@ -17,7 +17,6 @@ const partnerSlice = createSlice({
   },
   reducers: {
     loginPartner: (state, action) => {
-      console.log(action);
       const email = action.payload.email;
       const token = action.payload.token;
       const partnerId = action.payload.partnerId;
@@ -31,7 +30,6 @@ const partnerSlice = createSlice({
       localStorage.clear();
     },
     getProfile: (state, action) => {
-      console.log(action.payload, "profile partner");
       state.profile = action.payload;
       state.email = localStorage.email;
       localStorage.setItem("profile", JSON.stringify(action.payload));

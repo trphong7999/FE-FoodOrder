@@ -21,7 +21,6 @@ function MainPageMerchant() {
         dispatch(logoutMerchant());
       }
     } catch {
-      console.log("ok");
       return;
     }
   });
@@ -32,9 +31,7 @@ function MainPageMerchant() {
     dispatch(haveUnread(0));
   });
 
-  socket.off("userCancelOrder");
   socket.on("userCancelOrder", (orderId) => {
-    console.log(orderId, newListOrder);
     const idx = newListOrder.findIndex((order) => {
       return String(order._id) == orderId;
     });

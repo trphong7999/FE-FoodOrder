@@ -41,6 +41,10 @@ const userApi = {
     const url = `/users/`;
     return axiosClient.get(url);
   },
+  getUserInMonth: (time) => {
+    const url = `/orders/userinmonth?time=${time}`;
+    return axiosClient.get(url);
+  },
   getUserById: (id) => {
     const url = `/users/${id}`;
     return axiosClient.get(url);

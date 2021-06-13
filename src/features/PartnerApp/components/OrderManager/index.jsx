@@ -270,8 +270,8 @@ function MapPick({ partner, setRefresh, refresh }) {
           geo.lat,
           geo.lng
         )
-      ) < parseFloat(partner.setting.radiusWorking / 1000 || 2) || true
-      // !order.cancelPartner.includes(partner._id)
+      ) < parseFloat(partner.setting.radiusWorking / 1000 || 2) &&
+      !order.cancelPartner.includes(partner._id)
     );
   });
 
@@ -544,9 +544,7 @@ function Detail({ orderDetail }) {
           <div className="shop-take__time">
             <span>Lấy:</span>
             <span>
-              {datetimeFromTimestamp(
-                parseInt(orderDetail.timeOrder) + 15 * 60000
-              )}
+              {datetimeFromTimestamp(parseInt(orderDetail.timeOrder))}
             </span>
           </div>
         </div>
@@ -582,8 +580,7 @@ function Detail({ orderDetail }) {
             <span>Giao:</span>
             <span>
               {datetimeFromTimestamp(
-                parseInt(orderDetail.timeOrder) +
-                  (orderDetail.distance * 5 + 10) * 60000
+                parseInt(orderDetail.timeDeliverDone || 0)
               )}
             </span>
           </div>
@@ -711,10 +708,13 @@ function CurrentOrder({
   const lastOrder = historyOrder.slice(-1).pop() || {};
 
   const chooseOrder = (order_id) => {
-    socket.emit("chooseOrder", order_id);
-    handleChooseOrder(order);
-    removeOrderPicked(order_id);
-    handleClose();
+    socket.emit("chooseOrder", order_id, function (data) {
+      if (data) {
+        handleChooseOrder(order);
+        removeOrderPicked(order_id);
+        handleClose();
+      } else alert("Đơn đã có người nhận");
+    });
   };
 
   useEffect(() => {

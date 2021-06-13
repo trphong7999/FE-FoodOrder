@@ -1,0 +1,20 @@
+.card-total {
+  display: flex;
+  padding: 1.5rem;
+  justify-content: space-around;
+  align-items: center;
+  height: 10rem;
+  width: 50rem;
+  font-size: 2rem;
+  border: 1px solid;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 7%), 0 4px 6px -2px rgb(0 0 0 / 5%);
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  line-height: 1.6;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.5rem;
+}

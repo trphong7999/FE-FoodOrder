@@ -27,7 +27,6 @@ function LoginMerchant() {
       return;
     }
     if (res === "Account is block!") {
-      console.log("hello", res.send);
       alert("Tài khoản của bạn đã bị chặn!");
       return;
     }

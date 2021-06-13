@@ -38,6 +38,7 @@ function Review({ orderId, data, type }) {
   const [tagReview, setTagReview] = useState(0);
   const [textReview, setTextReview] = useState("");
   const [review, setReview] = useState(null);
+
   const [tagNameReview, setTagNameReview] = useState([]);
 
   const handleOpen = () => {
@@ -70,7 +71,6 @@ function Review({ orderId, data, type }) {
     if (res === "NotRate") {
       alert("Bạn chưa đánh sao");
     } else {
-      console.log(res);
       alert("Bạn đã đánh giá thành công");
       setOpen(false);
     }

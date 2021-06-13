@@ -30,7 +30,6 @@ function NewOrder({ newListOrder }) {
       pathname: `${match.url}/moi-tu-choi`,
       state: { detailOrderNeedCancel: detailOrder },
     };
-    console.log(location);
     history.push(location);
     history.replace(location);
   };

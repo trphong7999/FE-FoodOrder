@@ -1,0 +1,96 @@
+* {
+  box-sizing: inherit;
+}
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.report {
+  max-width: 800px;
+  margin: 30px auto;
+  border: 1px solid #000;
+  font-size: 16px;
+}
+.report-head {
+  margin: 0 auto;
+  position: relative;
+}
+
+.report-head__title {
+  text-align: center;
+}
+.report-head__title h1 {
+  margin-bottom: 0;
+}
+.report-head__title div {
+  font-weight: 500;
+}
+.report-head__title div:last-child {
+  margin-top: 1rem;
+  font-style: italic;
+}
+.report-head__code {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+}
+.code-item {
+  margin-bottom: 10px;
+}
+.code-item span {
+  font-weight: bold;
+}
+.report-body {
+  padding: 10px 20px;
+}
+.report-body .body-item {
+  padding: 3px 0;
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+.report-body .body-item .body-item--bold {
+  font-weight: bold;
+}
+.box {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #000;
+}
+
+table,
+td,
+th {
+  border: 1px solid black;
+}
+td {
+  padding: 10px 0 0;
+}
+
+.body-table {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+}
+.body-table-2 th {
+  border-top: none;
+}
+.report-sign {
+  padding: 0px 40px 100px;
+  display: flex;
+  justify-content: space-between;
+}
+.sign-item {
+  text-align: center;
+}
+.sign-item div:last-child {
+  font-size: 14px;
+  font-style: italic;
+}
+.footer {
+  margin: 0 auto;
+  font-size: 12px;
+  font-style: italic;
+  text-align: center;
+}

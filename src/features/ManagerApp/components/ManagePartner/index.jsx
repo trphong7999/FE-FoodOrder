@@ -131,7 +131,6 @@ function ManagePartner(props) {
   }, [findName]);
 
   useEffect(() => {
-    console.log(findAddress);
     const listMer = allPartner;
     const filterMerchant = listMer.filter((part) =>
       removeAccents(part.address)

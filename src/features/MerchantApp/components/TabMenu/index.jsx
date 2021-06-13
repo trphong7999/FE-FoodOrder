@@ -37,7 +37,6 @@ function TabMenu() {
       unRead: unRead[3].count,
     },
   ]);
-  console.log(unRead);
 
   useEffect(() => {
     const updateUnread = () => {
@@ -62,7 +61,6 @@ function TabMenu() {
       return item;
     });
     setTabNavOrder(list);
-    console.log("change", index);
     dispatch(readDone(parseInt(index)));
   };
   return (

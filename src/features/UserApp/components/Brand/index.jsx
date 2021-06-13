@@ -28,6 +28,9 @@ export default function Brand({ merchant }) {
   const latUser = localStorage.getItem("lat") || user.info.location.lat;
   const lngUser = localStorage.getItem("lng") || user.info.location.lng;
 
+  const averageStar =
+    allReview.reduce((val, item) => val + item.rate, 0) / allReview.length || 0;
+  console.log(averageStar);
   const cartWarning = () =>
     toast.error(
       <div>
@@ -110,7 +113,6 @@ export default function Brand({ merchant }) {
         id: merchant._id,
         type: 1,
       });
-      console.log(res);
       res.reverse();
       setAllReview(res);
       setReviewClone(res);
@@ -184,7 +186,23 @@ export default function Brand({ merchant }) {
             />
             <IoLocationOutline className="brand-info__distant-icon" />
             {distance}
-            km
+            km{" "}
+            <span
+              style={{
+                margin: "0 0.5rem 0 1.5rem",
+                color: "rgb(255, 150, 30)",
+                fontWeight: "bold",
+              }}
+            >
+              Rate
+            </span>
+            {[...Array(parseInt(averageStar))].map((star, i) => {
+              return (
+                <label className="review-star__wrap" key={i}>
+                  <FaStar className="icon-star" color={"#ffc107"} size={17} />
+                </label>
+              );
+            })}
           </div>
           <div className="brand-info__time">
             {merchant.status == "open" ? (

@@ -80,7 +80,6 @@ export default function SlickList() {
   useEffect(() => {
     const fetchVoucherList = async () => {
       const res = await voucherApi.getAll();
-      console.log(res);
       setVouchers(res);
     };
 
@@ -102,7 +101,7 @@ export default function SlickList() {
     infinite: true,
     slidesToShow: 3,
     slidesToScroll: 1,
-    // autoplay: true,
+    autoplay: true,
     autoplaySpeed: 2000,
     pauseOnHover: true,
     responsive: [

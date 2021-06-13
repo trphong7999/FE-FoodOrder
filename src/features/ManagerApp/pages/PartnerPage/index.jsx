@@ -28,7 +28,6 @@ export default function PartnerPage() {
 
     getPartnerById();
   }, []);
-  console.log(partner);
   return (
     <div className="grid__full-width">
       {partner ? (
@@ -203,6 +202,7 @@ function Review({ partner }) {
       });
       res.reverse();
       setAllReview(res);
+
       setReviewClone(res);
     };
     setShowStar(0);
@@ -333,7 +333,6 @@ function HistoryOrder({ partner }) {
     getHistoryOrder();
   }, []);
 
-  console.log(historyOrder);
   return (
     <div className="history-order__list">
       {historyOrder.length > 0 ? (

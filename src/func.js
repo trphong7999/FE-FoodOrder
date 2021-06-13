@@ -1,6 +1,3 @@
-import { getPos } from "redux/loginUserAppSlice";
-import { useDispatch } from "react-redux";
-
 function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }

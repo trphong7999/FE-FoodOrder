@@ -240,8 +240,6 @@ export default function Newfeed({ keyFind, refreshNewFeed }) {
             {merchantFiltered.length} kết quả
             <select className="filter-sort--item">
               <option value="">Gần tôi</option>
-              <option value="">Đánh giá</option>
-              <option value="">Bán chạy</option>
             </select>
           </div>
         </div>

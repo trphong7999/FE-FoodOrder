@@ -26,7 +26,6 @@ function ReceivedOrder() {
 
   socket.off("findDonePartner");
   socket.on("findDonePartner", ({ orderId, partner }) => {
-    console.log("have", orderId, partner);
     const updatePartner = (list, setList) => {
       let currentList = [...list];
       let order = currentList.find((or) => or._id == orderId);
@@ -77,7 +76,6 @@ function ReceivedOrder() {
       if (idx > -1) {
         list.splice(idx, 1);
         setList([...list]);
-        console.log("okcomple");
         dispatch(haveUnread(2));
       }
     };
@@ -93,7 +91,6 @@ function ReceivedOrder() {
       if (idx > -1) {
         list.splice(idx, 1);
         setList([...list]);
-        console.log("okdeli");
         dispatch(haveUnread(2));
       }
     };
