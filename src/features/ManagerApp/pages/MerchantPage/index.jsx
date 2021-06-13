@@ -12,6 +12,7 @@ import { FaStar } from "react-icons/fa";
 import { MdRateReview } from "react-icons/md";
 import avtDefault from "assets/image/avartar/slide1.jpg";
 import reviewApi from "api/review";
+import { tagNameReviewMerchant } from "assets/data/tagNameReview";
 
 function MerchantPage() {
   let { id } = useParams();
@@ -283,21 +284,108 @@ function OpenTime({ newtime }) {
 
 function Review({ merchant }) {
   const [allReview, setAllReview] = useState([]);
+  const [showStar, setShowStar] = useState(0);
+  const [reviewClone, setReviewClone] = useState([]);
+  const [tagReview, setTagReview] = useState(0);
+
+  const handleChangeListReview = (idx) => {
+    setShowStar(idx);
+    if (idx === 0) {
+      setAllReview(reviewClone);
+    } else {
+      const list = reviewClone;
+      const reviews = list.filter((rw) => rw.rate === idx);
+      setAllReview(reviews);
+    }
+  };
+
+  const changeReviewsByTag = (num) => {
+    setTagReview(num);
+
+    const list = reviewClone;
+    const reviews = list.filter((rw) => rw.tagReview === num);
+    setAllReview(reviews);
+  };
+
+  const getTagNameReview = (num) => {
+    let name = tagNameReviewMerchant.find((item) => item.value === num);
+    return name ? name.text : "";
+  };
 
   useEffect(() => {
     const getAllReviewByMer = async () => {
-      const res = await reviewApi.getReviewByMerId({id: merchant._id, type: 1});
+      const res = await reviewApi.getReviewByMerId({
+        id: merchant._id,
+        type: 1,
+      });
       res.reverse();
       setAllReview(res);
-      console.log(res)
+      setReviewClone(res);
     };
+    setShowStar(0);
     getAllReviewByMer();
   }, []);
 
-  
-
   return (
     <div className="task-shop">
+      <div className="brand-star">
+        {[...Array(6)].map((s, idx) =>
+          idx === 0 ? (
+            <div
+              className={
+                showStar === idx
+                  ? "brand-star__item brand-star__item--active"
+                  : "brand-star__item"
+              }
+              key={idx}
+              onClick={() => handleChangeListReview(idx)}
+            >
+              Tất cả
+            </div>
+          ) : (
+            <div
+              className={
+                showStar === idx
+                  ? "brand-star__item brand-star__item--active"
+                  : "brand-star__item"
+              }
+              key={idx}
+              onClick={() => handleChangeListReview(idx)}
+            >
+              <span>{idx}</span>
+              <FaStar className="icon-star" color={"#ffc107"} size={16} />
+              <span>
+                (
+                {reviewClone.reduce(
+                  (arr, curr) => (curr.rate === idx ? arr + 1 : arr),
+                  0
+                )}
+                )
+              </span>
+            </div>
+          )
+        )}
+      </div>
+
+      <div className="manage-review-tag">
+        {tagNameReviewMerchant.map((item, idx) => (
+          <div
+            key={idx}
+            className={`manage-tag-item ${
+              tagReview === item.value ? "manage-tag-item--active" : ""
+            }`}
+            onClick={() => changeReviewsByTag(item.value)}
+          >
+            {item.text} (
+            {reviewClone.reduce(
+              (arr, curr) => (curr.tagReview === item.value ? arr + 1 : arr),
+              0
+            )}
+            )
+          </div>
+        ))}
+      </div>
+
       <div className="brand-review">
         {allReview.map((review, idx) => (
           <div key={idx} className="brand-reviewm__item">
@@ -335,8 +423,10 @@ function Review({ merchant }) {
               </div>
             </div>
             <div className="item-body">
-              <span>{review.text}</span>
-              
+              <span className="tag-item">
+                {getTagNameReview(review.tagReview)}
+              </span>
+              <div className="text-item">{review.text}</div>
             </div>
           </div>
         ))}

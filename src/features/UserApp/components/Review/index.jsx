@@ -8,6 +8,10 @@ import Fade from "@material-ui/core/Fade";
 import "./style.scss";
 import { FaStar } from "react-icons/fa";
 import reviewApi from "api/review";
+import {
+  tagNameReviewMerchant,
+  tagNameReviewPartner,
+} from "assets/data/tagNameReview";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -26,13 +30,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Review({ orderId, data, type }) {
+  console.log(type);
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(null);
   const [hover, setHover] = useState(null);
+  const [tagReview, setTagReview] = useState(0);
   const [textReview, setTextReview] = useState("");
   const [review, setReview] = useState(null);
-  console.log(orderId, data);
+  const [tagNameReview, setTagNameReview] = useState([]);
+
   const handleOpen = () => {
     setOpen(true);
     getReview();
@@ -40,6 +47,11 @@ function Review({ orderId, data, type }) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const getTagNameReview = (num) => {
+    let name = tagNameReview.find((item) => item.value === num);
+    return name ? name.text : "";
   };
 
   const handleSubmitReview = async () => {
@@ -50,7 +62,9 @@ function Review({ orderId, data, type }) {
       orderId: orderId,
       reviewer: localStorage.userId,
       beReviewerId: data._id,
+      tagReview: tagReview,
     };
+    console.log(dataReview);
     const res = await reviewApi.postNewReview(dataReview);
 
     if (res === "NotRate") {
@@ -69,16 +83,20 @@ function Review({ orderId, data, type }) {
     } else {
       setReview(review);
     }
+
     console.log(review);
   };
 
-  //   useEffect(() => {
-  //     const getReview = async () => {
-  //       const review = await reviewApi.getReview(orderId);
-  //       console.log(review);
-  //     };
-  //     getReview();
-  //   }, []);
+  useEffect(() => {
+    const getTagNameReview = () => {
+      if (type == 1) {
+        setTagNameReview(tagNameReviewMerchant);
+      } else {
+        setTagNameReview(tagNameReviewPartner);
+      }
+    };
+    getTagNameReview();
+  }, []);
 
   return (
     <div className="review">
@@ -152,6 +170,26 @@ function Review({ orderId, data, type }) {
                         </label>
                       );
                     })}
+                  </div>
+                )}
+
+                {review === null ? (
+                  <div className="review-tag">
+                    {tagNameReview.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="tag-item"
+                        onClick={() => setTagReview(item.value)}
+                      >
+                        {item.text}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="review-tag">
+                    <div className="tag-item">
+                      {getTagNameReview(review.tagReview)}
+                    </div>
                   </div>
                 )}
 

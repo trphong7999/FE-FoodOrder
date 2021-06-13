@@ -79,6 +79,22 @@
       }
     }
 
+    .review-tag {
+      display: flex;
+      flex-wrap: wrap;
+      .tag-item {
+        padding: 1rem;
+        margin: 0.5rem;
+        border: 1px solid #ebebeb;
+        border-radius: 16px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #ebebeb;
+        }
+      }
+    }
+
     textarea {
       background: #eeeeee;
       color: #a5a5a5;

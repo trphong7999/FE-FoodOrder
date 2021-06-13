@@ -14,11 +14,14 @@ import "./style.scss";
 import { FaComment, FaStar } from "react-icons/fa";
 import { AiFillHeart } from "react-icons/ai";
 import reviewApi from "api/review";
+import { tagNameReviewMerchant } from "assets/data/tagNameReview";
 
 export default function Brand({ merchant }) {
   const [distance, setDistance] = useState(0);
   const [switchh, setSwitchh] = useState(1);
   const [allReview, setAllReview] = useState([]);
+  const [reviewClone, setReviewClone] = useState([]);
+  const [showStar, setShowStar] = useState(0);
   const dispatch = useDispatch();
   const listCartOrder = useSelector((state) => state.cartOrder);
   const user = useSelector((state) => state.loginUserApp.profile);
@@ -69,6 +72,23 @@ export default function Brand({ merchant }) {
     }
   };
 
+  const handleChangeListReview = (idx) => {
+    setShowStar(idx);
+    if (idx === 0) {
+      setAllReview(reviewClone);
+    } else {
+      const list = reviewClone;
+      const reviews = list.filter((rw) => rw.rate === idx);
+      setAllReview(reviews);
+    }
+  };
+  console.log(allReview);
+
+  const getTagNameReview = (num) => {
+    let name = tagNameReviewMerchant.find((item) => item.value === num);
+    return name ? name.text : "";
+  };
+
   useEffect(() => {
     const catList = document.getElementById("category-list");
     const sticky = catList.offsetTop;
@@ -93,6 +113,7 @@ export default function Brand({ merchant }) {
       console.log(res);
       res.reverse();
       setAllReview(res);
+      setReviewClone(res);
     };
     getAllReviewByMer();
   }, []);
@@ -286,6 +307,48 @@ export default function Brand({ merchant }) {
             </div>
           ) : (
             <div className="brand-review">
+              <div className="brand-star">
+                {[...Array(6)].map((s, idx) =>
+                  idx === 0 ? (
+                    <div
+                      className={
+                        showStar === idx
+                          ? "brand-star__item brand-star__item--active"
+                          : "brand-star__item"
+                      }
+                      key={idx}
+                      onClick={() => handleChangeListReview(idx)}
+                    >
+                      Tất cả
+                    </div>
+                  ) : (
+                    <div
+                      className={
+                        showStar === idx
+                          ? "brand-star__item brand-star__item--active"
+                          : "brand-star__item"
+                      }
+                      key={idx}
+                      onClick={() => handleChangeListReview(idx)}
+                    >
+                      <span>{idx}</span>
+                      <FaStar
+                        className="icon-star"
+                        color={"#ffc107"}
+                        size={16}
+                      />
+                      <span>
+                        (
+                        {reviewClone.reduce(
+                          (arr, curr) => (curr.rate === idx ? arr + 1 : arr),
+                          0
+                        )}
+                        )
+                      </span>
+                    </div>
+                  )
+                )}
+              </div>
               {allReview.length < 1 ? <h1>Hiện chưa có đánh giá nào</h1> : ""}
               {allReview.map((review, idx) => (
                 <div key={idx} className="brand-reviewm__item">
@@ -323,7 +386,11 @@ export default function Brand({ merchant }) {
                     </div>
                   </div>
                   <div className="item-body">
-                    <span>{review.text}</span>
+                    <span className="tag-item">
+                      {getTagNameReview(review.tagReview)}
+                    </span>
+
+                    <div className="text">{review.text}</div>
                     <div className="item-body__action">
                       <span>
                         <AiFillHeart /> Thích

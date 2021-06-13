@@ -13,6 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
+import { tagNameReviewPartner } from "assets/data/tagNameReview";
 
 export default function PartnerPage() {
   let { id } = useParams();
@@ -166,6 +167,33 @@ function Profile({ partner }) {
 
 function Review({ partner }) {
   const [allReview, setAllReview] = useState([]);
+  const [showStar, setShowStar] = useState(0);
+  const [reviewClone, setReviewClone] = useState([]);
+  const [tagReview, setTagReview] = useState(0);
+
+  const handleChangeListReview = (idx) => {
+    setShowStar(idx);
+    if (idx === 0) {
+      setAllReview(reviewClone);
+    } else {
+      const list = reviewClone;
+      const reviews = list.filter((rw) => rw.rate === idx);
+      setAllReview(reviews);
+    }
+  };
+
+  const changeReviewsByTag = (num) => {
+    setTagReview(num);
+
+    const list = reviewClone;
+    const reviews = list.filter((rw) => rw.tagReview === num);
+    setAllReview(reviews);
+  };
+
+  const getTagNameReview = (num) => {
+    let name = tagNameReviewPartner.find((item) => item.value === num);
+    return name ? name.text : "";
+  };
 
   useEffect(() => {
     const getAllReviewByMer = async () => {
@@ -175,57 +203,121 @@ function Review({ partner }) {
       });
       res.reverse();
       setAllReview(res);
-      console.log(res);
+      setReviewClone(res);
     };
+    setShowStar(0);
     getAllReviewByMer();
   }, []);
 
   return (
-    <div className="brand-review">
-      {allReview.length > 0 ? (
-        allReview.map((review, idx) => (
-          <div key={idx} className="brand-reviewm__item">
-            <div className="item-head">
-              <div className="item-head__left">
-                <img
-                  src={
-                    review.reviewer.info.avt === ""
-                      ? avtDefault
-                      : review.reviewer.info.avt
-                  }
-                  alt="avt-user-review"
-                />
-                <div className="user">
-                  <span>{review.reviewer.info.name}</span>
-                  <span>
-                    {formatDatetimeToString(
-                      new Date(parseInt(review.timeReview))
-                    )}
-                  </span>
+    <div>
+      <div className="brand-star">
+        {[...Array(6)].map((s, idx) =>
+          idx === 0 ? (
+            <div
+              className={
+                showStar === idx
+                  ? "brand-star__item brand-star__item--active"
+                  : "brand-star__item"
+              }
+              key={idx}
+              onClick={() => handleChangeListReview(idx)}
+            >
+              Tất cả
+            </div>
+          ) : (
+            <div
+              className={
+                showStar === idx
+                  ? "brand-star__item brand-star__item--active"
+                  : "brand-star__item"
+              }
+              key={idx}
+              onClick={() => handleChangeListReview(idx)}
+            >
+              <span>{idx}</span>
+              <FaStar className="icon-star" color={"#ffc107"} size={16} />
+              <span>
+                (
+                {reviewClone.reduce(
+                  (arr, curr) => (curr.rate === idx ? arr + 1 : arr),
+                  0
+                )}
+                )
+              </span>
+            </div>
+          )
+        )}
+      </div>
+
+      <div className="manage-review-tag">
+        {tagNameReviewPartner.map((item, idx) => (
+          <div
+            key={idx}
+            className={`manage-tag-item ${
+              tagReview === item.value ? "manage-tag-item--active" : ""
+            }`}
+            onClick={() => changeReviewsByTag(item.value)}
+          >
+            {item.text} (
+            {reviewClone.reduce(
+              (arr, curr) => (curr.tagReview === item.value ? arr + 1 : arr),
+              0
+            )}
+            )
+          </div>
+        ))}
+      </div>
+
+      <div className="brand-review">
+        {allReview.length > 0 ? (
+          allReview.map((review, idx) => (
+            <div key={idx} className="brand-reviewm__item">
+              <div className="item-head">
+                <div className="item-head__left">
+                  <img
+                    src={
+                      review.reviewer.info.avt === ""
+                        ? avtDefault
+                        : review.reviewer.info.avt
+                    }
+                    alt="avt-user-review"
+                  />
+                  <div className="user">
+                    <span>{review.reviewer.info.name}</span>
+                    <span>
+                      {formatDatetimeToString(
+                        new Date(parseInt(review.timeReview))
+                      )}
+                    </span>
+                  </div>
+                </div>
+                <div className="item-head__right">
+                  {[...Array(review.rate)].map((star, i) => {
+                    return (
+                      <label className="review-star__wrap" key={i}>
+                        <FaStar
+                          className="icon-star"
+                          color={"#ffc107"}
+                          size={12}
+                        />
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
-              <div className="item-head__right">
-                {[...Array(review.rate)].map((star, i) => {
-                  return (
-                    <label className="review-star__wrap" key={i}>
-                      <FaStar
-                        className="icon-star"
-                        color={"#ffc107"}
-                        size={12}
-                      />
-                    </label>
-                  );
-                })}
+              <div className="item-body">
+                <span className="tag-item">
+                  {getTagNameReview(review.tagReview)}
+                </span>
+                <div className="text-item">{review.text}</div>
               </div>
             </div>
-            <div className="item-body">
-              <span>{review.text}</span>
-            </div>
-          </div>
-        ))
-      ) : (
-        <h1>Hiện không có đánh giá nào</h1>
-      )}
+          ))
+        ) : (
+          <h1>Hiện không có đánh giá nào</h1>
+        )}
+      </div>
     </div>
   );
 }

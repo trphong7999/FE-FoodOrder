@@ -315,6 +315,7 @@ function Categories({ cat, recover }) {
                     {...register("addCatName")}
                     className="form-input"
                     placeholder="Nhập tên mới ..."
+                    autoComplete={false}
                   />
                   <div>
                     <input

@@ -6,7 +6,10 @@
     padding: 1rem;
     background: linear-gradient(0deg, #7897ff, #b47aff);
     color: #faf7fe;
-    height: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
     .task-bar__item {
       font-size: 1.4rem;
       padding: 1rem;
@@ -79,6 +82,32 @@
         }
       }
 
+      .manage-review-tag {
+        display: flex;
+        flex-wrap: wrap;
+        background-color: white;
+        font-size: 1.6rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        box-shadow: var(--box-shadow);
+        .manage-tag-item {
+          padding: 1rem;
+          margin: 0.5rem;
+          border: 1px solid #ebebeb;
+          border-radius: 16px;
+          cursor: pointer;
+
+          &:hover {
+            background: linear-gradient(0deg, #7897ff, #b47aff);
+            color: white;
+          }
+        }
+        .manage-tag-item--active {
+          background: linear-gradient(0deg, #7897ff, #b47aff);
+          color: white;
+        }
+      }
+
       .brand-review {
         padding-right: 2rem;
         .brand-reviewm__item {
@@ -124,7 +153,8 @@
           .item-body {
             margin-top: 1rem;
             font-size: 1.5rem;
-            span {
+            .text-item {
+              margin-top: 2rem;
               white-space: pre-line;
               line-height: 1.4em;
               word-wrap: break-word;
@@ -143,7 +173,44 @@
                 }
               }
             }
+
+            .tag-item {
+              padding: 0.5rem;
+              margin: 0.5rem;
+              border: 1px solid #ebebeb;
+              border-radius: 16px;
+              cursor: pointer;
+            }
           }
+        }
+      }
+      .brand-star {
+        background-color: white;
+        box-shadow: var(--box-shadow);
+        border-radius: 6px;
+        padding: 1rem 1rem 0;
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        font-size: 1.6rem;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        .brand-star__item {
+          height: 38px;
+          min-width: 80px;
+          text-align: center;
+          line-height: 38px;
+          border-radius: 6px;
+          cursor: pointer;
+          background-color: #ebebeb;
+          margin-bottom: 1rem;
+          span {
+            margin-right: 0.5rem;
+          }
+        }
+        .brand-star__item--active {
+          background: linear-gradient(0deg, #7897ff, #b47aff);
+          color: white;
         }
       }
     }
